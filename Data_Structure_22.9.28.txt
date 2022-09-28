@@ -1,4 +1,5 @@
 /*静态分配
+
 // 定义最大长度
 #define MaxSize 10
 
@@ -29,6 +30,7 @@ int main(){
 
 
 /* 动态分配
+
 #include <stdlib.h>
 
 // 默认最大长度
@@ -91,7 +93,10 @@ int main(){
 */
 
 
+
+
 /* 插入操作
+
 // 定义最大长度
 #define MaxSize 10
 
@@ -142,6 +147,64 @@ int main(){
 	printf("\n");
 	for(int i=0;i<L.length;i++)
 		printf("打印列表：L[%d]=%d\n",i,L.data[i]);
+	return 0;
+}
+*/
+
+
+
+
+
+/* 删除元素
+
+// 定义最大长度
+#define MaxSize 10
+
+// 定义结构体
+typedef struct{
+	// 用静态的“数组”存放数据元素
+	int data[MaxSize];
+	// 顺序表当前长度
+	int length;
+}Sqlist; // 顺序表的类型定义
+
+// 初始化
+void Initlist(Sqlist &L){
+	L.length=0;
+}
+
+// 删除
+bool ListDelete(Sqlist &L,int i,int &e){
+	// 判断i的范围是否有效
+	if(i<1||i>L.length)
+		return false;
+	// 将被删除的元素赋值给e
+	e = L.data[i-1];
+	// 将第i个元素及之后的元素前移
+	for(int j=i;j<L.length;j++)
+		L.data[j-1]=L.data[j];
+	// 长度减1
+	L.length--;
+	return true;
+}
+
+int main(){
+	// 申明一个顺序表
+	Sqlist L;
+	// 初始化
+	Initlist(L);
+	// 插入几个元素
+	for(int i=0;i<5;i++){
+		L.data[i]=i+2;
+		printf("打印列表：L[%d]=%d\n",i,L.data[i]);
+		L.length++;
+	}
+	// 用变量e把删除的元素“带回来”
+	int e = -1;
+	if(ListDelete(L,3,e))
+		printf("已删除第三个元素，删除元素的值为=%d\n",e);
+	else
+		printf("位序不合法，删除失效\n");
 	return 0;
 }
 */
