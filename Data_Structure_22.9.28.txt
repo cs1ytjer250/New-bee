@@ -1,25 +1,25 @@
-/*¾²Ì¬·ÖÅä
-// ¶¨Òå×î´ó³¤¶È
+/*é™æ€åˆ†é…
+// å®šä¹‰æœ€å¤§é•¿åº¦
 #define MaxSize 10
 
-// ´´½¨Ò»¸ö½á¹¹¶ÔÏó
+// åˆ›å»ºä¸€ä¸ªç»“æ„å¯¹è±¡
 typedef struct{
 	int data[MaxSize];
 	char length;
 }Sqlist;
 
-// ³õÊ¼»¯ÁĞ±í³¤¶È
+// åˆå§‹åŒ–åˆ—è¡¨é•¿åº¦
 void InitList(Sqlist & L){
 	L.length = 0;
 }
 
-// ³ÌĞòÈë¿Ú
+// ç¨‹åºå…¥å£
 int main(){
-	// ÁĞ±íÃüÃûÎªL
+	// åˆ—è¡¨å‘½åä¸ºL
 	Sqlist L;
-	// µ÷ÓÃ³õÊ¼»¯º¯Êı
+	// è°ƒç”¨åˆå§‹åŒ–å‡½æ•°
 	InitList(L);
-	// ´òÓ¡ÁĞ±íÖµ
+	// æ‰“å°åˆ—è¡¨å€¼
 	for(int i=0;i<L.length;i++)
 		printf("data[%d]=%d\n",i,L.data[i]);
 	return 0;
@@ -28,69 +28,120 @@ int main(){
 
 
 
-
-
-
-
-/* ¶¯Ì¬·ÖÅä
+/* åŠ¨æ€åˆ†é…
 #include <stdlib.h>
 
-// Ä¬ÈÏ×î´ó³¤¶È
+// é»˜è®¤æœ€å¤§é•¿åº¦
 #define InitSize 10
 
 typedef struct{
-	// Ö¸Ê¾¶¯Ì¬·ÖÅäÊı×éµÄÖ¸Õë
+	// æŒ‡ç¤ºåŠ¨æ€åˆ†é…æ•°ç»„çš„æŒ‡é’ˆ
 	int *data;
-	// Ë³Ğò±íµÄ×î´ó³¤¶È
+	// é¡ºåºè¡¨çš„æœ€å¤§é•¿åº¦
 	int MaxSize;
-	// Ë³Ğò±íµÄµ±Ç°³¤¶È
+	// é¡ºåºè¡¨çš„å½“å‰é•¿åº¦
 	int length;
 }Sqlist;
 
-// ³õÊ¼»¯
+// åˆå§‹åŒ–
 void InitList(Sqlist &L){
-	// ÓÃmallocº¯ÊıÉêÇëÒ»Æ¬Á¬ĞøµÄ´æ´¢¿Õ¼ä
+	// ç”¨mallocå‡½æ•°ç”³è¯·ä¸€ç‰‡è¿ç»­çš„å­˜å‚¨ç©ºé—´
 	L.data = (int *)malloc(sizeof(int)*InitSize);
 	L.length = 0;
 	L.MaxSize=InitSize;
 }
 
-// Ôö¼Ó¶¯Ì¬Êı×éµÄ³¤¶È
+// å¢åŠ åŠ¨æ€æ•°ç»„çš„é•¿åº¦
 void IncreaseSize(Sqlist &L,int len){
 	int *p = L.data;
 	L.data = (int *)malloc((L.MaxSize+len)*sizeof(int));
 	for(int i=0;i<L.length;i++)
-		// ½«Êı¾İ¸´ÖÆµ½ĞÂÇøÓò
+		// å°†æ•°æ®å¤åˆ¶åˆ°æ–°åŒºåŸŸ
 		L.data[i]=p[i];
-	// Ë³Ğò±í×î´ó³¤¶ÈÔö¼Ó len
+	// é¡ºåºè¡¨æœ€å¤§é•¿åº¦å¢åŠ  len
 	L.MaxSize = L.MaxSize+len;
-	// ÊÍ·ÅÔ­À´´æ´¢¿Õ¼ä
+	// é‡Šæ”¾åŸæ¥å­˜å‚¨ç©ºé—´
 	free(p);
 }
 
-// ³ÌĞòÈë¿Ú
+// ç¨‹åºå…¥å£
 int main(){
-	// ÉêÃ÷Ò»¸öË³Ğò±í
+	// ç”³æ˜ä¸€ä¸ªé¡ºåºè¡¨
 	Sqlist L;
-	// ³õÊ¼»¯Ë³Ğò±í
+	// åˆå§‹åŒ–é¡ºåºè¡¨
 	InitList(L);
-	// ²åÈëÔªËØ
+	// æ’å…¥å…ƒç´ 
 	for(int i=0;i<InitSize;i++){
 		L.data[i] = i+2;
-		printf("´òÓ¡ÁĞ±í:L[%d]=%d\n",i,L.data[i]);
-		// µ±Ç°±í³¤¼Ó1
+		printf("æ‰“å°åˆ—è¡¨:L[%d]=%d\n",i,L.data[i]);
+		// å½“å‰è¡¨é•¿åŠ 1
 		L.length++;
 	}
-	// Ôö¼Ó±í³¤
+	// å¢åŠ è¡¨é•¿
 	IncreaseSize(L,5);
-	printf("Ôö¼Óºó±í³¤Îª£º%d\n",L.MaxSize);
+	printf("å¢åŠ åè¡¨é•¿ä¸ºï¼š%d\n",L.MaxSize);
 	for(int i=InitSize;i<L.MaxSize;i++)
 		L.data[i]=i*2;
 	for(int i=0; i<L.MaxSize; i++)
-		printf("´òÓ¡ÁĞ±í:L[%d]=%d\n",i,L.data[i]);
+		printf("æ‰“å°åˆ—è¡¨:L[%d]=%d\n",i,L.data[i]);
 
 	
 	return 0;
 }
+*/
 
+
+/*
+// å®šä¹‰æœ€å¤§é•¿åº¦
+#define MaxSize 10
+
+// å®šä¹‰ç»“æ„ä½“
+typedef struct{
+	// ç”¨é™æ€çš„â€œæ•°ç»„â€å­˜æ”¾æ•°æ®å…ƒç´ 
+	int data[MaxSize];
+	// é¡ºåºè¡¨å½“å‰é•¿åº¦
+	int length;
+}Sqlist; // é¡ºåºè¡¨çš„ç±»å‹å®šä¹‰
+
+// åˆå§‹åŒ–
+void Initlist(Sqlist &L){
+	L.length=0;
+}
+
+// æ’å…¥
+bool ListInsert(Sqlist &L,int i,int e){
+	// åˆ¤æ–­içš„èŒƒå›´æ˜¯å¦æœ‰æ•ˆ
+	if(i<1||i>L.length+1)
+		return false;
+	// å½“å‰ç©ºé—´å·²æ»¡ï¼Œä¸èƒ½æ’å…¥
+	if(L.length>=MaxSize)
+		return false;
+	// å°†ç¬¬iä¸ªå…ƒç´ åŠä¹‹åçš„å…ƒç´ åç§»
+	for(int j=L.length;j>=i;j--)
+		L.data[j]=L.data[j-1];
+	// åœ¨ä½ç½®iå¤„æ”¾å…¥e
+	L.data[i-1]=e;
+	// é•¿åº¦åŠ 1
+	L.length++;
+	return true;
+}
+
+int main(){
+	// ç”³æ˜ä¸€ä¸ªé¡ºåºè¡¨
+	Sqlist L;
+	// åˆå§‹åŒ–
+	Initlist(L);
+	// æ’å…¥å‡ ä¸ªå…ƒç´ 
+	for(int i=0;i<9;i++){
+		L.data[i]=i+2;
+		printf("æ‰“å°åˆ—è¡¨ï¼šL[%d]=%d\n",i,L.data[i]);
+		L.length++;
+	}
+	// æ’å…¥å…ƒç´ 
+	ListInsert(L, 10, 1);
+	printf("\n");
+	for(int i=0;i<L.length;i++)
+		printf("æ‰“å°åˆ—è¡¨ï¼šL[%d]=%d\n",i,L.data[i]);
+	return 0;
+}
 */
