@@ -1,2 +1,2 @@
 # New-bee
-This is a exercise program!
+This is an exercise program!
