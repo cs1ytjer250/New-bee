@@ -1,127 +1,146 @@
-/* ����Ԫ��:��λ����
+/* 查找元素:按位查找
 
-// ������󳤶�
+// 定义最大长度
 #define InitSize 10
 
-// �������캯��
+// 创建构造函数
 typedef struct{
-	int *data; // �б�����ʼ��ַ��ָ��
+	int *data; // 列表的起始地址的指针
 	int Maxsize;
 	int length;
 }Sqlist;
 
-// ��ʼ��
+// 初始化
 void Initlist(Sqlist &L){
-	// malloc��������һ��Ƭ�ռ䣬��������ʼ��ַָ��
+	// malloc函数申请一整片空间，并返回起始地址指针
 	L.data = (int *)malloc(InitSize*sizeof(int));
 	L.length = 0;
 	L.Maxsize = InitSize;
 }
 
-// ����Ԫ��
+// 查找元素
 int Getelem(Sqlist L, int i){
-	// ��ָ�����Ԫ�أ����磺��ʼ��ַΪ1000��Ԫ�ش�СΪ4����ô��һ��Ԫ�ؾ���1000-1004�ռ��е����ݣ�
+	// 用指针查找元素（列如：起始地址为1000，元素大小为4，那么第一个元素就是1000-1004空间中的数据）
 	return L.data[i-1];
 }
 
-// �������
+// 程序入口
 int main(){
-	// �����б�
+	// 创建列表
 	Sqlist L;
-	// ��ʼ���б�
+	// 初始化列表
 	Initlist(L);
-	// �����б�Ԫ��
+	// 添加列表元素
 	for(int i=0; i<4; i++){
 		L.data[i]=i*2;
 		printf("L[%d]= %d\n", i+1, L.data[i]);
 	}
-	// ���Ԫ��ֵ
-	printf("��ǰֵΪ��%d\n",Getelem(L, 3));
+	// 获得元素值
+	printf("当前值为：%d\n",Getelem(L, 3));
 }
 */
 
-/* ����Ԫ�أ���ֵ����
+/* 查找元素：按值查找
 
-// ������󳤶�
+// 定义最大长度
 #define InitSize 10
 
-// �������캯��
+// 创建构造函数
 typedef struct{
-	int *data; // �б�����ʼ��ַ��ָ��
+	int *data; // 列表的起始地址的指针
 	int Maxsize;
 	int length;
 }Sqlist;
 
-// ��ʼ��
+// 初始化
 void Initlist(Sqlist &L){
-	// malloc��������һ��Ƭ�ռ䣬��������ʼ��ַָ��
+	// malloc函数申请一整片空间，并返回起始地址指针
 	L.data = (int *)malloc(InitSize*sizeof(int));
 	L.length = 0;
 	L.Maxsize = InitSize;
 }
 
-// ����Ԫ��
+// 查找元素
 int LocateElem(Sqlist L, int e){
-	// �����Ҷ���ͱ����Ҷ�����бȶ�
+	// 将查找对象和被查找对象进行比对
 	for(int i=0; i<L.length; i++)
-		// �ȶԳɹ������ظ�Ԫ�ص�λ��λ���1��ʼ������Ҫ��1��
+		// 比对成功，返回该元素的位序（位序从1开始，所以要加1）
 		if(L.data[i] == e)
 			return i+1;
 	return 0;
 }
-// �������
+// 程序入口
 int main(){
-	// �����б�
+	// 创建列表
 	Sqlist L;
-	// ��ʼ���б�
+	// 初始化列表
 	Initlist(L);
-	// �����б�Ԫ��
+	// 添加列表元素
 	for(int i=0; i<6; i++){
 		L.data[i]=i+1;
 		printf("L[%d]= %d\n", i+1, L.data[i]);
 		L.length++;
 	}
-	// ���Ԫ��ֵ
-	printf("��ǰλ��Ϊ��%d\n",LocateElem(L, 6));
+	// 获得元素值
+	printf("当前位序为：%d\n",LocateElem(L, 6));
 }
 */
 
 
-// ɾ��Ԫ�أ�������ֵ
+// 删除元素，并返回值
 bool Del_Min(Sqlist &L){
-	// �ж��б��Ƿ�Ϊ��
+	// 判断列表是否为空
 	if(L.length==0)
 		return false;
-	// �����Աȶ���
+	// 创建对比对象
 	int value = L.data[0];
-	// �±����
+	// 下标计数
 	int pos = 0;
-	// ѭ���ȶ��б�Ԫ��
+	// 循环比对列表元素
 	for(int i=0; i<L.length; i++){
-		// ����ȶ�Ԫ�رȱ��ȶ�Ԫ��С�����滻�ȶ�Ԫ�أ����ü�������¼�±�
+		// 如果比对元素比被比对元素小，则替换比对元素，并用计数器记录下标
 		if(L.data[i]<value){
 			value = L.data[i];
 			pos = i;
 		}
 	}
-	// �ñ�βԪ�أ��滻��СԪ�أ�����������1
+	// 用表尾元素，替换最小元素，并将表长减1
 	L.data[pos] = L.data[L.length-1];
 	L.length--;
 	return true;
 }
 
-// ��ת˳���
+// 翻转顺序表
 void Reverse(Sqlist &L){
-	// ��ʱ����
+	// 零时变量
 	int temp=0;
-	// ����ǰ�벿��˳���
+	// 遍历前半部分顺序表
 	for(int i=0; i<L.length/2;i++){
-		// ���浱ǰԪ��
+		// 保存当前元素
 		temp = L.data[i];
-		// ��תǰ�벿��Ԫ��
+		// 翻转前半部分元素
 		L.data[i] = L.data[L.length-i-1];
-		// ��ת��벿��Ԫ��
+		// 翻转后半部分元素
 		L.data[L.length-i-1] = temp;
 	}
 }
 
+
+// 删除指定元素
+void def_x_2(Sqlist &L, int x){
+	// 用k记录要删除的个数
+	int k=0, i=0;
+	// 循环比对是否是要删除的元素
+	while(i<L.length){
+		// 如果是，则计数器加1
+		if(L.data[i] == x)
+			k++;
+		// 如果不是，则将当前元素前移k个位置
+		else{
+			L.data[i-k]=L.data[i];
+		}
+		i++;
+	}
+	// 表长递减
+	L.length=L.length-k;
+}
