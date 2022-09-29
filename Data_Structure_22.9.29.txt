@@ -1,0 +1,127 @@
+/* 查找元素:按位查找
+
+// 定义最大长度
+#define InitSize 10
+
+// 创建构造函数
+typedef struct{
+	int *data; // 列表的起始地址的指针
+	int Maxsize;
+	int length;
+}Sqlist;
+
+// 初始化
+void Initlist(Sqlist &L){
+	// malloc函数申请一整片空间，并返回起始地址指针
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.length = 0;
+	L.Maxsize = InitSize;
+}
+
+// 查找元素
+int Getelem(Sqlist L, int i){
+	// 用指针查找元素（列如：起始地址为1000，元素大小为4，那么第一个元素就是1000-1004空间中的数据）
+	return L.data[i-1];
+}
+
+// 程序入口
+int main(){
+	// 创建列表
+	Sqlist L;
+	// 初始化列表
+	Initlist(L);
+	// 添加列表元素
+	for(int i=0; i<4; i++){
+		L.data[i]=i*2;
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+	}
+	// 获得元素值
+	printf("当前值为：%d\n",Getelem(L, 3));
+}
+*/
+
+/* 查找元素：按值查找
+
+// 定义最大长度
+#define InitSize 10
+
+// 创建构造函数
+typedef struct{
+	int *data; // 列表的起始地址的指针
+	int Maxsize;
+	int length;
+}Sqlist;
+
+// 初始化
+void Initlist(Sqlist &L){
+	// malloc函数申请一整片空间，并返回起始地址指针
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.length = 0;
+	L.Maxsize = InitSize;
+}
+
+// 查找元素
+int LocateElem(Sqlist L, int e){
+	// 将查找对象和被查找对象进行比对
+	for(int i=0; i<L.length; i++)
+		// 比对成功，返回该元素的位序（位序从1开始，所以要加1）
+		if(L.data[i] == e)
+			return i+1;
+	return 0;
+}
+// 程序入口
+int main(){
+	// 创建列表
+	Sqlist L;
+	// 初始化列表
+	Initlist(L);
+	// 添加列表元素
+	for(int i=0; i<6; i++){
+		L.data[i]=i+1;
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+		L.length++;
+	}
+	// 获得元素值
+	printf("当前位序为：%d\n",LocateElem(L, 6));
+}
+*/
+
+
+// 删除元素，并返回值
+bool Del_Min(Sqlist &L){
+	// 判断列表是否为空
+	if(L.length==0)
+		return false;
+	// 创建对比对象
+	int value = L.data[0];
+	// 下标计数
+	int pos = 0;
+	// 循环比对列表元素
+	for(int i=0; i<L.length; i++){
+		// 如果比对元素比被比对元素小，则替换比对元素，并用计数器记录下标
+		if(L.data[i]<value){
+			value = L.data[i];
+			pos = i;
+		}
+	}
+	// 用表尾元素，替换最小元素，并将表长减1
+	L.data[pos] = L.data[L.length-1];
+	L.length--;
+	return true;
+}
+
+// 翻转顺序表
+void Reverse(Sqlist &L){
+	// 零时变量
+	int temp=0;
+	// 遍历前半部分顺序表
+	for(int i=0; i<L.length/2;i++){
+		// 保存当前元素
+		temp = L.data[i];
+		// 翻转前半部分元素
+		L.data[i] = L.data[L.length-i-1];
+		// 翻转后半部分元素
+		L.data[L.length-i-1] = temp;
+	}
+}
+
