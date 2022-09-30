@@ -1,0 +1,185 @@
+// 定义最大长度
+#define InitSize 10
+
+// 创建构造函数
+typedef struct{
+	int *data; // 列表的起始地址的指针
+	int Maxsize;
+	int length;
+}Sqlist;
+
+// 初始化
+void Initlist(Sqlist &L){
+	// malloc函数申请一整片空间，并返回起始地址指针
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.length = 0;
+	L.Maxsize = InitSize;
+}
+
+
+// 删除区间元素
+bool Del_s_t2(Sqlist &L, int s, int t){
+	int i,j;
+	// 判断合法性
+	if(s>=t || L.length==0)
+		return false;
+	// 找到小于s的第一个元素
+	for(i=0; i<L.length && L.data[i]<s; i++);
+	// 如果元素值均大于s,返回
+	if(i>=L.length)
+		return false;
+	// 找到大于t的第一个元素
+	for(j=i; j<L.length && L.data[j]<=t;j++);
+	// 前移，填补被删除的元素位置
+	for(;j<L.length;i++,j++)
+		L.data[i]=L.data[j];
+	// 修改表长，表长为当前i值
+	L.length=i;
+	return true;
+	
+}
+
+// 程序入口
+int main(){
+	// 创建列表
+	Sqlist L;
+	// 初始化列表
+	Initlist(L);
+	// 添加列表元素
+	for(int i=0; i<8; i++){
+		L.data[i]=i+1;
+		if(i==2)
+			L.data[i]=2;
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+		L.length++;
+	}
+	printf("\n");
+	Del_s_t2(L, 4, 5);
+	for(int i=0; i<L.length; i++)
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+}
+
+
+
+*****************************************
+
+
+
+// 定义最大长度
+#define InitSize 10
+
+// 创建构造函数
+typedef struct{
+	int *data; // 列表的起始地址的指针
+	int Maxsize;
+	int length;
+}Sqlist;
+
+// 初始化
+void Initlist(Sqlist &L){
+	// malloc函数申请一整片空间，并返回起始地址指针
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.length = 0;
+	L.Maxsize = InitSize;
+}
+
+
+// 删除重复元素
+bool Delete_same(Sqlist &L){
+	// 判断合法性
+	if(L.length==0)
+		return false;
+	// i存储第一个不相同的元素，j为工作指针
+	int i,j;
+	for(i=0,j=1; j<L.length; j++){
+		// 查找下一个元素和上一个元素值不同的元素
+		if(L.data[i] != L.data[j])
+			// 找到后，将元素前移
+			L.data[++i] = L.data[j];
+	}
+	L.length = i+1;
+	return true;
+}
+
+// 程序入口
+int main(){
+	// 创建列表
+	Sqlist L;
+	// 初始化列表
+	Initlist(L);
+	// 添加列表元素
+	for(int i=0; i<8; i++){
+		L.data[i]=i+1;
+		if(i==2)
+			L.data[i]=2;
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+		L.length++;
+	}
+	printf("\n");
+	Delete_same(L);
+	for(int i=0; i<L.length; i++)
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+}
+
+
+*****************************************
+
+
+#include <iostream>
+using namespace std;
+
+// 定义最大长度
+#define InitSize 10
+
+// 创建构造函数
+typedef struct{
+	int *data; // 列表的起始地址的指针
+	int Maxsize;
+	int length;
+}Sqlist;
+
+// 初始化
+void Initlist(Sqlist &L){
+	// malloc函数申请一整片空间，并返回起始地址指针
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.length = 0;
+	L.Maxsize = InitSize;
+}
+
+// 删除区间元素（含起点和终点）
+bool Del_s_t1(Sqlist &L, int s, int t){
+	// i为工作指针，k为计数器
+	int i, k = 0;
+	// 判断合法性
+	if(L.length==0 || s>=t)
+		return false;
+	for(i=0; i<L.length; i++){
+		// 如果元素值大于左边界，小于等于右边界，则计数器（k）加1,否则工作指针就前移k个位置。
+		if(L.data[i] >= s && L.data[i]<=t)
+			k++;
+		else
+			L.data[i-k]=L.data[i];
+	}
+	L.length -= k;
+	return true;
+}
+
+// 程序入口
+int main(){
+	// 创建列表
+	Sqlist L;
+	// 初始化列表
+	Initlist(L);
+	// 添加列表元素
+	for(int i=0; i<8; i++){
+		L.data[i]=i+1;
+		if(i==2)
+			L.data[i]=2;
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+		L.length++;
+	}
+	printf("\n");
+	Del_s_t1(L, 2, 6);
+	for(int i=0; i<L.length; i++)
+		printf("L[%d]= %d\n", i+1, L.data[i]);
+}
