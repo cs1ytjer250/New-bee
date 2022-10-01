@@ -1,0 +1,65 @@
+#define InitSize 15
+
+typedef struct{
+	int *data;
+	int Maxsize;
+	int length;
+}Sqlist, Sqlist2, Sqlist3;
+
+void Initlist(Sqlist &L, Sqlist2 &L2, Sqlist3 &L3){
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.Maxsize = InitSize;
+	L.length = 0;
+	L2.data = (int *)malloc(InitSize*sizeof(int));
+	L2.Maxsize = InitSize;
+	L2.length = 0;
+	L3.data = (int *)malloc(InitSize*sizeof(int));
+	L3.Maxsize = InitSize;
+	L3.length = 0;
+}
+
+
+// 合并列表
+bool Merge(Sqlist A, Sqlist2 B, Sqlist3 &C){
+	// 判断合法性
+	if(A.length + B.length > C.Maxsize)
+		return false;
+	int i=0, j=0, k=0;
+	// 两两比较，小者存入结果表
+	while(i<A.length && j<B.length){
+		if(A.data[i] <= B.data[j])
+			C.data[k++] = A.data[i++];
+		else
+			C.data[k++] = B.data[j++];
+	}
+	// 还剩一个没比较完的表。
+	while(i<A.length)
+		C.data[k++] = A.data[i++];
+	while(i<B.length)
+		C.data[k++] = B.data[j++];
+	C.length = k;
+	return true;
+}
+
+
+int main(){
+	Sqlist L;
+	Sqlist2 L2;
+	Sqlist3 L3;
+	Initlist(L, L2, L3);
+	for(int i=0; i<8; i++){
+		L.data[i] = i;
+		printf("L[%d]=%d\n", i+1, L.data[i]);
+		L.length++;
+	}
+	printf("\n");
+	for(int i=0; i<6; i++){
+		L2.data[i] = i+1;
+		printf("L2[%d]=%d\n", i+1, L2.data[i]);
+		L2.length++;
+	}
+	Merge(L, L2, L3);
+	printf("\n");
+	for(int i=0; i<L3.length; i++)
+		printf("L3[%d]=%d\n", i+1, L3.data[i]);
+}
