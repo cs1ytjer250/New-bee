@@ -1,0 +1,133 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+
+#define InitSize 10
+
+typedef struct{
+	int *data;
+	int Maxsize;
+	int length;
+}Sqlist;
+
+void Initlist(Sqlist &L){
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.Maxsize = InitSize;
+	L.length = 0;
+}
+
+
+// 查找变换插入
+void SearchExchangeInsert(Sqlist &L, int x){
+	int low = 0, high = L.length-1, mid, temp;
+	// 左边界小于右边界，进入
+	while(low<=high){
+		// 中间下标
+		mid = (low+high)/2;
+		// 如果x是中间下标的元素,结束循环
+		if(L.data[mid] == x) break;
+		// 如果x小于中间下标元素，则把查找范围改为右半区
+		else if(L.data[mid] < x) low = mid+1;
+		// 否则改为左半区
+		else high = mid-1;
+	}
+	// 找到后将当前元素和后一个元素进行位置替换。
+	if(L.data[mid] == x && mid!=L.length-1){
+		temp = L.data[mid]; L.data[mid] = L.data[mid+1]; L.data[mid+1] = temp;
+	}
+	
+}
+
+
+int main(){
+	Sqlist L;
+	Initlist(L);
+	for(int i=0; i<6; i++){
+		L.data[i] = i*2;
+		printf("L[%d]=%d\n", i, L.data[i]);
+		L.length++;
+	}
+	printf("\n");
+	printf("数组长度为：%d\n", L.length);	
+	printf("\n");
+	SearchExchangeInsert(L, 9);
+	for(int i=0; i<L.length; i++){
+		printf("L[%d]=%d\n", i, L.data[i]);
+	}
+}
+
+
+*************************************************
+
+// 翻转列表
+void Reverse(Sqlist &L, int from, int to){
+	int i, temp;
+	// 将指定部分的元素进行翻转
+	for(i=0; i<(to-from+1)/2; i++){
+		temp = L.data[from+i]; L.data[from+i] = L.data[to-i]; L.data[to-i] = temp;
+	}
+}
+
+// 1,ab --> a-1b。 2,a-1b --> a-1b-1。 3,a-1b-1 --> (a-1b-1)-1。
+void Converse(Sqlist &L, int n, int p){
+	Reverse(L, 0, p-1);
+	Reverse(L, p, n-1);
+	Reverse(L, 0, n-1);
+}
+
+************************************************
+
+// 找中位数
+int M_Search(Sqlist L, Sqlist L2, int n){
+	// 定义首位数，末尾数，中位数
+	int s1=0, d1=n-1, m1, s2=0, d2=n-1, m2;
+	while(s1 != d1 || s2 != d2){
+		m1 = (s1+d1)/2;
+		m2 = (s2+d2)/2;
+		if(L.data[m1] == L2.data[m2])
+			// 满足条件1(两个顺序表的中位数相等)
+			return L.data[m1];
+
+
+		// 满足条件2（L1的中位数小于L2的中位数）
+		if(L.data[m1] < L2.data[m2]){
+			// 若元素个数为奇数
+			if((s1 + d1)%2 ==0){
+				// 舍弃L1前半部分，且保留中间数
+				s1 = m1;
+				// 舍弃L2后半部分，且保留中间数
+				d2 = m2;
+			}
+
+
+			// 若元素个数为偶数
+			else{
+				// 舍弃L1前半部分，包括中间数
+				s1 = m1+1;
+				// 舍弃L2后半部分，且保留中间数
+				d2 = m2;
+			}
+		}
+
+		// 满足条件3（L1的中位数小于L2的中位数）
+		else{
+			// 若元素个数为奇数
+			if((s2 + d2) % 2 == 0){
+				// 舍弃L1后半部分，且保留中间数
+				d1 = m1;
+				// 舍弃L2前半部分，且保留中间数
+				s2 = m2;
+			}
+
+ 			// 若元素个数为偶数
+			else{
+				// 舍弃L1后半部分，且保留中间数
+				d1 = m1;
+				// 舍弃L2前半部分，包括中间数
+				s2 = m2+1;
+			}
+		}
+	}
+	return L.data[s1] < L2.data[s2] ? L.data[s1] : L2.data[s2];
+}
