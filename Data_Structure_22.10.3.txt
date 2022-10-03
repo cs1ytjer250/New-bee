@@ -1,0 +1,104 @@
+// 查找主元素（当前列表中最多的元素，并且个数多余一半表长）
+
+int Majority(Sqlist L, int n){
+	// c为候选主元素，count记录个数
+	int i, c, count=1;
+	c = L.data[0];
+
+
+	for(i=1; i<n; i++){
+		// 如果当前扫描对象是候选主元素，则count++
+		if(L.data[i] == c)
+			count++;
+		// 不是，count--，当count=0时，则替换主元素
+		else{
+			if(count > 0)
+				count--;
+			else{
+				c = L.data[i];
+				count = 1;
+			}
+		}
+	}
+
+
+		// 统计主元素实际出现的次数
+		if(count>0){
+			for(i=count=0; i<n; i++){
+				if(L.data[i] == c)
+					count++;
+			}
+		}
+		// 判断是否大于一半表长
+		if(count>n/2) return c;
+		else return -1;
+}
+
+Time = O(n),  Space = O(1)
+
+
+
+******************************************************
+
+
+// 找到列表中未出现的最小正整数
+int findMissMin(Sqlist L, int n){
+	int i, *B;
+
+	// 创建一个空列表，用于保存扫描返回值
+	// 用malloc分配空间，该函数最后返回一个空间起始指针
+	B = (int *)malloc(sizeof(int)*n);
+
+	// memset函数，将一个空列表初始化
+	memset(B, 0, sizeof(int)*n);
+
+
+	// 扫描A列表，此时的i为下标
+	for(i=0; i<n; i++){
+		// 若A[i]的值介于1-n，则将值一个个复制到B
+		if(L.data[i]>0 && L.data[i]<=n)
+			B[L.data[i]-1] = 1;
+	}
+
+
+	// 扫描B列表，找到目标值
+	for(i=0; i<n; i++)
+		if(B[i]==0) break;
+	// 返回结果，此时的i为值
+	return i+1;
+}
+
+Time = 0(n)
+
+******************************************************
+
+// 求绝对值
+int abs_(int a){
+	if(a<0) return -a;
+	else return a;
+}
+
+// 判断a是否为最小
+bool xls_min(int a, int b, int c){
+	if(a<=b && a<=c) return true;
+	return false;
+}
+
+// 找出三个集合中最小的距离
+int findMinofTrip(int A[], int n, int B[], int m, int C[], int p){
+	// D_min用于记录最小值，初值为INT_MAX
+	int i=0, j=0, k=0, D_min= INT_MAX, D;
+
+	// 循环开始，开始条件为：起始下标小于对应数组最大下标，且D_min大于0
+	while(i<n && j<m && k<p && D_min>0){
+		// 计算D
+		D = abs_(A[i]-B[j]) + abs_(B[j]-C[k]) + abs_(C[k]-A[i]);
+		// 更新D
+		if(D<D_min) D_min = D;
+		// 更新 a
+		if(xls_min(A[i], B[j], C[k])) i++;
+		else if(xls_min(B[j], C[k], A[i])) j++;
+		else k++;
+	}
+	return D_min;
+}
