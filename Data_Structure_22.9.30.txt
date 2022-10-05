@@ -151,7 +151,7 @@ bool Del_s_t1(Sqlist &L, int s, int t){
 	// i为工作指针，k为计数器
 	int i, k = 0;
 	// 判断合法性
-	if(L.length==0 || s>=t)
+	if(L.length==0 || s<=t)
 		return false;
 	for(i=0; i<L.length; i++){
 		// 如果元素值大于左边界，小于等于右边界，则计数器（k）加1,否则工作指针就前移k个位置。
