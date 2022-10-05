@@ -1,0 +1,158 @@
+#include <string.h>
+int main()
+{
+	char arr1[] = "bit";
+	char arr2[10] = "##########";
+	strcpy(arr2, arr1);
+	printf("%s\n", arr2);
+   return 0;
+}
+
+
+*******************************************
+
+#include <string.h>
+#include <stdlib.h>
+int main()
+{
+	char B[]="hello world";
+	memset(B, '#', 5);
+	printf("%s\n", B);
+}
+
+
+*******************************************
+
+int Max(int x, int y){
+	return x<y?x:y;
+}
+int main()
+{
+	printf("%d\n", Max(4,5));
+}
+
+
+*******************************************
+
+
+// &取地址：获取变量在内存中的起始地址。   *解引用：通过内存地址，找到对应的值。
+void Exchange(int* x, int* y){
+	int temp = *x;
+	*x = *y;
+	*y = temp;
+}
+int main()
+{	
+	int a = 4;
+	int b = 5;
+	Exchange(&a, &b);
+	printf("a = %d  b=%d", a, b);
+}
+
+*******************************************
+
+
+// 函数：求素数
+int isPrime(int x){
+	int n = 2;
+	if(x==0) return 0;
+	for(; n<x; n++){
+		if(x%n == 0)
+			return 0;
+	}
+	return 1;
+}
+int main()
+{	
+	int a = 5;
+	int b = 5;
+	for(int i=101; i<201; i++){
+		if(isPrime(i))
+			printf("%d :是素数  ", i);
+	}
+}
+
+
+
+
+*******************************************
+
+
+#include <stdlib.h>
+
+#define InitSize 10
+
+typedef struct{
+	int *data;
+	int Maxsize;
+	int length;
+}Sqlist;
+
+void Initlist(Sqlist &L){
+	L.data = (int *)malloc(InitSize*sizeof(int));
+	L.Maxsize = InitSize;
+	L.length = 0;
+}
+
+
+int Binary_search(Sqlist &L, int n){
+	int sz = L.length;
+	int left = 0;
+	int right = sz-1;
+	int mid;
+	if(sz == 0)
+		return 0;
+	while(left<=right){
+		mid = (left+right)/2;
+		if(L.data[mid] == n)
+			return mid;
+		else if(L.data[mid] < n)
+			left = mid+1;
+		else
+			right = mid-1;
+	}
+	return 0;
+}
+int main(){
+	Sqlist L;
+	Initlist(L);
+	int ret;
+	for(int i=0; i<10; i++){
+		L.data[i] = i+1;
+		printf("L[%d]=%d\n", i, L.data[i]);
+		L.length++;
+	}
+	ret =  Binary_search(L, 0);
+	if(ret)
+		printf("下标为：%d\n", ret);
+	else
+		printf("找不到指定的数字");
+
+}
+
+
+*******************************************
+
+
+
+#include <stdio.h>
+
+void Increase(int* x){
+	(*x)++;
+}
+
+int main()
+{
+	int num = 0;
+	Increase(&num);
+	printf("%d\n", num);
+	Increase(&num);
+	printf("%d\n", num);
+	Increase(&num);
+	printf("%d\n", num);
+	Increase(&num);
+	printf("%d\n", num);
+	Increase(&num);
+	printf("%d\n", num);
+	return 0;
+}
