@@ -1,0 +1,70 @@
+int Add(int, int );
+int main()
+{
+	int a = 10;
+	int b = 20;
+	int num = Add(a, b);
+	printf("%d\n", num);
+}
+
+int Add(int x, int y){
+	int z = x+y;
+	return z;
+}
+
+
+
+***********************************
+
+// 输入1234， 输出：1，2，3, 4
+int Factorial(int x){
+	// 当参数小于10的时，出来。
+	if(x>9)
+		Factorial(x/10);
+	printf("%d ", x%10);
+}
+int main()
+{
+	int x = 12345;
+	Factorial(x);
+}
+
+
+**********************************
+
+// 计算字符串长度。
+int my_strlen(char* arr){
+	int count = 0;
+	while(*arr!='\0'){
+		count++;
+		arr++;
+	}
+	return count;
+}
+int main()
+{
+	char arr[] = "hell";
+	int num = my_strlen(arr);
+	printf("%d\n", num);
+}
+
+
+**********************************
+
+
+
+// 计算字符串长度(递归)
+int my_strlen(char* arr){
+	// *arr:该空间中的值。
+	if(*arr != '\0')
+		// arr+1:指针指向下一个元素。
+		return 1+my_strlen(arr+1);
+	else
+		return 0;
+}
+int main()
+{
+	char arr[] = "hell";
+	int num = my_strlen(arr);
+	printf("%d\n", num);
+}
