@@ -1,0 +1,225 @@
+
+#include <iostream>
+using namespace std;
+
+// 定义单链表节点类型(不带头节点)
+typedef struct LNode{
+	// 每个节点存放一个数据元素
+	int data;
+	// 指针指向下一个节点
+	struct LNode *next;
+}LNode, *Linklist;
+
+// 初始化一个空的单链表
+bool Initlist(Linklist &L){
+	// 空表，暂时还没有任何节点
+	L = NULL;
+	return true;
+}
+
+// 判断单链表是否为空
+bool Empty(Linklist L){
+	return (L==NULL);
+}
+
+
+
+int main(){
+	// 声明一个指向单链表的指针
+	Linklist L;
+	// 初始化一个空表。
+	Initlist(L);
+}
+
+
+**********************************************
+
+
+// 定义单链表节点类型(带头节点)
+typedef struct LNode{
+	int data;
+	struct LNode *next;
+}LNode, *Linklist;
+
+
+bool Initlist(Linklist &L){
+	// 分配一个头结点
+	L = (LNode *)malloc(sizeof(LNode));
+	// 内存不足，分配失败
+	if(L == NULL)
+		return false;
+	// 头结点之后暂时还没有节点
+	L->next = NULL;
+	return true;
+}
+
+// 判断单链表是否为空（带头节点）
+bool Empty(Linklist L){
+	if(L->next == NULL)
+		return true;
+	else
+		return false;
+}
+
+int main(){
+	Linklist L;
+	Initlist(L);
+}
+
+********************************************
+
+// 带头节点单链表，在第i个位置插入元素e
+bool ListInsert(Linklist *L, int i, int e){
+	// 判断i的合法性，带头节点单链表，下标从1开始（0是头节点）
+	if(i<1)
+		return false;
+
+	//  指针p指向当前扫描到的节点
+	LNode *p;
+
+	//  当前p指向的是第几个节点
+	int j = 0;
+
+	// L指向头二级点，头结点是第0个节点（不存数据）
+	p = L;
+
+	// 循环找到第i-1个节点。
+	while(p != NULL && j<i-1){
+		p = p->next;
+		j++;
+	}
+	// i值不合法
+	if(p==NULL)
+		return false;
+	LNode *s = (LNode *)malloc(sizeof(LNode));
+	s->data = e;
+
+
+	// 将节点s连接到p
+	s->next = p->next;
+	p->next = s;
+
+	// 插入成功
+	return true;
+}
+
+Time = O(n)
+
+********************************************
+
+// 后插操作：在p节点之后插入元素e
+bool InsertNextNode(LNode *p, int e){
+	if(p==NULL)
+		return false;
+	LNode *s = (LNode *)malloc(sizeof(LNode));
+	// 内存分配失败
+	if(s==NULL)
+		return false;
+	// 用节点s保存数元素e
+	s->data = e;
+
+	// 将节点s连接到p
+	s->next = p->next;
+	p->next = s;
+
+
+	return true;
+}
+
+Time = O(1)
+
+
+********************************************
+// 前插操作：在P节点之前插入元素e
+bool InsertPriorNode(LNode *p, int e){
+	if(p==NULL)
+		return false;
+	LNode *s = (LNode *)malloc(sizeof(LNode));
+	if(s==NULL)
+		return false;
+
+
+	s->next = p->next
+	// 新节点s连接到p之后
+	p->next = s;
+	// 将p中元素复制到s中
+	s->datt = p->data;
+	// p中元素覆盖为e
+	p->data = e;
+	return true;
+}
+
+Time = O(1)
+
+******************************************
+
+// 带头节点单链表，删除第i个节点，并将删除节点的数据保存到e
+bool ListDelete(Linklist *L, int i, int &e){
+
+	// 判断下标合法性
+	if(i<1)
+		return false;
+
+	// 创建指针p，p指向当前扫描到的节点
+	LNode *p;
+
+	// 当前p指向的是第几个节点
+	int j=0;
+
+	// L指向头节点，头结点是第0个节点（不存数据）
+	p = L;
+
+	// 循环找到第i-1个节点
+	while(p!=NULL && j<i-1){
+		p = p->next;
+		j++;
+	}
+
+	// i值不合法
+	if(p==NULL)
+		return false;
+
+	// 第i-1个节点之后已无其他节点
+	if(p->next == NULL)
+		return false;
+
+	// 令q指向被删除节点
+	LNode *q = p->next;
+
+	// 用e返回元素的值
+	e = q->data;
+
+	// 将*q节点从链中“断开”
+	p->next = q->next;
+
+	// 释放节点的存储空间
+	free(q);
+
+	// 删除成功
+	return true;
+}
+
+Time = O(n)
+
+
+************************************************
+
+// 删除指定节点
+bool DeleteNode(LNode *p){
+	if(p == NULL)
+		return false;
+	// 令q指向*p的后继节点
+	LNode *q = p->next;
+
+	// 和后继节点交换数据域
+	p->data = p->next->data;
+
+	// 将*q节点从链中“断开”
+	p->next = q->next;
+
+	// 释放后继节点的存储空间
+	free(q);
+	return true;
+}
+
+Time = O(1)
