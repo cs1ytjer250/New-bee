@@ -1,0 +1,247 @@
+
+// 五子棋游戏
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define Row 3
+#define Col 3
+
+
+// 初始化棋盘数组
+void Initboard(char board[Row][Col], int row, int col)
+{
+	for(int i = 0; i<row; i++)
+	{
+		for(int j = 0; j<row; j++)
+			// 所有格子都为空格
+			board[i][j] = ' ';
+	}
+}
+
+
+// 显示当前棋盘
+void Displayboard(char board[Row][Col], int row, int col)
+{
+	int i, j;
+	for(i = 0; i < row; i++)
+	{
+		// 第一部分：“空格”加“|”
+		for(j = 0; j < row; j++)
+		{
+			printf(" %c ", board[i][j]);
+			if(j < col-1)
+				printf("|");
+		}
+		printf("\n");
+
+		// 第二部分：“---”加“|”
+		if(i < row-1)
+		{
+			for(j = 0; j < row; j++)
+			{
+				printf("---");
+				if(j < col-1)
+					printf("|");
+
+			}
+			printf("\n");
+		}
+	}
+}
+
+
+
+// 玩家走
+void PlayerMove(char board[Row][Col], int row, int col)
+{
+	int x, y;
+	printf("玩家走！\n");
+	while(1)
+	{
+		printf("输入的坐标为：");
+		scanf("%d%d",&x ,&y);
+
+		// 判断玩家输入的坐标是否合法
+		if(x >= 1 && x <= row && y >= 1 && y <= col)
+		{
+			if(board[x - 1][y - 1] == ' ')
+			{
+				// 坐标合法，将“空格”替换为“*”，并跳出循环
+				board[x-1][y-1] = '*';
+				break;
+			}
+			else
+			{
+				printf("改坐标被占用\n");
+			}
+		}
+		else
+		{
+			printf("坐标非法，请重新输入\n");
+		}
+	}
+}
+
+
+// 电脑走
+void ComputerMove(char board[Row][Col], int row, int col)
+{
+	int x, y;
+	printf("电脑走:\n");
+	while(1)
+	{
+		// 随机走，用rand（）函数获得的随机值，模“行数”和“列数”
+		x = rand() % row;
+		y = rand() % col;
+		if(board[x][y] == ' ')
+		{
+			board[x-1][y-1] = '#';
+			break;
+		}
+	}
+}
+
+
+// 判断是否为平局
+int isFull(char board[Row][Col], int row, int col)
+{
+	int i, j;
+	for(i = 0; i < row; i++)
+	{
+		for(j = 0; j < col; j++)
+		{
+			// 扫描数组，当元素中含有“空格”时，表示可以落子
+			if(board[i][j] == ' ')
+			{
+				return 0;
+			}
+		}
+	}
+
+	// 通过扫描发现没有“空格”，视为平局
+	return 1;
+}
+
+
+// 判断输赢
+char isWin(char board[Row][Col], int row, int col)
+{
+	int i, j, ret; // ret接收“平局”返回值
+	for(i = 0; i < row; i++)
+	{
+		
+		// 横行，是否为同子
+		if(board[i][0] == board[i][1] && board[i][1]==board[i][2] && board[i][1] != ' ')
+			return board[i][1];
+	}
+	for(j = 0; j < col ;j++)
+	{
+		// 竖列，是否为同子
+		if(board[0][j] == board[1][j] && board[1][j]==board[2][j] && board[1][j] != ' ')
+			return board[j][1];
+	}
+
+
+	// 对角线，是否为同子
+	if(board[0][0] == board[1][1] && board[1][1]==board[2][2] && board[1][1] != ' ')
+		return board[1][1];
+	if(board[2][0] == board[1][1] && board[1][1]==board[0][2] && board[1][1] != ' ')
+		return board[1][1];
+
+
+	ret = isFull(board, Row, Col);
+	if(ret == 1)
+		// “Q”为平局
+		return 'Q';
+
+	// “C”为继续落子
+	return 'C';
+}
+
+
+// 游戏菜单
+void menu()
+{
+	printf("******************************\n");
+	printf("*****   1. plat  0.exit  *****\n");
+	printf("******************************\n");
+}
+
+
+// 游戏逻辑
+void game()
+{
+	char board[Row][Col] = {0};
+	char ret;
+	Initboard(board, Row, Col);
+	Displayboard(board, Row, Col);
+	while(1)
+	{
+		// 玩家下棋
+		PlayerMove(board, Row, Col);
+		Displayboard(board, Row, Col);
+		ret = isWin(board, Row, Col);
+
+		// 当ret接收的值不为“C”表示对局已经有结果，跳出循环
+		if(ret != 'C')
+			break;
+
+		// 电脑下棋
+		ComputerMove(board, Row, Col);
+		Displayboard(board, Row, Col);
+		ret = isWin(board, Row, Col);
+		if(ret != 'C')
+			break;
+	}
+	
+	// 宣布对局结果
+	if(ret == '*')
+		printf("玩家赢！\n");
+	else if(ret == '#')
+		printf("电脑赢！\n");
+	else
+		printf('平局！\n')；
+}
+
+
+// 选择开始游戏
+void test()
+{
+	int input = 0;
+	srand((unsigned int)time(NULL));
+	scanf("%d", &input);
+	do
+	{
+		menu();
+		printf("请选择：");
+		switch(input)
+		{
+			case 1:
+				{
+					game();
+					break;
+				}
+			case 0:
+				{
+					printf("退出游戏\n");
+					break;
+				}
+			default:
+				{
+					printf("选择错误，请重新选择\n");
+					break;
+				}
+		}
+	}while(input);
+}
+
+
+// 程序入口
+int main()
+{
+	test();
+	return 0;
+}
