@@ -1,0 +1,170 @@
+// 取反
+
+int main()
+{
+	int a = 11;
+	a = a | (1 << 2);
+	printf("%d\n", a);
+	a = a & (~(1 << 2));
+	printf("%d\n", a);
+   return 0; 
+}
+
+或：一个为真则为真
+与：两个为真则为真
+异或：两个为真则为假，一个为假则为真。 （取反）
+
+
+
+
+int main()
+{
+	int a = 11;
+	// 前置++，先++，后使用
+	printf("%d\n", ++a);
+
+	// 后置++，先使用，后++
+	printf("%d\n", a++);
+   return 0; 
+}
+
+
+
+int main()
+{	
+	// 强制类型转换：（类型名），当浮点型转换为整型时，小数位直接丢弃。
+	int a = (int)11.12;
+	printf("%d\n", a);
+   return 0; 
+}
+
+
+// 计算指针类型变量的大小
+int test1( int arr[])
+{
+	printf("%d\n", sizeof(arr));
+}
+
+int test2( char ch[])
+{
+	printf("%d\n", sizeof(ch));
+}
+
+int main()
+{
+	int arr[10] = {0};
+	char ch[10] = {0};
+	
+	printf("%d\n", sizeof(arr));
+	printf("%d\n", sizeof(ch));
+	
+	test1(arr);
+	test2(ch);
+   return 0; 
+}
+
+
+// 逻辑与：当遇到条件为假时，立即break
+
+int main()
+{
+	int i = 0, a = 0, b = 2, c = 3, d = 4;
+	i = a++ && ++b && d++;
+	printf("%d%d%d%d", a, b, c, d);
+   return 0; 
+}
+
+
+// 逻辑或：当遇到条件为真时，立即break
+int main()
+{
+	int i = 0, a = 1, b = 2, c = 3, d = 4;
+	i = a++ || ++b || d++;
+	printf("%d%d%d%d", a, b, c, d);
+   return 0; 
+}
+
+// 条件操作符：exp0 ? exp1 : exp2  
+// 条件为真吗？如果为真，返回exp1， 为假返回exp2
+int get_max(int x, int y)
+{
+	return (x > y ? x : y);
+}
+int main()
+{
+	int a = 10;
+	int b = 20;
+	int max = get_max(a, b);
+	printf("%d\n", max);
+   return 0; 
+}
+
+
+// 结构体
+#include <stdio.h>
+
+#define Initsize 10
+
+// 通过typedef 对该结构体进行了重定义，名字在结构体最后进行声明
+typedef struct 
+{
+	int age;
+	char name;
+	int high;
+}*Stu, Spare;  // *Stu：为该结构体的指针名称。 Spare：为该结构体的名称
+
+
+// 常规定义结构体
+struct Book
+{
+	int sales;
+	int weight;
+	int page;
+};
+
+
+int main()
+{
+	// 常规调用结构体：结构体名称+调用名
+	struct Book b1 = {18, 24, 220};
+	// 对调用名进行重定义：改为指针类型。 结构体名称* + 重定义名称 = &原调用名
+	struct Book* spare = &b1;
+	//b1.sales = 25;
+	//b1.weight = 2;
+	//b1.page = 356;
+	//  用指针调用结构体时，应该用“->”，译为：指向该结构体中的那个成员。
+	printf("%d\n%d\n%d\n", spare->sales, spare->weight, spare->page);
+	// 用重定义创建的结构体，可以直接声明调用名，当用指针声明时，用“->”对成员进行读写
+	// 用结构体名称进行声明时，用“.”对成员进行读写。
+	Stu s1;
+	s1->age = 20;
+	s1->name = 'a';
+	s1->high = 175;
+	printf("%d\n%c\n%d\n", s1->age, s1->name, s1->high);
+	Spare s2;
+	s2.age = 21;
+	s2.name = 'b';
+	s2.high = 185;
+	printf("%d\n%c\n%d", s2.age, s2.name, s2.high);
+   return 0; 
+}
+
+
+// 隐式类型转换
+
+// 整型提升（小于整型的类型），字符在内存中存储的是二进制位，当一个字符在进行算术运算时，会把字符类型提升为整型（有1字节(byte)提升为4字节）
+// 8位（bit）提升为32位（bit）,当符号位为正，默认补0，符号位为负，默认补1。
+// 当负数提升时，提升后的二进制位为补码。
+int main()
+{	
+	char a = 1;
+	char b = 4;
+	char c = a + b;
+	printf("%d\n", c);
+	printf("%u\n", sizeof(a));
+	printf("%u\n", sizeof(+a));
+	printf("%u\n", sizeof(!a));
+   return 0; 
+}
+
+
