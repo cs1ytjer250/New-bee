@@ -1,0 +1,127 @@
+import requests
+import re
+import datetime
+import json
+import csv
+
+
+class LP:
+
+    def __init__(self, keyword, city, maxpagenum, date):
+        self.keyword = keyword
+        self.city = city
+        self.maxpagenum = maxpagenum
+        self.date = date
+
+    def run(self):
+        areacode = self.getAreacode()
+
+        target = None
+        with open(f'猎聘_关键字_{self.keyword}_城市_{self.city}_{self.date}.csv', 'w', newline='', encoding='utf-8')as f:
+            f_csv = csv.DictWriter(f, ['岗位名称',
+                                       '详情链接',
+                                       '工作地点',
+                                       '薪资',
+                                       '工作经验',
+                                       '学历要求',
+                                       '公司名称',
+                                       ])
+            f_csv.writeheader()
+            for pageNum in range(0, self.maxpagenum):
+                url = 'https://www.liepin.com/zhaopin/'
+                data = {
+                    "headId": "99cdeb148841404e58d2f99ff6dd1c8f",
+                    "ckId": "u0rkeuwvxct1tjdu245ycipr71d6yao9",
+                    "fkId": "lrhq95mfhemsexynajza6n7xrit5x6lb",
+                    "skId": "lrhq95mfhemsexynajza6n7xrit5x6lb",
+                    "sfrom": "search_job_pc",
+                    "key": self.keyword,
+                    "dq": areacode,
+                    "currentPage": pageNum,
+                    "scene": "condition",
+                }
+                try:
+                    res = requests.get(url=url, params=data)
+
+                except Exception as E:
+                    print(E, res.status_code)
+
+                if target == None:
+                    pattarn = r'<li title=\"3\" class=\"ant-pagination-item\" tabindex=\"0\">.*?<a href=\"/zhaopin/\" data-currentpage=\"2\" data-selector=\"pagintion-item-selector\" onclick=\"return false;\">(.*?)</a>.*?</li>.*?'
+                    tp = re.compile(pattarn, re.DOTALL).findall(res.content)[0]
+                    print(f"共{tp}页")
+                    target = int(tp)
+
+
+                pattarn = r'<li>.*?<div class=\"job-list-item\">.*?href=\"(?P<link>.*?)\".*?<div title=\"(?P<job>.*?)\" ' \
+                          r'class=\".*?<span class=\"ellipsis-1\">(?P<address>.*?)</span>.*?<span class=\"job-salary\">(?P<salary>.' \
+                          r'*?)</span>.*?<span class=\"labels-tag\">(?P<experience>.*?)</span>.*?<span class=\"labels-tag\" >(?P<education>.*?)' \
+                          r'</span>.*?<span class=\"company-name ellipsis-1\">(?P<company>.*?)</span>.*?</div>.*?</li>'
+
+                p = re.compile(pattarn, re.DOTALL)
+
+                for match in p.finditer(res.text):
+                    # print(match)
+                    row = {
+                        '岗位名称': match.group('job'),
+                        '详情链接': match.group('link'),
+                        '工作地点': match.group('address'),
+                        '薪资': match.group('salary'),
+                        '工作经验': match.group('experience'),
+                        '学历要求': match.group('education'),
+                        '公司名称': match.group('company'),
+                    }
+                    f_csv.writerow(row)
+
+                if pageNum == target:
+                    break
+
+
+
+        # print(res.text)
+
+    def getAreacode(self):
+        url = 'https://apidok.liepin.com/api/com.liepin.bd.p.v2.get-all-dq'
+
+        data = {
+            "sceneCode": 6,
+            "from": "component"
+        }
+
+        res = requests.post(url=url, data=data)
+        json_res = res.json()
+        All_data = json_res['data']['data']['city']['list']
+        for k, v in All_data.items():
+            if self.city in v:
+                print(k)
+                return k
+        else:
+            self.city = input('城市未找到，请重新输入城市：')
+            return self.getAreacode()
+
+
+
+
+now = datetime.datetime.today().strftime("%Y_%m_%d")
+# LP(keyword="python", city="昆明", maxpagenum=2, date=now).run()
+
+
+url = "https://apidok.liepin.com/api/com.liepin.bd.p.v2.get-all-dq"
+
+city = "昆明"
+data = {
+    "sceneCode": 6,
+    "from": "component"
+}
+
+res = requests.post(url=url, data=data)
+print(res)
+json_res = res.json()
+print(json_res)
+# all_data = json.dumps(json_res)
+# print(all_data)
+# All_data = json_res['data']['data']['city']['list']
+# print(All_data)
+# for k, v in All_data.items():
+#     if city in v:
+#         print(k)
