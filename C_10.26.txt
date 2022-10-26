@@ -1,0 +1,127 @@
+
+// 通过调试，对内存进行更深刻的理解
+// 内存中的空间是由高到低，进行开辟，当循环到13次的时候，可能就会越界访问到i,这时候i的值就会置0，该循环就会变为死循环
+int main()
+{
+	int i = 0;
+	int arr[] = {1,2,3,4,5,6,7,8,9,10};
+	for(i = 0; i <= 12; i++)
+	{
+		arr[i] = 0;
+		printf("hehe\n");
+	}
+   return 0;
+}
+
+// 优化 10分
+char* my_strcpy2(char *dest, const char *src)
+{
+	// 添加返回值，使函数既可以作为参数，也可以当做值。
+	char* ret = dest;
+	assert(dest != NULL);
+	assert(src != NULL);
+	while(*dest++ = *src++);
+	return ret;
+}
+
+int main()
+{
+	char arr1[] = "#####################";
+	printf("%s\n", arr1);
+	char arr2[] = "bit";
+	// char* ret = my_strcpy2(arr1, arr2); 
+	printf("%s\n", my_strcpy2(arr1, arr2));
+   
+
+// 优化 9分
+void my_strcpy2(char *dest, const char *src)
+{
+	assert(dest != NULL);
+	assert(src != NULL);
+	while(*dest++ = *src++);
+}
+
+
+//  优化 8分
+void my_strcpy2(char *dest, char *src)
+{
+	// assert的应用，当条件不满足的时候，抛出一个异常
+	assert(dest != NULL);
+	assert(src != NULL);
+	while(*dest++ = *src++);
+}
+
+
+
+// 优化 7分
+void my_strcpy2(char *dest, char *src)
+{
+	while(*dest++ = *src++);
+}
+
+// 及格 6分
+void my_strcpy(char *dest, char *src)
+{
+	while(*src != '\0')
+	{
+		*dest = *src;
+		dest ++;
+		src ++;
+	}
+	*dest = *src;
+}
+int main()
+{
+	char arr1[] = "#####################";
+	printf("%s\n", arr1);
+	char arr2[] = "bit";
+	my_strcpy(arr1, arr2);
+	printf("%s\n", arr1);
+   return 0;
+}
+
+
+return 0;
+}
+
+
+
+// const的应用
+#include <assert.h>
+int main()
+{
+	const int a = 10;
+	// const在起始位置，影响的是*p（指针所指向的值）,内容禁止修改
+	const int * p = &a;
+	*p = 20; // error
+
+	// const在结束位置，影响的是p（指针的地址），地址禁止修改
+	int * const p = &a;
+	int n = 100;
+	p = &n;// error
+	printf("%d\n", *p);
+   return 0;
+}
+
+
+
+
+int my_srtlen(const char *p)
+{
+	int count;
+	assert(p != NULL);
+	while(*p != '\0')
+	{
+		count ++;
+		p++;
+	}
+	return count;
+}
+
+int main()
+{
+	char arr[] = "abcdef";
+	printf("%d\n", my_srtlen(arr));
+	
+   return 0;
+}
