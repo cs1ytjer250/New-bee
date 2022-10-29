@@ -1,0 +1,88 @@
+import requests
+import openpyxl
+
+
+
+#知乎网站结构分析
+
+#第一页
+# t: general
+# q: 李淼
+# correction: 1
+# offset: 0
+# limit: 20
+# filter_fields:
+# lc_idx: 0
+# show_all_topics: 0
+
+
+#第二页
+# t: general
+# q: 李淼
+# correction: 1
+# offset: 20
+# limit: 20
+# filter_fields:
+# lc_idx: 20
+# show_all_topics: 0
+# search_hash_id: 651d97bf167d7361799cf963c2aeb010
+# vertical_info: 0,0,0,0,0,0,0,0,0,1
+
+#爬取新闻详情
+
+# wb = openpyxl.Workbook()
+# sheet = wb.active
+# sheet.title = '疫情'
+# column_name = ['标题','链接']
+# sheet.append(column_name)
+# headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'}
+# url = 'https://i.news.qq.com/trpc.qqnews_web.kv_srv.kv_srv_http_proxy/list'
+# # offset = input('请输入要爬取的页面数：')
+# offset = 0
+# while offset<60:
+#     # params = {'sub_srv_id': 'antip', 'srv_id': 'pc', 'offset': offset, 'limit': '20', 'strategy': '1',
+#     #           'ext': '{"pool":["high","top"],"is_filter":10,"check_type":true}'}
+#     params = {
+#         'sub_srv_id': '24hours',
+#         'srv_id': 'pc',
+#         'offset':offset,
+#         'limit': '20',
+#         'strategy': '1',
+#         'ext': '{"pool":["top"],"is_filter":7,"check_type":true}'
+#     }
+#     res = requests.get(url, params=params, headers=headers)
+#     json_new = res.json()
+#     list_news = json_new['data']['list']
+#     for new in list_news:
+#         if new.get('url'):
+#             row = [new['title'],new['url']]
+#             #print(row)
+#             sheet.append(row)
+#     offset+= 20
+#
+# wb.save('News.xlsx')
+# wb.close()
+
+
+#爬取歌曲评论
+#第一页
+# _: 1634966504040
+# sign: zzbeac3f198rfp8gl9udoxqpeddonamiw7ded1e5e
+
+
+#第二页
+# _: 1634966674591
+# sign: zzbda863ee52whcvsmxbuq1bm2ksfxva05c4d535
+# url = 'https://u.y.qq.com/cgi-bin/musics.fcg'
+# headers ={
+#     'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'
+#            }
+# params = {
+#     '_': '1634966504040',
+#     'sign': 'zzbeac3f198rfp8gl9udoxqpeddonamiw7ded1e5'
+# }
+# res = requests.get(url,headers=headers,params=params)
+# json_comment = res.json()
+# list_comment = json_comment['req_1']['data']['Commentlist']['Comments']
+# for comment in list_comment:
+#     print(comment['Content'])
