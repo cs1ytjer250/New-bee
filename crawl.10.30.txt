@@ -1,0 +1,100 @@
+import requests
+from bs4 import BeautifulSoup
+import smtplib  #smtplib是python的一个内置库不需要安装
+#引入Header和MIMEText模块
+from email.mime.text import MIMEText
+from email.header import Header
+import schedule
+import time
+
+sender = input('请输入你的邮箱号：')  #输入账号
+pwd = input('请输入你的密码：')  #输入密码
+recevier = input('请输入收件人邮箱：')  #收件人
+
+'''
+#爬取网站信息
+def get_weather():
+
+    url = 'http://www.weather.com.cn/weather/101290101.shtml'
+    headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'
+    }
+
+    res = requests.get(url,headers=headers)
+    res.encoding = 'utf-8'
+    soup = BeautifulSoup(res.text,'html.parser')
+
+    data_temperature = soup.find(class_="wea").text
+    data_weather = soup.find(class_="tem").text
+    return (data_temperature,data_weather)
+'''
+
+index = 0
+def get_weather():
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'}
+
+    url = 'https://movie.douban.com/chart'
+
+    res = requests.get(url, headers=headers)
+
+    res.encoding = 'utf-8'
+
+    bsdata = BeautifulSoup(res.text, 'html.parser')
+
+    movies_list = bsdata.find_all(class_="pl2")
+
+    list_all = []
+
+    for movie in movies_list:
+        name = movie.find('a').text.replace(' ', '').replace('\n', '')
+        rating = movie.find(class_="rating_nums").text
+        info = movie.find('p').text
+        list_all.append(name + rating + info)
+    return list_all
+
+
+#发送邮件
+def send_mail(data,sender,pwd,recevier):
+    mailhost = 'smtp.qq.com' #把qq邮箱服务器地址赋值给mailhost，地址需要是字符串
+    qqmail = smtplib.SMTP() #实例化一个smtplib模块里的STMP对象，这样就可以SMTP对象的方法和属性了
+    qqmail.connect(mailhost,25) #连接服务器，第一个参数是服务器地址，第二个参数是SMTP端口号
+
+    # sender = input('请输入你的邮箱号：')  #输入账号
+    # pwd = input('请输入你的密码：')  #输入密码
+    qqmail.login(sender,pwd)  #登录邮箱，第一个参数为邮箱账号，第二个参数为邮箱密码。
+    # receiver = input('请输入收件人邮箱：')  #收件人
+
+    content = '\n'.join(data)  #邮件正文
+    message = MIMEText(content,'plain','utf-8')  #实例化一个MIMEText邮件对象，该对象需要写进三个参数，分别是邮件正文，文本格式和编码类型
+    subject = '豆瓣新片！' #用input获取邮箱主题
+    message['Subject']=Header(subject,'utf-8')   #在等号的右边，是实例化一个Header邮箱头对象，该对象需要写入两个参数，第一个是邮箱的主题，第二个为编码格式，然后赋值给左边message['Subject']
+
+    try:
+        qqmail.sendmail(sender, recevier, message.as_string())  #发送邮件，调用了sendmail（）方法，写入三个参数，分别是发件人，收件人，和字符串格式的正文。
+        return True
+    except :
+        return False
+        print('发送失败！')
+    qqmail.quit()#退出邮箱
+
+def job():
+    global index
+    print('index:%d'%index)
+    print('开始第一次发送任务')
+    data = get_weather()
+    IsSuccess = send_mail(data,sender,pwd,recevier)
+    while IsSuccess is False:
+        print('邮件发送失败，正在尝试重新发送。')
+        IsSuccess = send_mail(data, sender, pwd, recevier)
+    print('发送成功！')
+    index += 1
+
+schedule.every(1).seconds.do(job)
+while index != 2:
+    schedule.run_pending()
+    time.sleep(1)
+
+
+
+
