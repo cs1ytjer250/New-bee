@@ -1,0 +1,84 @@
+import requests
+import json
+from bs4 import BeautifulSoup
+
+
+# try:
+#     cookie_txt=open('账号密码.txt','r')
+#     cookie_dict = json.loads(cookie_txt.read())
+#     cookie =  requests.utils.cookiejar_from_dict(cookie_dict)
+#     session.cookies = cookie
+#
+#     url_login = 'https://xiaoke.kaikeba.com/example/wordpress/wp-login.php'
+#     headers = {
+#     'user-agent''Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'
+#     }
+#
+# except FileNotFoundError:
+#     print('存储的文件不存在！')
+#     url_login = 'https://xiaoke.kaikeba.com/example/wordpress/wp-login.php'
+#
+#     data_login = {
+#         'log': input('请输入账号：'),
+#         'pwd': input("请输入你的密码："),
+#         'wp-submit': '登录',
+#         'redirect_to': 'https://xiaoke.kaikeba.com/example/wordpress/2019/10/17/%e5%bc%80%e8%af%be%e5%90%a7%e6%97%a0%e6%95%8c%e5%a5%bd%e5%90%83%e7%9a%84%e9%a3%9f%e5%a0%82%e4%b8%80%e5%91%a8%e8%8f%9c%e8%b0%b1/',
+#         'testcookie': '1'
+#     }
+#     session.post(url_login,headers=headers,data=data_login)
+#     cookie_dict =  requests.utils.dict_from_cookiejar(session.cookies)
+#     cookie_str = json.dumps(cookie_dict)
+#     with open('账号密码.txt','w') as file:
+#         file.write(cookie_str)
+#
+#
+# try:
+#     cookie_txt=open('账号密码2.txt','r')
+#     cookie_dict = json.loads(cookie_txt.read())
+#     cookie =  requests.utils.cookiejar_from_dict(cookie_dict)
+#     session.cookies = cookie
+# except FileNotFoundError:
+#     print('存储的文件不存在！')
+#     url_content = 'https://xiaoke.kaikeba.com/example/wordpress/wp-login.php?redirect_to=https%3A%2F%2Fxiaoke.kaikeba.com%2Fexample%2Fwordpress%2F2019%2F10%2F17%2F%25e5%25bc%2580%25e8%25af%25be%25e5%2590%25a7%25e6%2597%25a0%25e6%2595%258c%25e5%25a5%25bd%25e5%2590%2583%25e7%259a%2584%25e9%25a3%259f%25e5%25a0%2582%25e4%25b8%2580%25e5%2591%25a8%25e8%258f%259c%25e8%25b0%25b1%2F'
+#     data_content = {
+#     'post_password': input('请输入加密密码：'),
+#     'Submit':'提交'
+#     }
+#     session.post(url_content,headers=headers,data=data_content)
+#     cookie_dict2 =  requests.utils.dict_from_cookiejar(session.cookies)
+#     cookie_str2 = json.dumps(cookie_dict2)
+#     with open('账号密码2.txt','w') as file:
+#         file.write(cookie_str2)
+# url = requests.get('https://xiaoke.kaikeba.com/example/wordpress/wp-login.php')
+# soup = BeautifulSoup(url.text,'html.parser')
+# content_list = soup.find('div',class_='entrt-content')
+# print(content_list):
+login_url = 'https://xiaoke.kaikeba.com/example/wordpress/wp-login.php?action=postpass'
+post_url = 'https://xiaoke.kaikeba.com/example/wordpress/2019/11/07/互联网圈炸锅啦！有人要帮你加薪啦！/'
+session = requests.session()
+headers = {
+'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'
+}
+def content():
+    post_res = session.get(post_url, headers=headers)
+    soup = BeautifulSoup(post_res.text,'html.parser')
+    soup_content = soup.find('div',class_='entry-content')
+    if soup_content is None:
+        print('没有内容！')
+    else:
+        print(soup_content.text)
+# def login_in():
+content()
+
+
+
+post_data = {
+'post_password': 'xiaoke123',
+'Submit': '提交'
+}
+session.post(login_url,headers=headers,data=post_data)
+post_res = session.get(post_url,headers=headers)
+
+print(post_res.status_code)
+content()
+
