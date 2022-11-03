@@ -1,0 +1,199 @@
+char* my_strlen(char *dest, const char* src)
+{}
+
+int main()
+{
+	char*(*pf)(char*, const char*) = my_strlen;
+	char*(*pfarr[4])(char*, const char*) = {};
+   	return 0;
+}
+
+
+
+
+// 计算器
+void menu()
+{
+	printf("**************************\n");
+	printf("**     1.Add     2.Sub  **\n");
+	printf("**     3.Mul     2.Div  **\n");
+	printf("**         0. exit      **\n");
+	printf("**************************\n");
+	
+}
+
+int Add(int x, int y)
+{
+	return x + y;
+}
+
+int Sub(int x, int y)
+{
+	return x - y;
+}
+
+int Mul(int x, int y)
+{
+	return x * y;
+}
+
+int Div(int x, int y)
+{
+	return x / y;
+}
+
+
+int main()
+{
+	int n = 5;
+	int x = 0;
+	int y = 0;
+	do
+	{
+		menu();
+		printf("请选择：\n");
+		scanf("%d\n", n);
+		switch(n)
+		{
+			case 1:
+				printf("请输入两个操作数：");
+				scanf("%d%d", &x, &y);
+				printf("%d\n", Add(x, y));
+				break;
+			case 2:
+				printf("请输入两个操作数：");
+				scanf("%d%d", &x, &y);
+				printf("%d\n", Sub(x, y));
+				break;
+			case 3:
+				printf("请输入两个操作数：");
+				scanf("%d%d", &x, &y);
+				printf("%d\n", Mul(x, y));
+				break;
+			case 4:
+				printf("请输入两个操作数：");
+				scanf("%d%d", &x, &y);
+				printf("%d\n", Div(x, y));
+				break;
+			case 0:
+				printf("Exit");
+				break;
+			default:
+				printf("Select Error");
+				break;
+		}
+	}while(0);
+   	return 0;
+}
+
+
+
+// 函数指针数组的运用
+int main()
+{
+	int n = 6;
+	int x = 0;
+	int y = 0;
+	int (*pfarr[5])(int, int) = {0, Add, Sub, Mul, Div};
+	do
+	{
+		menu();
+		printf("请选择：\n");
+		scanf("%d\n", n);
+		if(n >= 1 && n<= 5)
+		{
+			printf("请输入两个操作数：\n");
+			scanf("%d%d", &x, &y);
+			int ret = pfarr[n](x, y);
+			printf("%d\n", ret);
+		}
+		else if(n == 0)
+		{
+			printf("退出");
+		}
+		else
+		{
+			printf("选择错误!");
+		}
+	}while(0);
+   	return 0;
+}
+
+
+// 函数回调
+
+void Calc(int(*pf)(int, int))
+{
+	int x = 10;
+	int y = 20;
+	printf("Input two numbers Please:\n");
+	printf("%d\n", pf(x, y));
+}
+
+
+// 将一个函数指针作为参数传给函数，进行调用的方式就是回调函数。
+void print(char *str)
+{
+	printf("haha %s\n", str);
+}
+
+void test(void(*p)(char*))
+{
+	printf("test\n");
+	p("hello world");
+}
+int main()
+{
+	test(print);
+   return 0;
+}
+
+int main()
+{
+	int n = 4;
+	do
+	{
+		menu();
+		printf("请选择：\n");
+		scanf("%d\n", n);
+		switch(n)
+		{
+			case 1:
+				Calc(Add);
+				break;
+			case 2:
+				Calc(Sub);
+				break;
+			case 3:
+				Calc(Mul);
+				break;
+			case 4:
+				Calc(Div);
+				break;
+			case 0:
+				printf("Exit");
+				break;
+			default:
+				printf("Select Error");
+				break;
+		}
+	}while(0);
+   	return 0;
+}
+
+// 指向函数指针数组的指针。
+int Add(int x, int y)
+{
+	return x + y;
+}
+int main()
+{
+	int arr[10] = {0};
+	int (*arr2)[10] = &arr;
+	
+	int (*pfarr[4])(int, int);
+	// ppfarr是一个数组指针，指针指向的数组有4个元素。
+	// 每个元素的类型是：一个函数指针。
+	int (*(*ppfarr)[4])(int, int) = &pfarr;
+   return 0;
+}   
