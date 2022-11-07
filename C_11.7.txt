@@ -1,0 +1,201 @@
+int main()
+{
+	char arr[] = "abcdef";
+	printf("%d\n", sizeof(arr)); // 7
+	printf("%d\n", sizeof(arr + 0)); // 4/8
+	printf("%d\n", sizeof(*arr));//1
+	printf("%d\n", sizeof(arr[1]));// 1
+	printf("%d\n", sizeof(&arr)); //4/8
+	printf("%d\n", sizeof(&arr + 1)); // 4/8
+	printf("%d\n", sizeof(&arr[0] + 1)); // 4/8
+    return 0;
+}
+
+
+
+
+int main()
+{
+	char arr[] = "abcdef";
+	printf("%d\n", strlen(arr)); // 6
+	printf("%d\n", strlen(arr + 0)); // 6
+	//printf("%d\n", strlen(*arr));//越界访问
+	//printf("%d\n", strlen(arr[1]));// 越界访问
+	printf("%d\n", strlen(&arr)); //6
+	printf("%d\n", strlen(&arr + 1)); // 随机
+	printf("%d\n", strlen(&arr[0] + 1)); // 5
+    return 0;
+}
+
+
+
+int main()
+{
+	char *p = "abcdef";
+	printf("%d\n", sizeof(p)); // 4/8
+	printf("%d\n", sizeof(p + 1)); // 4/8
+	printf("%d\n", sizeof(*p));// 1
+	printf("%d\n", sizeof(p[0]));// 1
+	printf("%d\n", sizeof(&p)); //4/8
+	printf("%d\n", sizeof(&p + 1)); // 4/8
+	printf("%d\n", sizeof(&p[0] + 1)); // 4/8
+    return 0;
+}
+
+
+
+
+int main()
+{
+	char *p = "abcdef";
+	printf("%d\n", strlen(p)); // 6
+	printf("%d\n", strlen(p + 1)); // 随机
+	//printf("%d\n", strlen(*p));// 越界
+	//printf("%d\n", strlen(p[0]));// 越界
+	printf("%d\n", strlen(&p)); //随机
+	printf("%d\n", strlen(&p + 1)); // 随机
+	printf("%d\n", strlen(&p[0] + 1)); // 5
+    return 0;
+}
+
+
+
+
+int main()
+{
+	int a[3][4] = {0};
+	printf("%d\n", sizeof(a)); // 48
+	printf("%d\n", sizeof(a[0][0])); // 4
+	printf("%d\n", sizeof(a[0])); //16
+	printf("%d\n", sizeof(a[0] + 1)); // 4/8
+	printf("%d\n", sizeof(*a[0] + 1)); // 4
+	printf("%d\n", sizeof(a + 1)); // 4/8
+	printf("%d\n", sizeof(*(a + 1))); // 16
+	printf("%d\n", sizeof(&a[0] + 1)); // 4/8
+	printf("%d\n", sizeof(*(&a[0] + 1))); // 16
+	printf("%d\n", sizeof(*a)); // 16
+	printf("%d\n", sizeof(a[3])); //16
+    return 0;
+}
+
+
+
+
+int main()
+{
+	int a[5] = {1,2,3,4,5};
+	int *ptr = (int *)(&a + 1);
+	// a+1把指针指向了下一个元素，并不是跳过整个数组
+	// ptr-1同上
+	printf("%d, %d", *(a + 1), *(ptr -1));
+  	return 0;
+}
+
+
+
+
+struct Test
+{
+	int Num; // 4
+	char *pcName; // 4/8
+	short sData; // 2
+	char cha[2]; // 2
+	short sBa[4]; // 8
+}*p, pt; 
+
+int main()
+{
+	//Test p;
+	printf("%p\n", p + 0x1); // 跳过一个结构体
+	printf("%p\n", (unsigned long)p + 0x1); // 地址加1
+	printf("%p\n", (unsigned int*)p + 0x1); // 整型指针加1
+  	return 0;
+}
+
+
+
+int main()
+{
+	int a[4] = {1,2,3,4};
+	int *ptr1 = (int *)(&a + 1); // 4：首先指针跳过整个数组然后再往会查找4个字节的宽度
+	int *ptr2 = (int *)((int)a + 1); // 0x2 00 00 00 : 首先将指针转换为整型，然后加1，再转换为指针，对齐解引用
+这时，在已经前进了1个字节的基础上，再读取4个字节，最后进行拿出。
+	printf("%x, %x", ptr1[-1], *ptr2);
+  	return 0;
+}
+
+
+
+int main()
+{
+	// 逗号表达式的运用。
+	int a[3][2] = {(0,1), (2,3), (4,5)};
+	int *p;
+	p = a[0];
+	printf("%d", p[0]);
+  	return 0;
+}
+
+
+
+
+int main()
+{
+	int a[5][5];
+	int (*p)[4]; 
+	p = a; // 因为数组指针只有4个元素，所以当把a赋值给p的时候，p中只有第一行前4个元素，p的地址为首地址（0）
+	// &p[4][2] == *(*(p+4)+2), 所以&p[4][2] 这时的p指针已经跳到第4行第4列。
+	printf("%p, %d\n", &p[4][2] - &a[4][2], &p[4][2] - &a[4][2]);
+  	return 0;
+}
+
+
+
+int main()
+{
+	int aa[2][5] = {1,2,3,4,5,6,7,8,9,10};
+	
+	int *ptr1 = (int *)(&aa + 1);
+	int *ptr2 = (int *)(*(aa + 1));
+	// ptr1 - 1 ：当前ptr1指向的是该数组后面的位置，-1向回退一个整型
+	// ptr2 - 1 ：当前ptr2指向的是第二行的首元素位置，-1向回退一个整型
+	printf("%d,%d\n", *(ptr1 -1), *(ptr2 -1)); // 10, 5
+  	return 0;
+}
+
+
+
+
+int main()
+{	
+	// a:当前为指针数组，存的是w，a，a的地址
+	char *a[] = {"work", "at", "alibaba"};
+	// pa：是指向地址a的指针，指向的是w的地址
+	char **pa = a;
+	// pa++：向后跳跃一个字节，由w跳向a
+	pa++;
+	// 对pa解引用，打印at
+	printf("%s\n", *pa);
+  	return 0;
+}
+
+
+
+
+int main()
+{
+	char *c[] = {"enter", "new", "point", "first"};
+	char **cp[] = {c + 3, c + 2, c + 1, c};
+	char***cpp = cp;
+	
+	c = {"e", "n", "p", "f"};
+	cp = {"f", "p", "n", "e"};
+	cpp = {"f"};	
+
+
+	printf("%s\n", **++cpp); // point
+	printf("%s\n", *--*++cpp + 3); // er
+	printf("%s\n", *cpp[-2] + 3); // st
+	printf("%s\n", cpp[-1][-1] + 1); // ew
+  	return 0;
+}
