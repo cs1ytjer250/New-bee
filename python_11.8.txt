@@ -1,0 +1,110 @@
+﻿#模仿静态变量的用法。
+'''
+class Text:   #定义一个类
+    var = 0  #类属性
+    print('var=%d'%var)
+    var += 1   #类属性值加1
+if __name__ == '__main__':  #程序入口
+    for i in range(3):  #循环遍历Text类
+        Text()
+
+
+class Static:  #定义一个Static类
+    StaticVar = 5  #类属性
+    def varfunc(self):  #类方法
+        self.StaticVar+=1  #类属性加1
+        print(self.StaticVar)  #打印类属性
+
+
+print(Static.StaticVar)  #打印Static类的属性
+a = Static()   #把Static类赋值给a
+for i in range(3):  #遍历实例a的类方法
+    a.varfunc()
+'''
+
+class Var:
+    var = 0
+    def text(self):
+        self.var+= 1
+        print(self.var)
+
+a = Var()
+print(Var.var)
+print(a.var)
+a.text()
+a.text()
+a.text()
+print(Var.var)
+print(a.var)
+
+
+
+
+#逆序输出一个数组
+a = [2,5,6,9,4,5,0,5,1,4,8]
+
+for i in range(0,(len(a)-1)//2): #运用地板除法（整除） 求得中间下标
+    temp = a[i]  #把需要替换的下标数给temp
+    a[i] = a[len(a)-i-1]  #把相对的数替换给a[i]
+    a[len(a)-i-1] = temp  #在把temp存储的数给与a[len(a)-j-1]完成替换
+
+
+print(a)
+
+
+
+
+
+#有一个已经排好序的数组。现输入一个数，要求按原来的规律将它插入数组中。
+#首先判断此数是否大于最后一个数，然后再考虑插入中间的数的情况，插入后此元素之后的数，依次后移一个位置。
+
+a = [1,2,4,8,12,20,52,34,0]
+print('before:')
+for i in range(0,len(a)-1):print(a[i],end=' ')
+print()
+n = int(input('Please input the number you want to insert:'))
+local = 0
+for i in range(len(a)-2,-1,-1):
+    if n > a[i]:
+        local = i+1
+        break
+for i in range(len(a)-1,local-1,-1):
+    a[i] = a[i-1]
+a[local] = n
+print(a)
+
+
+
+
+
+# 模仿静态变量(static)另一案例。
+
+class Test:
+    num = 1
+    def text(self):
+        self.num+=1
+        print('num = %d' %self.num)
+
+if __name__ == '__main__':
+    num = 2
+    inst = Test()
+    for i in range(3):
+        num+=1
+        print('The num = %d'%num)
+        inst.text()
+
+
+
+
+#题目：学习使用auto定义变量的用法。
+
+num = 2
+def aotyfunc():
+    num = 1
+    print('text num %d'% num)
+    num += 1
+
+for i in range(3):
+    num +=1
+    print('num:%d'%num)
+    aotyfunc()
