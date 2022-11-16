@@ -1,0 +1,228 @@
+
+// 两数相加
+int main()
+{
+ 	int arr1[] = {9,9,8};
+	int arr2[] = {9,9};
+	int sz1 = sizeof(arr1) / sizeof(arr1[0]);
+	int sz2 = sizeof(arr2) / sizeof(arr2[0]);
+	int arr3[5] = {0};
+	int i = 0, j = 0;
+	int sum = 0;
+	int next = 0;
+	int total = 0;
+	while(i < sz1)
+	{
+		sum = arr1[i] + arr2[i] + next;
+		next = sum / 10;
+		total = sum % 10;
+		arr3[i] = total;
+		i ++;
+		sum = 0;
+	}
+	if(sum / 10)
+	{
+		arr3[i] = next;
+	}
+	for(j = 0; j < 5; j++)
+	{
+		printf("%d\n", arr3[j]);
+	}
+	
+   	return 0;
+}
+
+
+
+
+#include <string.h>
+
+int main()
+{
+ 	const char* p1 = "abcdefghi";
+	const char* p2 = "abcqdw";
+	int ret = strncmp(p1, p2, 4);
+	printf("%d\n", ret);
+   	return 0;
+}
+
+
+// 查找子串
+int main()
+{
+ 	const char* p1 = "abcdefghi";
+	const char* p2 = "def";
+	char* ret = strstr(p1, p2);
+	if(ret == NULL)
+	{
+		printf("不存在子串");
+	}
+	else
+	{
+		printf("%s\n", ret);
+	}
+   	return 0;
+}
+
+
+
+
+char* my_strstr(const char* p1, const char* p2)
+{
+	assert(p1 != NULL);
+	assert(p2 != NULL);
+	char* s1 = NULL;
+	char* s2 = NULL;
+	char* cur = (char*)p1;
+	if(*p2 == '\0')
+	{
+		return (char*)p1;
+	}
+	while(*cur)
+	{
+		s1 = cur;
+		s2 = (char*)p2;
+		while((*s1 != '\0') && (*s2 != '\0') && (*s1 == *s2))
+		{
+			s1++;
+			s2++;
+		}
+		if(*s2 == '\0')
+		{
+			return cur;
+		}
+		if(*s1 == '\0')
+		{
+			return NULL;
+		}
+		cur++;
+	}
+	return NULL;
+}
+
+
+
+int main()
+{
+ 	char* p1 = "abbbcdefghi";
+	char* p2 = "bbc";
+	char* ret = my_strstr(p1, p2);
+	int a = 2;
+	if(ret == NULL)
+	{
+		printf("不存在子串\n");
+	}
+	else
+	{
+		printf("%s\n", ret);
+	}
+	printf("%d\n" , !a);
+   	return 0;
+}
+
+
+
+
+// strtok使用
+
+int main()
+{
+ 	char arr[] = "168.911.212.13";
+	char* p2 = ".";
+	char buf[1024] = {0};
+	strcpy(buf, arr);
+	char* ret = strtok(arr, p2);
+	printf("%s\n", buf);
+	printf("%s\n", ret);
+	ret = strtok(NULL, p2);
+	printf("%s\n", ret);
+	ret = strtok(NULL, p2);
+	printf("%s\n", ret);
+	ret = strtok(NULL, p2);
+	printf("%s\n", ret);
+   	return 0;
+}
+
+
+
+
+int main()
+{
+ 	char arr[] = "168.911.212.13";
+	char* p2 = ".";
+	char buf[1024] = {0};
+	strcpy(buf, arr);
+	char* ret;
+	for(ret = strtok(arr, p2); ret != NULL; ret = strtok(NULL, p2))
+	{
+		printf("%s\n", ret);
+	}
+   	return 0;
+}
+
+
+// strerror 使用
+int main()
+{
+	char* ret = strerror(3);
+	printf("%s\n", ret);
+   	return 0;
+}
+
+
+
+#include <errno.h>
+
+int main()
+{
+	FILE* pf = fopen("test.txt", "r");
+	if(pf == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		printf("file open success\n");
+	}
+   	return 0;
+}
+
+
+
+int main()
+{
+	char ch = tolower('q');
+	printf("%c\n", ch);
+   	return 0;
+}
+
+
+
+#include <ctype.h>
+
+int main()
+{
+	char ch = tolower('q');
+	char ch2 = toupper('q');
+	printf("%c\n", ch);
+	printf("%c\n", ch2);
+   	return 0;
+}
+
+
+
+int main()
+{
+	char ch[] = "I Am a Student";
+	int i = 0;
+	while(ch[i])
+	{
+		if(islower(ch[i]))
+		{
+			ch[i] = toupper(ch[i]);
+		}
+		i++;
+	}
+	printf("%s\n", ch);
+   	return 0;
+}
