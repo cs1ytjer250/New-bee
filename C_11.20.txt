@@ -1,0 +1,211 @@
+struct Stu
+{
+	char name[20];
+	char tele[20];
+	char sex[20];
+	int age;
+}s1, s2, s3;
+
+int main()
+{
+ 	struct Stu s1[2] = {{"zhangsan", "135216546", "nan", 24}, {"lisi", "13412216546", "nv", 26}};
+	
+   	return 0;
+}
+
+
+
+// 结构体的自引用
+struct Node
+{
+	int data;
+	struct Node* next; // 结构体指针，大小4/8
+};
+
+int main()
+{
+ 	struct Stu s1[2] = {{"zhangsan", "135216546", "nan", 24}, {"lisi", "13412216546", "nv", 26}};
+	
+   	return 0;
+}
+
+
+// 重命名结构体名称
+typedef struct Node
+{
+	int data;
+	struct Node* next;
+}Node;
+
+int main()
+{
+ 	struct Node s1;
+	Node s2;
+	
+   	return 0;
+}
+
+
+// 结构体的初始化和访问
+struct Stu
+{
+	char c;
+	int age;
+	double f;
+};
+int main()
+{
+	struct Stu s1 = {'w', 53, 3.14};
+	printf("%lf %d %c\n", s1.f, s1.age, s1.c);
+   	return 0;
+}
+
+
+
+struct T
+{
+	double weight;
+	short age;
+};
+
+struct S
+{
+	char c;
+	int a;
+	double d;
+	char arr[20];
+	struct T st;
+};
+int main()
+{
+	struct S s1 = {'w', 53, 3.14};
+	struct S s2 = {'Q', 24, 2.43, "zhangsan", {1.533, 20}};
+	printf("%lf %d %c\n", s1.d, s1.a, s1.c);
+	printf("%lf %d %c %s %d\n", s2.st.weight, s2.a, s2.c, s2.arr, s2.st.age);
+   	return 0;
+}
+
+
+
+
+
+// 边界对齐
+#include <stdio.h>
+struct S4
+{
+	double age;
+	char sex;
+	int name;
+};
+
+struct S3
+{
+	int age;
+	char sex;
+	char name;
+};
+
+struct S2
+{
+	char name;
+	int age;
+	char sex;
+};
+
+struct S1
+{
+	char name;
+	char sex;
+	int age;
+};
+
+struct S5
+{
+	char sex;
+	struct S4 s1;
+	double name;
+};
+int main()
+{
+	struct S1 s1 = {0};
+	struct S2 s2 = {0};
+	struct S3 s3 = {0};
+	struct S4 s4 = {0};
+	struct S5 s5 = {0};
+	printf("%d\n", sizeof(s1));
+	printf("%d\n", sizeof(s2));
+	printf("%d\n", sizeof(s3));
+	printf("%d\n", sizeof(s4));
+	printf("%d\n", sizeof(s5));
+   	return 0;
+}
+
+
+
+
+// 设置默认对齐数
+#pragma pack(4) // 对齐数为4
+struct S1
+{
+	char sex;
+	double name;
+};
+#pragma pack() // 取消对齐数
+int main()
+{
+	struct S1 s1 = {0};
+	printf("%d\n", sizeof(s1));
+   	return 0;
+}
+
+
+
+// 每个成员在内存中的起始地址（逻辑地址）
+#include <stddef.h>
+struct S1
+{
+	char sex;
+	double name;
+};
+
+int main()
+{
+
+	printf("%d\n", offsetof(struct S1, sex)); // 0
+	printf("%d\n", offsetof(struct S1, name)); // 8
+   	return 0;
+}
+
+
+
+
+// 合并两个有序链表
+
+struct Node
+{
+	int val;
+	struct Node* next;
+}ListNode*, ListNode;
+
+
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2)
+{
+	ListNode dummy(0);
+	ListNode* tail = &dummy;
+	
+	while()
+	{
+		if(l1->next < l2->next)
+		{
+			tail->next = new ListNode(l1->val);
+			tail = tail->next;
+			l1 = l1->next;
+		}
+		else
+		{
+			tail->next = new ListNode(l2->val);
+			tail = tail->next;
+			l2 = l2->next;
+		}
+	}
+}
