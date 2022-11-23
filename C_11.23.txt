@@ -1,0 +1,307 @@
+
+// 接收参数为非指针时，无法将初始化值“带回来”
+struct S 
+{
+	char c;
+	int a;
+	double d;
+};
+
+void Init(struct S tmp)
+{
+	tmp.c = 'w';
+	tmp.a = 3;
+	tmp.d = 3.4;
+}
+
+int main()
+{
+	struct S s = {0};
+	Init(s);
+   	return 0;
+}
+
+
+// 接收参数为指针，才能将初始化值“带回来”
+struct S 
+{
+	char c;
+	int a;
+	double d;
+};
+
+void Init1(struct S* ps)
+{
+	ps->c = 'w';
+	ps->a = 3;
+	ps->d = 3.4;
+}
+
+void Init2(struct S tmp)
+{
+	tmp.c = 'z';
+	tmp.a = 67;
+	tmp.d = 2.34;
+}
+
+int main()
+{
+	struct S s1 = {0};
+	struct S s2 = {0};
+	Init1(&s1);
+	Init2(s2);
+	printf("%d %c %lf\n", s1.a, s1.c, s1.d);
+	printf("%d %c %lf", s2.a, s2.c, s2.d);
+   	return 0;
+}
+
+
+
+
+
+
+struct S 
+{
+	char c;
+	int a;
+	double d;
+};
+
+void Init1(struct S* ps)
+{
+	ps->c = 'w';
+	ps->a = 3;
+	ps->d = 3.4;
+}
+
+void Init2(struct S tmp)
+{
+	tmp.c = 'z';
+	tmp.a = 67;
+	tmp.d = 2.34;
+}
+
+void Print1(struct S tmp)
+{
+	printf("%d %c %lf\n", tmp.a, tmp.c, tmp.d);
+}
+
+void Print2(const struct S* ps)
+{
+	printf("%d %c %lf\n", ps->a, ps->c, ps->d);
+}
+
+int main()
+{
+	struct S s1 = {0};
+	struct S s2 = {0};
+	Init1(&s1);
+	Init2(s2);
+	Print1(s1);
+	Print2(&s1);
+   	return 0;
+}
+
+
+
+// 位段
+struct S 
+{
+	int a : 2;  // 冒号后面的数字表示，所需位数。
+	int b : 5;
+	int c : 10;
+	int d : 30;
+};
+
+
+int main()
+{
+	struct S s;
+	printf("%d\n", sizeof(s));
+   	return 0;
+}
+
+
+
+
+struct S 
+{
+	int a : 2;
+	int b : 5;
+	int c : 10;
+	int d : 30;
+};
+
+struct S1 
+{
+	char a : 3;
+	char b : 4;
+	char c : 5;
+	char d : 4;
+ };
+
+int main()
+{
+	struct S1 s = {0};
+	s.a = 10;   // 因为10超出3个二进制位所表示最大范围，所以报错
+	s.b = 20;  // 同上
+	s.c = 3;
+	s.d = 4;
+	printf("%d\n", sizeof(s));
+   	return 0;
+}
+
+
+
+
+// 枚举
+enum Sex
+{
+	// 所有可能的取值范围
+	MALE,
+	FAMALE,
+	SECRET
+};
+
+int main()
+{
+	enum Sex s = MALE;
+   	return 0;
+}
+
+
+
+
+
+// 枚举
+enum Sex
+{
+	// 所有可能的取值范围
+	MALE = 2, 
+	FAMALE = 4,
+	SECRET
+};
+
+enum Color
+{
+	RED, // 0
+	GREEN, // 1
+	BLUE  // 2
+};
+
+int main()
+{
+	// enum Sex s = MALE;
+	printf("%d %d %d \n", MALE, FAMALE, SECRET);
+	printf("%d %d %d \n", RED, BLUE, GREEN);
+   	return 0;
+}
+
+
+
+
+enum Um
+{
+	MALE,
+	FAMALE,
+	SECRET
+};
+
+int main()
+{
+	enum Um um;
+	printf("%d\n", sizeof(um)); // 4个字节
+	return 0;
+}
+
+
+
+
+// 联合体 - 公用体
+// 所有成员公用一块空间，空间大小为最大对齐数的整数倍
+// 联合体是一种临界资源，只能互斥的进行访问
+union U
+{
+	char c;
+	int a;
+	double d;
+};
+
+int main()
+{
+	union U u = {0};
+	printf("%d\n", sizeof(u));
+	printf("%p\n", &u);
+	printf("%p\n", &(u.c));
+	printf("%p\n", &(u.a));
+	printf("%p\n", &(u.d));
+   	return 0;
+}
+
+
+
+// 判断内存的存储方式
+int check_sys()
+{
+	int a = 1;
+	return *(char*)&a;
+}
+
+int main()
+{
+	int ret = check_sys();
+	if(ret == 1)
+		printf("小端\n");
+	else
+		printf("大端");
+	return 0;
+}
+
+
+// 使用联合体，判断存储方式
+int check_sys_union()
+{
+	union Un
+	{
+		char c;
+		int i;
+	}u;
+	u.i = 1;
+	return u.c;
+	// 1：小端
+	// 0 : 大端
+}
+
+int main()
+{
+	int ret = check_sys_union();
+	if(ret == 1)
+		printf("小端\n");
+	else
+		printf("大端");
+	return 0;
+}
+
+
+
+// 生成括号
+vector<string> generateParenthesis(int n)
+{
+	dfs(0, 0, n, "");
+	return ans;
+}
+
+void dfs(int lc, int rc, int n, string seq)
+{
+	// 输出数组
+	if(lc == n && rc == n)
+	{
+		ans.push_back(seq);
+		return ;
+	}
+	// 判断出口
+	if(lc < n)  // 当左括号小于对数时， 左括号加1
+		dfs(lc + 1, rc, n, seq + "(");
+	if(rc < n && lc > rc) // 当右括号小于对数，并且左括号大于右括号，右括号加1
+		dfs(lc, rc + 1, n, seq + ")");
+}
