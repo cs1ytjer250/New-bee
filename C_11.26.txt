@@ -1,0 +1,490 @@
+#include <stdio.h>
+#include <string.h>
+
+
+// 利用枚举创建常量
+enum Um
+{
+	MAX = 1000,
+	MAX_NAME = 20,
+	MAX_SEX = 5,
+	MAX_TELE = 12,
+	MAX_ADDR = 20
+};
+
+enum Option
+{
+	EXIT,
+	ADD,
+	DEL,
+	SEARCH,
+	MODIFY,
+	SHOW,
+	SORT
+};
+
+
+// 声明一个结构体
+struct PeopleInfo
+{
+	char name[MAX_NAME];
+	int age;
+	char sex[MAX_SEX];
+	int tele[MAX_TELE];
+	char addr[MAX_ADDR];
+};
+
+
+struct Contact
+{
+	struct PeopleInfo data[MAX];
+
+	// 当前成员数量
+	int size;
+};
+
+
+
+// 封装一个公共函数，用于查找人名
+static int FindByName(const struct Contact* ps, char name[MAX_NAME])
+{
+	int i = 0;
+	for(i = 0; i < ps->size; i++)
+	{
+		if(0 == strcmp(ps->data[i].name, name))
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+
+// 初始化结构体
+void InitContact(struct Contact* ps)
+{	
+	// 用内存设置函数，对结构体进行初始化（第一个参数为要初始化的对象，第二个参数为初始化内容，第三参数为初始化的长度）
+	memset(ps->data, 0, sizeof(ps->data));
+	ps->size = 0;
+}
+
+
+// 封装添加功能
+void AddContact(struct Contact* ps)
+{
+	// 判断剩余空间
+	if(ps->size == MAX)
+	{
+		printf("通讯录已满\n");
+	}
+	else
+	{
+		// 录入信息
+		printf("请输入名字：");
+		scanf("%s\n", ps->data[ps->size].name);
+		printf("请输入年龄：");
+		scanf("%s\n", &(ps->data[ps->size].age));
+		printf("请输入电话：");
+		scanf("%s\n", ps->data[ps->size].tele);
+		printf("请输入性别：");
+		scanf("%s\n", ps->data[ps->size].sex);
+		printf("请输入住址：");
+		scanf("%s\n", ps->data[ps->size].addr);
+		
+		// 当前大小+1
+		ps->size ++;
+		printf("添加成功");
+	}
+}
+
+
+
+// 封装删除功能
+void DelContact(struct Contact* ps)
+{	
+	// 声明一个变量数组，用于接收要删除的人名
+	char name[MAX_NAME];
+	printf("请输入要删除的人名:\n");
+	scanf("%s\n", name);
+
+
+	// 调用公共函数，进行查找
+	int pos = FindByName(ps, name);
+
+	// 判断元素是否存在
+	if(pos == -1)
+	{
+		printf("要删除的人名不存在！\n");
+	}
+	// 删除元素
+	else
+	{
+		int j = 0;
+		// 防止越界，扫描的最大范围为当前长度-1
+		for(j = pos; j < ps->size-1; j++)
+		{
+
+			// 用后一个元素覆盖前一个元素
+			ps->data[j] = ps->data[j + 1];
+		}
+		// 长度-1
+		ps->size --;
+		printf("删除成功！\n");
+	}
+}
+
+
+// 封装查找功能
+void SearchContact(const struct Contact* ps)
+{
+	char name[MAX_NAME];
+	printf("请输入要查找的人名：\n");
+	scanf("%s\n", name);
+	int pos = FindByName(ps, name);
+	if(pos == -1)
+	{
+		printf("查找的人名不存在！\n");
+	}
+	else
+	{
+		// 输出对应的信息
+		printf("%-4s\t%-5s\t%-4s\t%-12s\t%-20s\t\n", "名字", "性别", "年龄", "电话", "住址");
+		printf("%-4s\t%-5s\t%-4d\t%-12s\t%-20s\t\n", 
+				 ps->data[pos].name,
+				 ps->data[pos].sex,
+				 ps->data[pos].age,
+				 ps->data[pos].tele,
+				 ps->data[pos].addr);
+
+	}
+}
+
+
+
+// 封装修改功能
+void ModifyContact(struct Contact* ps)
+{
+	char name[MAX_NAME];
+	printf("请输入要修改的人名：\n");
+	scanf("%s\n", name);
+	int pos = FindByName(ps, name);
+	if(pos == -1)
+	{
+		printf("要修改的人不存在！\n");
+	}
+	else
+	{	
+		// 对该成员的信息，重新接收一遍
+		printf("请输入名字：");
+		scanf("%s\n", ps->data[pos].name);
+		printf("请输入年龄：");
+		scanf("%s\n", &(ps->data[pos].age));
+		printf("请输入电话：");
+		scanf("%s\n", ps->data[pos].tele);
+		printf("请输入性别：");
+		scanf("%s\n", ps->data[pos].sex);
+		printf("请输入住址：");
+		scanf("%s\n", ps->data[pos].addr);
+		
+		printf("修改成功！\n");
+	}
+}
+
+// 封装展示功能
+void ShowContact(const struct Contact* ps)
+{
+	if(ps->size == 0)
+	{
+		printf("通讯录为空\n");
+	}
+	else
+	{
+		int i = 0;
+		// 表头
+		printf("%-4s\t%-5s\t%-4s\t%-12s\t%-20s\t\n", "名字", "性别", "年龄", "电话", "住址");
+
+		// 从第一个成员开始逐一扫描输出，指导最后一个成员
+		for(i = 0; i < ps->size; i++)
+		{
+			printf("%-4s\t%-5s\t%-4d\t%-12s\t%-20s\t\n", 
+				  ps->data[i].name,
+				  ps->data[i].sex,
+				  ps->data[i].age,
+				  ps->data[i].tele,
+				  ps->data[i].addr);
+		}
+	}
+	
+}
+
+
+// 封装菜单
+void menu()
+{
+	printf("*********************************************\n");
+	printf("********    1. add         2. del    ********\n");
+	printf("********    3. search      4. modify ********\n");
+	printf("********    5. show        6. sort   ********\n");
+	printf("********    0. exit                  ********\n");
+	printf("*********************************************\n");
+}
+
+
+// 程序入口
+int main()
+{
+	// 声明一个变量，接收用户的选择
+	int n = 2;
+
+	// 声明一个通讯录
+	struct Contact con;
+
+	// 初始化通讯录
+	InitContact(&con);
+	
+	// 进入程序
+	do
+	{
+		// 显示菜单
+		menu();
+
+		// 进行选择
+		printf("请选择：>");
+		scanf("%d\n", &n);
+
+		// 功能分区
+		switch(n)
+		{
+			case ADD:
+				AddContact(&con);
+				break;
+			case DEL:
+				DelContact(&con);
+				break;
+			case SEARCH:
+				SearchContact(&con);
+				break;
+			case MODIFY:
+				ModifyContact(&con);
+				break;
+			case SHOW:
+				ShowContact(&con);
+				break;
+			case SORT:
+				break;
+			case EXIT:
+				printf("退出通讯录");
+				break;
+			default:
+				printf("选择错误！\n");
+				break;
+		}
+	}while(0);
+	
+	
+   	return 0;
+}
+
+
+
+
+#include <stdlib.h>
+
+// 动态内存分配
+int main()
+{
+	int* p = (int *)malloc(10 * sizeof(int));
+   	return 0;
+}
+
+
+
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+void print(int * arr)
+{
+	int  i = 0;
+	for(i = 0; i < 10; i++)
+	{
+		printf("%d\n", *(arr + i));
+	}
+}
+
+int main()
+{
+	int* p = (int *)malloc(10 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			*(p + i) = i;
+		}
+	}
+	print(p);
+   	return 0;
+}
+
+
+
+
+int main()
+{
+	// 超出内存大小，返回空指针。
+	int* p = (int *)malloc(INT_MAX);
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno)); // Cannot allocate memory
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			*(p + i) = i;
+		}
+		print(p);
+	}
+	
+   	return 0;
+}
+
+
+
+
+
+
+#include <limits.h>
+
+
+// malloc 和 free 成对使用
+void print(int * arr)
+{
+	int  i = 0;
+	for(i = 0; i < 10; i++)
+	{
+		printf("%d\n", *(arr + i));
+	}
+}
+
+int main()
+{
+	int* p = (int *)malloc(10 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			*(p + i) = i;
+		}
+		print(p);
+	}
+	free(p);  // 释放内存
+	p = NULL; // 指针清零
+   	return 0;
+}
+
+
+
+// calloc函数：区别在于可以初始化内容为0
+int main()
+{
+	int* p = (int *)calloc(10, sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			printf("%d\n", *(p + i));
+		}
+	}
+	free(p);
+	p = NULL;
+   	return 0;
+}
+
+
+
+
+
+int main()
+{
+	int* p = (int *)malloc(5 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 5; i++)
+		{
+			*(p + i) = i;
+		}
+	}
+	p = (int *)realloc(p, 40);
+	int i = 0;
+	for(i = 5; i < 10; i++)
+	{
+		*(p + i) = i;	
+	}
+	for(i = 0; i < 10; i++)
+	{
+		printf("%d\n", *(p + i));
+	}
+   	return 0;
+}
+
+
+// realloc函数：在原有的空间基础上，追加指定字节空间。
+// 若剩余空间，不够追加，则新开辟一片空间，并返回新空间的首址。
+// realloc函数还会将原空间中的数据复制到新空间，同时还会将原空间回收内存
+// 当要追加的空间，超出可用空间大小时，则返回NULL。
+int main()
+{
+	int* p = (int *)malloc(5 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 5; i++)
+		{
+			*(p + i) = i;
+		}
+	}
+	int* ptr = (int *)realloc(p, 40);
+	if(ptr != NULL)
+	{
+		p = ptr;
+		int i = 0;
+		for(i = 5; i < 10; i++)
+		{
+			*(p + i) = i;	
+		}
+		for(i = 0; i < 10; i++)
+		{
+			printf("%d\n", *(p + i));
+		}
+	}
+	free(p);
+	p = NULL;
+	
+   	return 0;
+}
