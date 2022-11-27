@@ -1,0 +1,217 @@
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
+
+int main()
+{
+ 	int* p = (int *)malloc(10 * sizeof(int));
+	int i = 0;
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	
+	for(i = 0; i < 10; i++)
+	{
+		*(p + i) = i;
+	}
+	for(i = 0; i < 10; i++)
+	{
+		printf("%d\n", p[i]);
+	}
+	free(p);
+	p = NULL;
+  	return 0;
+}
+
+
+
+
+int main()
+{
+ 	int* p = (int *)malloc(10 * sizeof(int));
+	int i = 0;
+	if(p == NULL)
+	{
+		return 0;
+	}
+	int* p2 = (int *)realloc(p, 100);
+	if(p2 != NULL)
+	{
+		p = p2;
+	}	
+	free(p);
+	p = NULL;
+  	return 0;
+}
+
+
+
+
+
+int main()
+{
+ 	int* p = (int *)malloc(10 * sizeof(int));
+	int i = 0;
+	if(p == NULL)
+	{
+		return 0;
+	}
+	for(i = 0; i < 10; i++)
+	{
+		*p++ = i;
+	}
+	free(p); // ERROR  越界释放内存
+	p = NULL;
+  	return 0;
+}
+
+
+
+
+
+void GetMemory(char* p)
+{
+	p = (char*)malloc(100);
+}
+
+void Test(void)
+{
+	char* str = NULL;
+	GetMemory(str);
+	strcpy(str, "hello world");  // 崩溃，str是空指针，进行拷贝的时候会非法访问
+	printf(str);
+}
+
+int main()
+{
+	Test();
+  	return 0;
+}
+
+
+
+
+// 改法一
+
+void GetMemory(char** p) // 需要用char** 接收
+{
+	*p = (char*)malloc(100);  // 解引用之后为指针
+}
+
+void Test(void)
+{
+	char* str = NULL;
+	GetMemory(&str); // 传址
+	strcpy(str, "hello world");
+	printf(str);
+	free(str);
+	str = NULL;
+}
+
+int main()
+{
+	Test();
+  	return 0;
+}
+
+
+
+
+// 改法二
+
+char* GetMemory(char* p)
+{
+	p = (char*)malloc(100);
+	return p;
+}
+
+void Test(void)
+{
+	char* str = NULL;
+	str = GetMemory(str);
+	strcpy(str, "hello world");
+	printf(str);
+	free(str);
+	str = NULL;
+}
+
+int main()
+{
+	Test();
+  	return 0;
+}
+
+
+
+
+// 栈区的非法访问
+char* GetMemory(void)
+{
+	// static char p[] = "hello world";  // static 延长了局部变量的生命周期
+	char p[] = "hello world"; // 非法访问
+	return p;
+}
+
+void Test(void)
+{
+	char* str = NULL;
+	str = GetMemory();
+	printf(str);
+}
+
+int main()
+{
+	Test();
+  	return 0;
+}
+
+
+
+
+
+void GetMemory(char** p, int num)
+{
+	*p = (char*)malloc(num);
+}
+
+void Test(void)
+{
+	char* str = NULL;
+	GetMemory(&str, 100);
+	strcpy(str, "hello");
+	printf(str);
+	free(str);
+	str = NULL;
+}
+
+int main()
+{
+	Test();
+  	return 0;
+}
+
+
+
+
+
+
+void Test(void)
+{
+	char* str = (char*)malloc(100);
+	strcpy(str, "hello");
+	free(str);
+	// str = NULL;  // if语句不会执行
+	if(str != NULL)
+	{
+		strcpy(str, "world");
+		printf(str);
+	}
+}
+
+int main()
+{
+	Test();
+  	return 0;
+}
