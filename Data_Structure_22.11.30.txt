@@ -1,0 +1,268 @@
+// C++
+
+#include <stdlib.h>
+
+typedef struct LNode
+{
+	int data; // 数据域
+	struct LNode* next; // 指针域
+}LNode, *LinkList;
+
+
+// 不带头结点初始化链表
+bool InitList(LinkList &L)
+{
+	L = NULL;
+	return L;
+}
+
+
+void test()
+{
+	LinkList L;  // 声明一个链表
+	InitList(L);  // 初始化链表
+}
+
+bool Empty(LinkList L)
+{
+	return ( L == NULL);  // 不带头结点判断链表是否为空
+}
+
+bool Empty(LinkList L)
+{
+	if(L->next == NULL)  // 带头节点判断链表是否为空
+		{
+			return true
+		}
+	else
+	{
+		return false;
+	}
+}
+
+// 带头结点初始化
+bool InitList(LinkList &L)
+{
+	L = (LNode*)malloc(sizeof(LNode));  // 分配头结点
+	if(L == NULL)		// 内存不足，分配失败
+		returun false;
+	L->next = null;		// 头结点之后暂时还没有节点
+	return true;
+}
+
+int main()
+{
+	test();
+   	return 0;
+}
+
+
+
+
+
+#include <stdlib.h>
+
+// 动态内存分配
+int main()
+{
+	int* p = (int *)malloc(10 * sizeof(int));
+   	return 0;
+}
+
+
+
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+void print(int * arr)
+{
+	int  i = 0;
+	for(i = 0; i < 10; i++)
+	{
+		printf("%d\n", *(arr + i));
+	}
+}
+
+int main()
+{
+	int* p = (int *)malloc(10 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			*(p + i) = i;
+		}
+	}
+	print(p);
+   	return 0;
+}
+
+
+
+
+int main()
+{
+	// 超出内存大小，返回空指针。
+	int* p = (int *)malloc(INT_MAX);
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno)); // Cannot allocate memory
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			*(p + i) = i;
+		}
+		print(p);
+	}
+	
+   	return 0;
+}
+
+
+
+
+
+
+#include <limits.h>
+
+
+// malloc 和 free 成对使用
+void print(int * arr)
+{
+	int  i = 0;
+	for(i = 0; i < 10; i++)
+	{
+		printf("%d\n", *(arr + i));
+	}
+}
+
+int main()
+{
+	int* p = (int *)malloc(10 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			*(p + i) = i;
+		}
+		print(p);
+	}
+	free(p);  // 释放内存
+	p = NULL; // 指针清零
+   	return 0;
+}
+
+
+
+// calloc函数：区别在于可以初始化内容为0
+int main()
+{
+	int* p = (int *)calloc(10, sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 10; i++)
+		{
+			printf("%d\n", *(p + i));
+		}
+	}
+	free(p);
+	p = NULL;
+   	return 0;
+}
+
+
+
+
+
+int main()
+{
+	int* p = (int *)malloc(5 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 5; i++)
+		{
+			*(p + i) = i;
+		}
+	}
+	p = (int *)realloc(p, 40);
+	int i = 0;
+	for(i = 5; i < 10; i++)
+	{
+		*(p + i) = i;	
+	}
+	for(i = 0; i < 10; i++)
+	{
+		printf("%d\n", *(p + i));
+	}
+   	return 0;
+}
+
+
+// realloc函数：在原有的空间基础上，追加指定字节空间。
+// 若剩余空间，不够追加，则新开辟一片空间，并返回新空间的首址。
+// realloc函数还会将原空间中的数据复制到新空间，同时还会将原空间回收内存
+// 当要追加的空间，超出可用空间大小时，则返回NULL。
+int main()
+{
+	int* p = (int *)malloc(5 * sizeof(int));
+	if(p == NULL)
+	{
+		printf("%s\n", strerror(errno));
+	}
+	else
+	{
+		int i = 0;
+		for(i = 0; i < 5; i++)
+		{
+			*(p + i) = i;
+		}
+	}
+	int* ptr = (int *)realloc(p, 40);
+	if(ptr != NULL)
+	{
+		p = ptr;
+		int i = 0;
+		for(i = 5; i < 10; i++)
+		{
+			*(p + i) = i;	
+		}
+		for(i = 0; i < 10; i++)
+		{
+			printf("%d\n", *(p + i));
+		}
+	}
+	free(p);
+	p = NULL;
+	
+   	return 0;
+}
+
+
+
+
+
+
