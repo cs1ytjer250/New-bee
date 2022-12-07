@@ -1,0 +1,40 @@
+
+// ¾²Ì¬Á´±í
+
+#include <iostream>
+using namespace std;
+#include <stdlib.h>
+
+// ¾²Ì¬Á´±í
+#define MaxSize 10
+struct Node
+{
+	int data;
+	int next;
+};
+
+
+typedef struct 
+{
+	int data;
+	int next;
+}SLinkList[MaxSize];
+
+void testSLinkList()
+{
+	struct Node x;
+	printf("%d\n", sizeof(x));
+	
+	struct Node a[MaxSize];
+	printf("%d\n", sizeof(a));
+	
+	SLinkList b;
+	printf("%d\n", sizeof(b));
+}
+
+
+int main()
+{
+	testSLinkList();
+   	return 0;
+}

@@ -1,0 +1,192 @@
+
+// 双链表
+
+#include <iostream>
+using namespace std;
+#include <stdlib.h>
+
+typedef struct DNode
+{
+	int data;
+	struct DNode *prior, *next;
+}DNode, *DLinkList;
+
+bool InitDLinkList(DLinkList &L)
+{
+	L = (DNode*)malloc(sizeof(DNode*));
+	if(L == NULL)
+		return false;	
+	L->prior = NULL;
+	L->next = NULL;
+	return true;
+}
+
+bool InsertNextDNode(DNode *p, DNode *s)
+{
+	if(p == NULL || s == NULL)
+		return false;
+	s->next = p->next;
+	if(p->next != NULL)
+		p->next->prior = s;
+	s->prior = p;
+	p->next = s;
+}
+
+bool DeleteNextDNode(DNode *p)
+{
+	if(p == NULL)
+		return false;
+	DNode *q = p->next;
+	if(q == NULL)
+		return false;
+	p->next = q->next;
+	if(q->next != NULL)
+		q->next->prior = p;
+	free(q);
+	return true;
+}
+
+void DestroyList(DLinkList &L)
+{
+	while(L->next != NULL)
+		DeleteNextDNode(L);
+	free(L);
+	L = NULL;
+}
+
+bool Empty(DLinkList L)
+{
+	if(L->next == NULL)
+		return true;
+	else
+		return false;
+}
+
+void textDLinkList()
+{
+	DLinkList L;
+	InitDLinkList(L);
+	Empty(L);
+}
+
+int main()
+{
+	textDLinkList();
+   	return 0;
+}
+
+
+// 循环单链表
+
+#include <iostream>
+using namespace std;
+#include <stdlib.h>
+
+typedef struct LNode
+{
+	int data;
+	struct LNode *next;
+}LNode, *LinkList;
+
+bool InitList(LinkList &L)
+{
+	L = (LNode*)malloc(sizeof(LNode));
+	if(L == NULL)
+		return false;
+	L->next = L;
+	return true;
+}
+
+// 判断是否为空链表
+bool Empty(LinkList L)
+{
+	if(L->next == L)
+		return true;
+	else
+		return false;
+}
+
+// 判断是否是表尾节点
+bool isTail(LinkList L, LNode *p)
+{
+	if(p->next == L)
+		return true;
+	else 
+		return false;
+}
+void textDLinkList()
+{
+	DLinkList L;
+	InitDLinkList(L);
+	Empty(L);
+}
+
+int main()
+{
+	textDLinkList();
+   	return 0;
+}
+
+
+
+// 循环双链表
+
+
+
+#include <iostream>
+using namespace std;
+#include <stdlib.h>
+
+typedef struct DNode
+{
+	int data;
+	struct DNode *prior, *next;
+}DNode, *DLinkList;
+
+bool InitDLinkList(DLinkList &L)
+{
+	L = (DNode*)malloc(sizeof(DNode));
+	if(L == NULL)
+		return false;
+	L->next = L;
+	L->prior = L;
+	return true;
+}
+
+bool Empty(DLinkList L)
+{
+	if(L->next == L)
+		return true;
+	else
+		return false;
+}
+
+bool InsertNextNode(DNode *p, DNode *s)
+{
+	s->next = p->next;
+	p->next->prior = s;
+	s->prior = p;
+	p->next = s;
+}
+
+bool isTail(DLinkList L, DNode* p)
+{
+	if(p->next == L)
+		return true;
+	else
+		return false;
+}
+
+void textDLinkList()
+{
+	DLinkList L;
+	InitDLinkList(L);
+	Empty(L);
+	isTail(L);
+}
+
+int main()
+{
+	textDLinkList();
+   	return 0;
+}
