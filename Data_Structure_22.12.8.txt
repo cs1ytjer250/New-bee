@@ -1,0 +1,134 @@
+
+// 递归删除指定节点（不带头节点）
+
+#include <iostream>
+using namespace std;
+
+typedef struct LNode
+{
+	int data;
+	struct LNode *next;
+}LNode, *LinkList;
+
+
+void Del_x_3(LinkList &L, int x)
+{
+	LNode *p;
+	if(L == NULL)
+		return;
+	if(L->data == x)
+	{
+		p = L;
+		L = L->next;
+		free(p);
+		Del_x_3(L, x);
+	}
+	else
+		Del_x_3(L->next, x);
+}
+
+
+int main()
+{
+   	LinkList L;
+	Del_x_3(L, 3);
+   	return 0;
+}
+
+
+// 单链表删除所有值为X的节点（带头节点）
+void Del_x_L(LinkList &L, int x)
+{
+	LNode *p = L->next, *pre = L, *q;
+	while(p != NULL)
+	{
+		if(p->data == x)
+		{
+			q = p;
+			p = p->next;
+			pre->next = p;
+			free(q);
+		}
+		else
+		{
+			pre = p;
+			p = p->next;
+		}
+	}
+}
+
+
+
+// 尾插法删除值为X的节点。
+void Del_x_L(LinkList &L, int x)
+{
+	LNode *p = L->next, *r = L, *q;
+	while(p != NULL)
+	{
+		if(p->data != x)
+		{
+			r->next = p;
+			r = p;
+			p = p->next;
+		}
+		else
+		{
+			q = p;
+			p = p->next;
+			free(q);
+		}
+	}
+	r->next = NULL;
+}
+
+
+// 用递归进行逆向输出单链表中的值
+void R_print(LinkList L)
+{
+	if(L->next != NULL)
+		R_print(L->next);
+	if(L != NULL)
+		printf(L->data);
+}
+
+
+
+// 删除单链表中值最小的节点（带头节点）
+
+LinkList Delete_Min(LinkList &L)
+{
+	LNode *pre = L, *p = pre->next;
+	LNode *minpre = pre, minp = p;
+	while(p != NULL)
+	{
+		if(p->data < minp->data)
+		{
+			minp = p;
+			minpre = pre
+		}
+		pre = p;
+		p = p->next;
+	}
+	minpre->next = minp->next;
+	free(minp);
+	return L;
+}
+
+
+// 逆置链表（带头节点）
+
+// 解法1 头插法
+LinkList Reverse_1(LinkList L)
+{
+	LNode *p, *r;
+	p = L->next;
+	L->next = NULL;
+	if(p != NULL)
+	{
+		r = p->next;
+		p->next = L->next;
+		L->next = p;
+		p = r;
+	}
+	return L;
+}
