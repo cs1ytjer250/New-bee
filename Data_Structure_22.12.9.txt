@@ -1,0 +1,149 @@
+// 递增排序（带头节点）
+
+void Sort(LinkList &L)
+{
+	LNode *p = L->next, *pre;
+	LNode *r = p->next;
+	p->next = NULL;
+	p = r;
+	while(p != NULL)
+	{
+		r = p->next;
+		pre = L;
+		while(pre->next != NULL && pre->next->data < p->data)
+		{
+			pre = pre->next;
+		}
+		p->next = pre->next;
+		pre->next = p;
+		p = r;
+	}
+}
+
+
+// 删除x-y之间的数
+
+void RangeDelete(LinkList &L, int min, int max)
+{
+	LNode *pr = L, *p = L->next;
+	while(p != NULL)
+	{
+		if(p->data > min && p->data < max)
+		{
+			pr->next = p->next;
+			free(p);
+			p = pr->next;
+		}
+		else
+		{
+			pr = p;
+			p = p->next;
+		}
+	}
+}
+
+
+// 找公共节点
+
+
+int Length(LinkList L)
+{
+	int len = 0;
+	if(L->next == NULL)
+		return 0;
+	while(L->next != NULL)
+	{
+		L = L->next;
+		len ++;
+	}
+	return len;
+}
+
+LinkList Search_1st_common(LinkList L1, LinkList L2)
+{
+	int len1 = Length(L1), len2 = Length(L2);
+	LinkList longlist, shortlist;
+	int dist;
+	if(len1 > len2)
+	{
+		longlist = L1->next;
+		shortlist = L2->next;
+		dist = len1 - len2;
+	}
+	else
+	{
+		longlist = L2->next;
+		shortlist = L1->next;
+		dist = len2 - len1;
+	}
+	while(dist--)
+	{
+		longlist = longlist->next;
+	}
+	while(longlist != NULL)
+	{
+		if(longlist == shortlist)
+			return longlist;
+		else
+		{
+			longlist = longlist->next;
+			shortlist = shortlist->next;
+		}
+	}
+	return NULL;
+	
+}
+
+
+// 依次删除单链表中值最小的节点，并输出其值（无序带头单链表）
+
+void Min_Delete(LinkList &head)
+{
+	while(head->next != NULL)
+	{
+		LNode *pre = head, *p = pre->next;
+		LNode *u;
+		while(p->next != NULL)
+		{
+			if(p->next->data < pre->next->data)
+				pre = p;
+			p = p->next;
+		}
+		printf(pre->next->data);
+		u = pre->next;
+		pre->next = u->next;
+		free(u);
+	}
+	free(head);
+}
+
+
+// 将一个单链表中奇偶序号分割成两个链表 
+
+LinkList Discreat_1(LinkList &A)
+{
+	int i = 0;
+	LinkList B = (LinkList)malloc(sizeof(LNode));
+	B->next = NULL;
+	LNode *ra = A, *rb = B, *p;
+	p = A->next;
+	A->next = NULL;
+	while(p != NULL)
+	{
+		i++;
+		if(i % 2 == 0)
+		{
+			rb->next = p;
+			rb = p;
+		}
+		else
+		{
+			ra->next = p;
+			ra = p;
+		}
+		p = p->next;
+	}
+	ra->next = NULL;
+	rb->next = NULL;
+	return B;
+}
