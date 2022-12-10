@@ -1,0 +1,291 @@
+
+// 将集合{a1, b1, a2, b2, .........an, bn}分离为两个链表（带头节点）
+
+LinkList Discreat_2(LinkList &A)
+{
+	LinkList B = (LinkList)malloc(sizeof(LNode));
+	B->next = NULL;
+	LNode *p = A->next, *q;
+	LNode *ra = A;
+	while(p != NULL)
+	{
+		ra->next = p;
+		ra = p;
+		p = p->next;
+		if(p != NULL)
+		{
+			q = p->next;
+			p->next = B->next;
+			B->next = p;
+			p = q;
+		}
+	}
+	ra->next = NULL;
+	return B;
+}
+
+
+// 删除链表中相同的元素（带头节点）
+
+void Del_Same(LinkList &L)
+{
+	LNode *p = L->next, *q;
+	if(p == NULL)
+		return ;
+	while(p->next != NULL)
+	{
+		q = p->next;
+		if(p->data == q->next)
+		{
+			p->next = q->next;
+			free(q);
+		}
+		else
+			p = p->next;
+	}
+}
+
+
+
+// 合并两个递增排序的顺序表（带头节点）
+
+void MergeList(LinkList &La, LinkList &Lb)
+{
+	LNode *r, *pa = La->next, &pb = Lb->next;
+	La->next = NULL;
+	while(pa && pb)
+	{
+		if(pa->data <= pb->data)
+		{
+			r = pa->next;
+			pa->next = La->next;
+			La->next = pa;
+			
+			pa = r;
+		}
+		else
+		{
+			r = pb->next;
+			pb->next = La->next;
+			La->next = pb;
+			
+			pb = r;
+		}
+	}
+	if(pa)
+		pb = pa;
+	
+	while(pb)
+	{
+		r = pb->next;
+		pb->next = La->next;
+		La->next = pb;
+		pb = r;
+	}
+	free(Lb);
+}
+
+
+// 找出两个链表中共同的节点，并用新链表保存（带头节点）
+
+void Get_Common(LinkList A, LinkList B)
+{
+	LNode *p = A->next, *q = B->next, *r, *s;
+	LinkList C = (LinkList)malloc(sizeof(LNode));
+	if(p->data < q->data)
+		p = p->next;
+	else if(p->data > q->data)
+		q = q->next;
+	else
+	{
+		s = (LNode*)malloc(sizeof(LNode));
+		s->data = p->data;
+		r->next = s;
+		r = s;
+		p = p->next;
+		q = q->next;
+	}
+	r->next = NULL;
+}
+
+
+// 找出两个集合的交集，并用其中一个集合保存（带头节点）
+
+LinkList Union(LinkList &La, LinkList &Lb)
+{
+	LNode *pa = La->next;
+	LNode *pb = Lb->next;
+	LNode *u, *pc = La;
+	while(pa && pb)
+	{
+		if(pa->data == pb->data)
+		{
+			pc->next = pa;
+			pc = pa;
+			pa = pa->next;
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+		else if(pa->data < pb->data)
+		{
+			u = pa;
+			pa = pa->next;
+			free(u);
+		}
+		else
+		{
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+	}
+	while(pa)
+	{
+		u = pa;
+		pa = pa->next;
+		free(u);
+	}
+	while(pb)
+	{
+		u = pb;
+		pb = pb->next;
+		free(u);
+	}
+	pc->next = NULL;
+	free(lb);
+	return la;
+}
+
+
+
+// 判断是否为子集（不带头节点）
+
+int Pattern(LinkList A, LinkList B)
+{
+	LNode *p = A;
+	LNode *pre = p;
+	LNode *q = B;
+	while(p && q)
+	{
+		if(p->data == q->data)
+		{
+			p = p->next;
+			q = q->next;
+		}
+		else
+		{
+			pre = pre->next;
+			p = pre;
+			q = B;
+		}
+	}
+	if(q == NULL)
+		return 1;
+	else
+		return 0;
+	
+}
+
+
+// 判断循环双链表是否对称
+
+typedef struct DNode
+{
+	int data;
+	struct DNode *next, *prior;
+}DNode, *DLinkList;
+
+int Symmetry(DLinkList L)
+{
+	DNode *p = L->next, *q = L->prior;
+	while(p != q && q->next != p)
+	{
+		if(p->data == q->data)
+		{
+			p = p->next;
+			q = q->prior;
+		}
+		else
+			return 0;
+	}
+	return 1;
+}
+
+// 合并链表，并使之成为一个循环
+
+LinkList Link(LinkList &h1, LinkList &h2)
+{
+	LNode *p, *q;
+	p = h1;
+	while(p->next != h1)
+	{
+		p = p->next;
+	}
+	q = h2;
+	while(q->next != h2)
+	{
+		q = q->next;
+	}
+	p->next = h2;
+	q->next = h1;
+	return h1;
+}
+
+
+// 输出一个循环单链表中最小值的节点，并将其删除，直至链表为空
+
+void Del_All(LinkList &L)
+{
+	LNode *p, *pre, *minp, *minpre;
+	while(L->next != NULL)
+	{
+		p = L->next, pre = L;
+		mingp = p, mingpre = pre;
+		while(p != NULL)
+		{
+			if(p->data < minp->data)
+			{
+				minp = p;
+				minpre = pre;
+			}
+			p = p->next;
+			pre = p;
+		}
+		printf("%d", minp->data);
+		mingpre->next = minp->next;
+		free(minp);
+	}
+}
+
+
+// 没理解该题
+
+DLinkList Locate(DLinkList &L, int x)
+{
+	DNode *p = L->next, *q;
+	while(p && p->data != x)
+	{
+		p = p->next;
+	}
+	if(!p)
+		exit(0);
+	else
+	{
+		p->freq++;
+		if(p->prior == L || p->prior->freq > p->freq)
+			return p;
+		if(p->next != NULL)
+			p->next->prior = p->prior;
+		p->prior->next = p->next;
+		q = p->prior;
+		while(q != L && q->freq <= p->freq)
+			q = q->prior;
+		p->next = q->next;
+		if(q->next != NULL)
+			q->next->prior = p;
+		p->prior = q;
+		q->next = p;
+	}
+	return p;
+}
