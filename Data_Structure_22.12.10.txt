@@ -92,18 +92,22 @@ void Get_Common(LinkList A, LinkList B)
 {
 	LNode *p = A->next, *q = B->next, *r, *s;
 	LinkList C = (LinkList)malloc(sizeof(LNode));
-	if(p->data < q->data)
-		p = p->next;
-	else if(p->data > q->data)
-		q = q->next;
-	else
+	r = C;
+	while(p != NULL && q != NULL)
 	{
-		s = (LNode*)malloc(sizeof(LNode));
-		s->data = p->data;
-		r->next = s;
-		r = s;
-		p = p->next;
-		q = q->next;
+		if(p->data < q->data)
+			p = p->next;
+		else if(p->data > q->data)
+			q = q->next;
+		else
+		{
+			s = (LNode*)malloc(sizeof(LNode));
+			s->data = p->data;
+			r->next = s;
+			r = s;
+			p = p->next;
+			q = q->next;
+		}
 	}
 	r->next = NULL;
 }
@@ -153,8 +157,8 @@ LinkList Union(LinkList &La, LinkList &Lb)
 		free(u);
 	}
 	pc->next = NULL;
-	free(lb);
-	return la;
+	free(Lb);
+	return La;
 }
 
 
@@ -241,7 +245,7 @@ void Del_All(LinkList &L)
 	while(L->next != NULL)
 	{
 		p = L->next, pre = L;
-		mingp = p, mingpre = pre;
+		minp = p, minpre = pre;
 		while(p != NULL)
 		{
 			if(p->data < minp->data)
@@ -253,7 +257,7 @@ void Del_All(LinkList &L)
 			pre = p;
 		}
 		printf("%d", minp->data);
-		mingpre->next = minp->next;
+		minpre->next = minp->next;
 		free(minp);
 	}
 }
