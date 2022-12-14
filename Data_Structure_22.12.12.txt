@@ -97,7 +97,7 @@ bool EmptyLiStack(LiStack S)
 		return false;
 }
 
-bool Del_LiStack(LiStack S, int &x)
+bool Get_top(LiStack S, int &x)
 {
 	if(S == NULL)
 		return false;
@@ -112,20 +112,19 @@ bool Pop_LiStack(LiStack &S, int &x)
 		return false;
 	x = S->next->data;
 	p = S->next;
-	S = S->next->next;
+	S->next = p->next;
 	free(p);
 	return true;
 }
 
 bool Push_LiStack(LiStack &S, int x)
 {
-	Linknode *p = (Linknode*)malloc(sizeof(Linknode));
-	p->next = NULL;
 	if(S == NULL)
 		return false;
+	Linknode *p = (Linknode*)malloc(sizeof(Linknode));
+	p->next = S->next;
 	p->data = x;
 	S->next = p;
-	free(p);
 	return true;
 	
 }
