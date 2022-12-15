@@ -168,7 +168,7 @@ bool bracketCheck(char str[], int length)
 				return false;
 			char topElem;
 			Pop(S, topElem);
-			if(str[i] == ')' && topElem != '(')
+			if(str[i] == '(' && topElem != ')')
 				return false;
 			if(str[i] == '[' && topElem != ']')
 				return false;
