@@ -1,0 +1,292 @@
+
+// 判断此次入栈出栈序列是否非法
+
+
+int Judge(char A[])
+{
+	int i = 0;
+	int j = k = 0;
+	while(A[i] != '\0')
+	{
+		switch(A[i])
+		{
+			case 'I': 
+				j++;
+				break;
+			case 'O':
+				k++;
+				if(k > j)
+					printf("序列非法\n");
+				exit(0);
+		}
+		i++;
+	}
+	if(j != k)
+		return false;
+	else
+		return true;
+}
+
+
+// 判断一个链表是否中心对称
+
+
+typedef struct LNode
+{
+	int data;
+	struct LNode *next;
+}LNode, *LinkList
+
+
+int dc(LinkList L, int n)
+{
+	int i;
+	char s[n/2];
+	p = L->next;
+	for(i = 0; i < n/2; i++)
+	{
+		s[i] = p->data;
+		p = p->next;
+	}
+	i--;
+	if(n % 2 == 1)
+	{
+		p = p->next;
+	}
+	while(p != NULL && s[i] == p->data)
+	{
+		i--;
+		p = p->next;
+	}
+	if(i == -1)
+		return 1;
+	else
+		return 0;
+}
+
+
+
+// 共享栈的进栈，出栈操作
+
+
+
+typedef struct 
+{
+	int top[2];
+	int data[MaxSize];
+}SqStack;
+SqStack S;
+
+
+int push(int i, int x)
+{
+	if(i < 0 || i > 1)
+	{
+		printf("false\n");
+		exit(0);
+	}
+	if(S.top[1] - S.top[0] == 1)
+		return 0;
+	switch(i)
+	{
+		case 0:
+			S.data[++S.top[0]] = x;
+			return 1;
+			break;
+		case 1:
+			S.data[--S.top[1]] = x;
+			return 1;
+			break;
+	}
+}
+
+int pop(int i)
+{
+	if(i < 0 || i > 1)
+	{
+		printf("false\n");
+		exit(0);
+	}
+	switch(i)
+	{
+		case 0:
+			if(S.top[0] == -1)
+			{
+				pritnf("Stack Empty");
+				return -1;
+			}
+			else
+				return S.data[S.top[0]--];
+			break;
+		case 1:
+			if(S.top[1] == MaxSize)
+			{
+				pritnf("Stack Empty");
+				return -1;
+			}
+			else
+				return S.data[S.top[1]++];
+			break;
+	}
+}
+
+
+// 队列的进队和出队
+
+
+
+typedef struct
+{
+	int data;
+	int front, rear, tag;
+}SqQueue;
+
+
+int EnQueue(SqQueue &Q, int x)
+{
+	if(Q.front == Q.rear && Q.tag == 1)
+		return 0;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	Q.tag = 1;
+	return 1;
+}
+
+int DeQueue(SqQueue &Q, int &x)
+{
+	if(Q.rear == Q.front && Q.tag == 0)
+		return 0;
+	x = Q.data[Q.rear];
+	Q.front = (Q.front + 1) % MaxSize;
+	Q.tag = 0;
+	return 1;
+} 
+
+
+
+// 利用栈和队列的特性逆置元素
+
+
+void Inverser(SqStack &S, SqQueue &Q)
+{
+	while(!QueueEmpty(Q))
+	{
+		x = DeQueue(Q);
+		Push(S, x);
+	}
+	while(!StackEmpty(S))
+	{
+		Pop(S, x);
+		EnQueue(Q, x);
+	}
+}
+
+
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.rear == Q.front && Q.tag == 0)
+		return true;
+	else
+		return false;
+}
+
+
+
+bool DeQueue(SqQueue &Q, int &x)
+{
+	if(Q.rear == Q.front && Q.tag == 0)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	Q.tag = 0;
+	return true;
+}
+
+bool EnQueue(SqQueue &Q, int x)
+{
+	if(Q.front == Q.rear && Q.tag == 1)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+}
+
+
+bool StackEmpty(SqStack S)
+{
+	if(Q.top == -1)
+		return true;
+	else
+		return false;
+}
+
+
+bool Push(SqStack &S, int x)
+{
+	if(S.top == MaxSize-1)
+		return false;
+	S.data[++S.top] = x;
+	return true;
+}
+
+bool Pop(SqStack &S, int &x)
+{
+	if(S.top == -1)
+		return false;
+	x = S.data[S.top--];
+}
+
+
+
+// 用两个栈实现队列
+
+
+int EnQueue(SqStack &S1, SqStack &S2, int e)
+{
+	if(!StackOverflow(S1))
+	{
+		Push(S1, e);
+		return 1;
+	}
+	if(StackOverflow(S1) && !(StackEmpty(S2))
+	{
+		printf("Enough");
+		return 0;
+	}
+	if(StackOverflow(S1) && (StackEmpty(S2))
+	{
+		while(!StackEmpty(S1))
+		{
+			Pop(S1, x);
+			Push(S2, x);
+		}
+	}
+	Push(S1, e);
+	return 1;
+}
+
+void DeQueue(SqStack &S1, SqStack &S2, int &x)
+{
+	if(!StackEmpty(S2))
+	{
+		Pop(S2, x);
+	}
+	else if(StackEmpty(S1))
+		printf("Empty");
+	else
+	{
+		while(!StackEmpty(S1))
+		{
+			Pop(S1, x);
+			Push(S2, x);
+		}
+	}
+	Pop(S2, x);
+}
+
+int EmptyQueue(SqStack S1, SqStack S2)
+{
+	if(StackEmpty(S1) && StackEmpty(S2))
+		return 1;
+	else
+		return 0;
+}
