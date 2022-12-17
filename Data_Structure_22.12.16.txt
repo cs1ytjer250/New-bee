@@ -156,7 +156,7 @@ int DeQueue(SqQueue &Q, int &x)
 {
 	if(Q.rear == Q.front && Q.tag == 0)
 		return 0;
-	x = Q.data[Q.rear];
+	x = Q.data[Q.front];
 	Q.front = (Q.front + 1) % MaxSize;
 	Q.tag = 0;
 	return 1;
@@ -167,7 +167,7 @@ int DeQueue(SqQueue &Q, int &x)
 // 利用栈和队列的特性逆置元素
 
 
-void Inverser(SqStack &S, SqQueue &Q)
+void Inverse(SqStack &S, SqQueue &Q)
 {
 	while(!QueueEmpty(Q))
 	{
@@ -185,6 +185,7 @@ void Inverser(SqStack &S, SqQueue &Q)
 bool QueueEmpty(SqQueue Q)
 {
 	if(Q.rear == Q.front && Q.tag == 0)
+	// Q.rear == Q.front
 		return true;
 	else
 		return false;
@@ -208,6 +209,8 @@ bool EnQueue(SqQueue &Q, int x)
 		return false;
 	Q.data[Q.rear] = x;
 	Q.rear = (Q.rear + 1) % MaxSize;
+	Q.tag = 1;
+	return true;
 }
 
 
@@ -233,6 +236,7 @@ bool Pop(SqStack &S, int &x)
 	if(S.top == -1)
 		return false;
 	x = S.data[S.top--];
+	return true;
 }
 
 

@@ -1,0 +1,146 @@
+
+// 括号匹配
+
+typedef struct
+{
+	int top;
+	int data[MaxSize];
+}SqStack;
+
+bool BracketsCheck(char *str)
+{
+	SqStack S;
+	InitStack(S);
+	int i = 0;
+	while(str[i] != '\0')
+	{
+		switch(str[i])
+		{
+			case '(': Push(S, '('); break; 
+			case '[': Push(S, '['); break; 
+			case '{': Push(S, '{'); break; 
+			case ')': Pop(S, e);
+				if(e != '(') return false;
+				break;
+			case ']': Pop(S, e);
+				if(e != '[') return false;
+				break;
+			case '}': Pop(S, e);
+				if(e != '{') return false;
+				break;
+			default:
+				break;
+		}
+		i++;
+	}
+	if(!IsEmpty(S))
+		return false;
+	else
+		return true;
+}
+
+
+
+// 车厢调座算法
+
+
+void Train_Arrange(char *train)
+{
+	char *p = train, *q = train, c;
+	SqStack s;
+	InitStack(s);
+	while(*p)
+	{
+		if(*p == 'H')
+			Push(s, *p);
+		else
+			*(q++) = *p;
+	}
+	while(!StackEmpty(s))
+	{
+		Pop(s, c);
+		*(q++) = c;
+	}
+}
+
+
+// 计算方程组
+
+double p(int n, double x)
+{
+	struct stack
+	{
+		int no;
+		double val;
+	}st[MaxSize];
+	int top = -1, i;
+	double fv1 = 1, fv2 = 2 * x;
+	for(i = n; i >= 2; i--)
+	{
+		top++;
+		st[top].no = i;
+	}
+	while(top >= 0)
+	{
+		st[top].val = 2 * x * fv2 - 2 * (st[top].no - 1) * fv1;
+		fv1 = fv2;
+		fv2 = st[top].val;
+		top--;
+	}
+	if(n == 0)
+	{
+		return fv1;
+	}
+	return fv2;
+}
+
+
+// 轮渡问题
+
+
+typedef struct
+{
+	int data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+
+SqQueue q;
+SqQueue q1;
+SqQueue q2;
+
+void manager()
+{
+	int i = 0, j = 0;
+	char x;
+	while(j < 10)
+	{
+		if(!QueueEmpty(q1) && i < 4)
+		{
+			DeQueue(q1, x);
+			EnQueue(q, x);
+			i++;
+			j++;
+		}
+		else if(i == 4 && !QueueEmpty(q2))
+		{
+			DeQueue(q2, x);
+			EnQueue(q, x);
+			i = 0;
+			j++;
+		}
+		else
+		{
+			while(j < 10 && i < 4 && !QueueEmpty(q2))
+			{
+				DeQueue(q2, x);
+				EnQueue(q, x);
+				i++;
+				j++;
+			}
+			i = 0;
+		}
+		if(QueueEmpty(q1) && QueueEmpty(q2))
+			j = 11;
+	}
+}
