@@ -1,0 +1,148 @@
+
+// ¶þ²æÊ÷
+
+#include <iostream>
+using namespace std;
+
+#define MaxSize 100
+
+
+// Ë³Ðò´æ´¢
+struct TreeNode
+{
+	int data;
+	bool isEmpty;
+};
+TreeNode t[MaxSize];
+
+bool isEmpty(TreeNode t)
+{
+	for(int i = 0; i < MaxSize; i++)
+	{
+		t[i].isEmpty = true;
+	}
+}
+
+
+// Á´Ê½´æ´¢
+struct Tree
+{
+	int value;
+};
+
+typedef struct BiTNode
+{
+	Tree data;
+	struct BiTNode *lchild, *rchild;
+	// struct BiTNode *parent;   // Èý²æÁ´±í ¸¸Ö¸Õë
+}BiTNode, *BiTree;
+
+
+typedef struct LinkNode
+{
+	BiTNode *data;
+	struct LinkNode *next;
+}LinkNode;
+
+typedef struct
+	LinkNode *front, *rear;
+}LinkQueue;
+
+
+
+bool InsertTree(BiTree &root)
+{
+	BiTNode *p = (BiTNode*)malloc(sizeof(BiTNode));
+	p->data = {2};
+	p->lchild = NULL;
+	p->rchild = NULL;
+	root->lchild = p;
+}
+
+bool InitTree(BiTree &root)
+{
+	
+	root = (BiTree)malloc(sizeof(BiTNode));
+	root->data = {1};
+	root->lchild = NULL;
+	root->rchild = NULL;
+	return true;
+}
+
+
+void PreOrder(BiTree T)
+{
+	if(T != NULL)
+	{
+		visit(T);
+		PreOrder(T->lchild);
+		PreOrder(T->rchild);
+	}
+}
+
+void InOrder(BiTree T)
+{
+	if(T != NULL)
+	{
+		InOrder(T->lchild);
+		visit(T);
+		InOrder(T->rchild);
+	}
+}
+
+void PostOrder(BiTree T)
+{
+	if(T != NULL)
+	{
+		PostOrder(T->lchild);
+		PostOrder(T->rchild);
+		visit(T);
+	}
+}
+
+
+int treeDepth(BiTree T)
+{
+	if(T == NULL)
+	{
+		return 0;
+	}
+	else
+	{
+		int l = treeDepth(T->lchild);
+		int r = treeDepth(T->rchild);
+		return l > r ? l + 1 : r + 1;
+	}
+}
+
+void Level0rder(BiTree T)
+{
+	LinkQueue Q;
+	InitQueue(Q);
+	BiTree p;
+	EnQueue(Q, T);
+	while(!IsEmpty(Q))
+	{
+		DeQueue(Q, p);
+		visit(p);
+		if(p->lchild != NULL)
+			EnQueue(Q, p->lchild);
+		if(p->rchild != NULL)
+			EnQueue(Q, p->rchild);
+	}
+}
+
+
+
+
+
+void Test()
+{
+	BiTree root = NULL;
+	InitTree(root);
+}
+int main()
+{
+
+  	 return 0;
+}
