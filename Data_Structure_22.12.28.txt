@@ -1,0 +1,202 @@
+struct Tree
+{
+	int value;
+}
+
+typedef struct TNode
+{
+	Tree data;
+	struct TNode *lchild, *rchild;
+}BiTNode, *BiTree;
+
+
+// 查找最近祖先节点
+char Comm_Ancestor(SqTree T, int i, int j)
+{
+	if(T[i] != '#' && T[j] != '#')
+	{
+		while(i != j)
+		{
+			if(i > j)
+				i = i / 2;
+			else
+				j = j / 2;
+		}
+		return T[i];
+	}
+}
+
+
+
+// 非递归后序遍历二叉树
+
+
+typedef struct Stack
+{
+	int data;
+	int top;
+}SqStack[MaxSize];
+
+
+
+void PostOrder(BiTree T)
+{
+	SqStack S;
+	InitStack(S);
+	BiTNode *p = T;
+	r = NULL;
+	while(p || !IsEmpty(S))
+	{
+		if(p)
+		{
+			push(S, p);
+			p = p->lchild;
+		}
+		else
+		{
+			GetTop(S, p);
+			if(p->rchild && p->rchild != r)
+				p = p->rchild;
+			else
+			{
+				pop(S, p);
+				visit(p->data);
+				r = p;
+				p = NULL;
+			}
+		}
+	}
+}
+
+
+
+// 从下向上，从右到左，层次遍历二叉树
+
+
+typedef struct Stack
+{
+	int data;
+	int top;
+}SqStack[MaxSize];
+
+typedef struct Queue
+{
+	int data;
+	int front, rear;
+}SqQueue;
+
+void InvertLevel(BiTree bt)
+{
+	SqStack s; SqQueue Q;
+	BiTNode *p = bt;
+	if(bt != NULL)
+	{
+		InitStack(s);
+		InitQueue(Q);
+		EnQueue(Q, bt);
+		while(IsEmpty(Q) == false)
+		{
+			DeQueue(Q, p);
+			Push(s, p);
+			if(p->lchild)
+				EnQueue(Q, p->lchild);
+			if(p->rchild)
+				EnQueue(Q, p->rchild);
+		}
+		while(IsEmpty(s) == false)
+		{
+			Pop(s, p);
+			visit(p->data);
+		}
+	}
+}
+
+
+// 非递归层次遍历二叉树
+
+int Btdepth(BiTree T)
+{
+	if(!T)
+		return 0;
+	int front = -1, rear = -1;
+	int last = 0, level = 0;
+	BiTree Q[MaxSize];
+	Q[++rear] = T;
+	BiTree p;
+	while(front < rear)
+	{
+		p = Q[++front];
+		if(p->lchild)
+			Q[++rear] = p->lchild;
+		if(p->rchild)
+			Q[++rear] = p->rchild;
+		if(front == last)
+			level++;
+		last = rear;
+	}
+	return level;
+}
+
+// 递归层次遍历二叉树
+int Btdepth2(BiTree T)
+{
+	if(T == NULL)
+		return 0;
+	ldep = Btdepth2(T->lchild);
+	rdep = Btdepth2(T->rchild);
+	if(ldep > rdep)
+		return ldep + 1;
+	else
+		return rdep + 1;
+}
+
+
+
+
+// 通过两个一维数组中的二叉树（先序加中序），还原原二叉树
+
+
+
+#define MaxSize 10
+
+struct Tree
+{
+	int value;
+}
+
+typedef struct TNode
+{
+	Tree data;
+	struct TNode *lchild, *rchild;
+}BiTNode, *BiTree;
+
+typedef struct Stack
+{
+	int data;
+	int top;
+}SqStack[MaxSize];
+
+typedef struct Queue
+{
+	int data;
+	int front, rear;
+}SqQueue;
+
+BiTree PreInCreat(int A[], int B[], int l1, int h1, int l2, int h2)
+{
+	l1 = l2 = 1, h1 = h2 = n;
+	root = (BiTNode*)malloc(sizeof(BiTNode));
+	root->data = A[l1];
+	for(int i = l2; B[i] != root->data; i++);
+	llen = i - l2;
+	rlen = h2 - i;
+	if(llen)
+		root->lchild = PreInCreat(A, B, l1 + 1, l1 + llen, l2, l2 + llen-1);
+	else
+		root->lchild = NULL;
+	if(rlen)
+		root->rchild = PreInCreat(A, B, h1 - rlen + 1, h1, h2 - rlen+1, h2);
+	else
+		root->rchild = NULL;
+	return root;
+}
