@@ -1,0 +1,127 @@
+
+// 一棵满二叉树，通过其先序序列，求后序序列
+
+void PreToPost(int pre[], nt l1, nt h1, int post[], int l2, int h2)
+{
+	int half;
+	if(h1 >= l1)
+	{
+		post[h2] = pre[l1];
+		half = (h1 - l1) / 2;
+		PreToPost(pre, l1 + 1, l1 + half, post, l2, l2 + half - 1);
+		PreToPost(pre, l1 + half + 1, h1, post, l2 + half, h2 - 1);
+	}
+}
+
+
+// 将一棵二叉树用一个单链表保存
+
+LinkedList head, pre = NULL;
+
+LinkedList InOrder(BiTree bt)
+{
+	if(bt)
+	{
+		InOrder(bt->lchild);
+		if(bt->lchild == NULL && bt->rchild == NULL)
+		{
+			if(pre == NULL)
+			{
+				head = bt;
+				pre = bt;
+			}
+			else
+			{
+				pre->rchild = bt;
+				pre = bt;
+			}
+		}
+		InOrder(bt->rchild);
+		pre->rchild = NULL;
+	}
+	return head;
+}
+
+
+
+// 判断两颗二叉树是否相似
+
+
+int similar(BiTree T1, BiTree T2)
+{
+	int leftS, rightS;
+	if(T1 == NULL && T2 == NULL)
+		return 1;
+	else if(T1 == NULL || T2 == NULL)
+		return 0;
+	else
+	{
+		leftS = similar(T1->lchild, T2->lchild);
+		rightS = similar(T1->rchild, T2->rchild);
+		return leftS && rightS;
+	}
+}
+
+
+// 判断后序序列中，节点p的前驱
+
+
+BiTree InPostPre(BiTree t, BiTree p)
+{
+	BiTree q;
+	if(p->rtag == 0)
+	{
+		q = p->rchild;
+	}
+	else if(p->ltag == 0)
+		q = p->lchild;
+	else if(p->lchild == NULL)
+		q = NULL;
+	else
+	{
+		while(p->ltag == 1 && p->lchild != NULL)
+			p = p->lchild;
+		if(p->ltag == 0)
+			q = p->lchild;
+		else
+			q = NULL;
+	}
+	return q;
+}
+
+
+// 求二叉树的带权路径长度（每个叶节点的深度与权值之积的总和）
+
+// 先序遍历的算法
+int WPL(BiTree root)
+{
+	return wpl_PreOrder(root, 0);
+}
+int wpl_PreOrder(BiTree root, int deep)
+{
+	static int wpl = 0;
+	if(root->lchild == NULL && root->rchild == NULL)
+		wpl += deep * root->weight;
+	if(root->lchild != NULL)
+		wpl_PreOrder(root->lchild, deep + 1);
+	if(root->rchild != NULL)
+		wpl_PreOrder(root->rchild, deep + 1);
+	return wpl;
+}
+
+// 将表达式树，转为中缀表达式
+
+void BtreeToExp(BTree *root, int deep)
+{
+	if(root == NULL) return;
+	else if(root->left == NULL && root->right == NULL)
+		printf("%s", root->data);
+	else
+	{
+		if(deep > 1) printf("(");
+		BtreeToExp(root->left, deep + 1);
+		printf("%s", root->data);
+		BtreeToExp(root->right, deep + 1);
+		if(deep > 1)printf(")");
+	}
+}
