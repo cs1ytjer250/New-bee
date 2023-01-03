@@ -1,0 +1,265 @@
+#define MaxSize 10
+
+// 两数之和
+
+int length(int* arr)
+{
+	int count = 0;
+	int i = 0;
+	while(arr[i])
+	{
+		count++;
+		i++;
+	}
+	return count;
+}
+
+
+int* twoSum(int nums[], int target)
+{
+	int i, j;
+	int len = length(nums);
+	int* temp = (int *)malloc(sizeof(int) * 2);  // 申请一片空间为2个整型的内存
+	for(i = 0; i < len; i++)
+	{
+		for(j = 0 && j != i; j < len; j++)  // j从头开始遍历，且j！=i
+		{
+			if(nums[i] + nums[j] == target)
+			{
+				temp[0] = i;
+				temp[1] = j;
+				return temp;
+			}
+		}
+	}
+	temp[0] = -1;
+	return temp;
+}
+
+
+void print(int* arr, int len)
+{
+	for(int i = 0; i < len; i++)
+		printf("%d\n", arr[i]);
+}
+
+
+int main()
+{
+	int arr[] = {2,7,11,15,3,5,6,7};
+	int* sum = twoSum(arr, 1);
+	int len = length(sum);
+	print(sum, len);
+   	return 0;
+}
+
+
+// 单链表的使用
+
+
+bool InitList(LinkList &L)
+{
+	L = (LNode *)malloc(sizeof(LNode));
+	if(L == NULL)
+		return false;
+	L->next = NULL;
+	return true;
+}
+
+bool Insert(LinkList &L, int i, int e)
+{
+	if(i < 1)
+		return false;
+	LNode *p = L;
+	int j = 0;
+	while(p != NULL && j < i-1)
+	{
+		p = p->next;
+		j++;
+	}
+	if(p == NULL)
+		return false;
+	LNode *s = (LNode *)malloc(sizeof(LNode));
+	s->data = e;
+	s->next = p->next;
+	p->next = s;
+
+	return true;
+}
+
+int List_Length(LinkList L)
+{
+	if(L == NULL)
+		return -1;
+	LNode *p = L;
+	int count = 0;
+	while(p != NULL)
+	{
+		p = p->next;
+		count++;
+	}
+	return count;
+}
+
+void printNode(LinkList L)
+{
+	int len = List_Length(L);
+	LNode *p = L->next;
+	while(p != NULL)
+	{
+		printf("%d\n", p->data);
+		p = p->next;
+	}
+}
+
+int main()
+{
+	LinkList L;
+	InitList(L);
+	bool reval;
+	for(int i = 0; i < 3; i++)
+	{
+		reval = Insert(L, i + 1, i + 2);
+		if(reval)
+			printf("成功！\n");
+	}
+	printNode(L);
+   	return 0;
+}
+
+
+// 两数相加
+
+
+LNode* addTwoNumbers(LinkList l1, LinkList l2)
+{
+	LinkList l3;
+	InitList(l3);
+	LNode *s = (LNode *)malloc(sizeof(LNode));
+	LNode *p = l3;
+	int temp = 0;
+	while(l1 != NULL && l2 != NULL)
+	{
+		s->data = l1->next->data + l2->next->data + temp;
+		if((s->data % 10) != 0)
+		{
+			temp = s->data / 10;
+			s->data = s->data % 10;
+		}
+		s->next = p->next;
+		p->next = s;
+		l1 = l1->next;
+		l2 = l2->next;
+	}
+	if(l1)
+	{
+		s->data = l1->next->data + temp;
+		if((s->data % 10) != 0)
+		{
+			temp = s->data / 10;
+			s->data = s->data % 10;
+		}
+		s->next = p->next;
+		p->next = s;
+		l1 = l1->next;
+	}
+	if(l2)
+	{
+		s->data = l2->next->data + temp;
+		if((s->data % 10) != 0)
+		{
+			temp = s->data / 10;
+			s->data = s->data % 10;
+		}
+		s->next = p->next;
+		p->next = s;
+		l2 = l2->next;
+	}
+	if(temp)
+	{
+		s->data = temp;
+		s->next = p->next;
+		p->next = s;
+	}
+
+	return l3;
+}
+
+
+// 两数相加（优化）
+
+
+
+LNode* addTwoNumbers2(LNode* l1, LNode* l2)
+{
+	LinkList dummy;
+	InitList(dummy);
+	LNode *cur = dummy->next;
+	int sum = 0;
+	while(l1 || l2 || sum)
+	{
+		if(l1)
+		{
+			sum += l1->data;
+			l1 = l1->next;
+		}
+		if(l2)
+		{
+			sum += l2->data;
+			l2 = l2->next;
+		}
+		cur->data = sum % 10;
+		cur = cur->next;
+		sum = sum / 10;
+	}
+	return dummy;
+}
+
+
+
+
+// 最长回文子串
+
+// 中心扩散法（O(n^2)）
+String longestPalindrome(String s)
+{
+	int len = s.length();
+	if(len < 2)
+		return s;
+	
+	int maxLen = 1;
+	int begin = 0;
+	char[] charArray = s.toCharArray();
+	for(int i = 0; i< len - 1; i++)
+	{
+		int oddLen = expandAroundCenter(charArray, i, i);
+		int evenLen = expandAroundCenter(charArray, i , i + 1);
+		
+		int curMaxLen = Math.max(oddLen, evenLen);
+		if(curMaxLen > maxLen)
+		{
+			maxLen = curMaxLen;
+			begin = i - (maxLen - 1) / 2;
+		}
+	}
+	return s.substring(begin, begin + maxLen);
+}
+
+
+int expandAroundCenter(char[] charArray, int left, int right)
+{
+	int len = charArray.length;
+	int i = left;
+	int j = right;
+	while(i >= 0 && j < len)
+	{
+		if(charArray[i] == charArray[j])
+		{
+			i--;
+			j++;
+		}
+		else
+			break;
+	}
+	return j - i - 1;
+}
