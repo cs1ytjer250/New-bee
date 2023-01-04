@@ -1,0 +1,240 @@
+// Z字形变换
+
+int length(char* arr)
+{
+	int count = 0;
+	int i = 0;
+	while(arr[i] != '\0')
+	{
+		i++;
+		count++;
+	}
+	return count;
+}
+
+
+void convert(char* arr, int numbers)
+{
+	char cur[numbers][MaxSize] = {0};
+	int len = length(arr);
+	char dummy[len] = {0};
+	int row = 0, col = 0;
+	int k = 0;
+	if(len > (numbers * MaxSize))
+		return;
+	for(int i = 0; i < len; i++)
+	{
+		cur[row][col] = arr[k];
+		row++;
+		k++;
+		if(row = numbers)
+		{
+			while(row--)
+			{
+				cur[row][col] = arr[k];
+				k++;
+				col++;
+			}
+		}
+		if(k > len)
+			break;
+	}
+	k = 0;
+	for(int j = 0; j < numbers; j++)
+	{
+		for(int l = 0; l < col; l++)
+		{
+			if(cur[j][l] != '0')
+				printf("%c\n", cur[j][l]);
+		}
+	}
+}
+
+
+int main()
+{
+	char arr[] = "abcdefghi";
+	convert(arr, 3);
+   	return 0;
+}
+
+
+
+// 打印字符串
+void print(char* arr)
+{
+	int len = length(arr);
+	for(int i = 0; i < len; i++)
+	{
+		printf("%c\n", arr[i]);
+	}
+}
+
+int main()
+{
+	char arr[] = "abcdefghi";
+	char arr2[] = {'a', 'w', 'e', 's', 'd', 'b', '\0'};
+	print(arr2);
+	print(arr);
+   	return 0;
+}
+
+
+// 队列的使用
+
+
+typedef struct LinkNode
+{
+	char data;
+	struct LinkNode *next;
+}LinkNode;
+
+typedef struct
+{
+	LinkNode *front, *rear;
+}LinkQueue;
+
+
+
+void InitQueue(LinkQueue &Q)
+{
+	Q.front = Q.rear = (LinkNode *)malloc(sizeof(LinkNode));
+	Q.front->next = NULL;
+}
+
+
+
+void EnQueue(LinkQueue &Q, char x)
+{
+	LinkNode *s = (LinkNode *)malloc(sizeof(LinkNode));
+	s->data = x;
+	s->next = NULL;
+	Q.rear->next = s;
+	Q.rear = s;
+}
+
+bool DeQueue(LinkQueue Q, char &x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	LinkNode *p = Q.front->next;
+	x = p->data;
+	Q.front->next = p->next;
+	if(Q.rear == p)
+		Q.rear = Q.front;
+	free(p);
+	return true;
+}
+
+
+
+int main()
+{
+	char arr = 'a';
+	char ch;
+	LinkQueue Q;
+	InitQueue(Q);
+	EnQueue(Q, arr);
+	DeQueue(Q, ch);
+	printf("%c\n", ch);
+
+   	return 0;
+}
+
+
+// 整数反转
+#define MaxSize 10
+
+typedef struct LNode
+{
+	int data[MaxSize];
+	int top;
+}SqStack;
+
+
+typedef struct LinkNode
+{
+	int data;
+	struct LinkNode *next;
+}LinkNode;
+typedef struct
+{
+	LinkNode *front, *rear;
+}LinkQueue;
+
+void InitStack(SqStack &S)
+{
+	S.top = -1;
+}
+
+void InitQueue(LinkQueue &Q)
+{
+	Q.front = Q.rear = (LinkNode*)malloc(sizeof(LinkNode));
+	Q.front->next = NULL;
+}
+
+void EnQueue(LinkQueue &Q, int x)
+{
+	LinkNode *s = (LinkNode*)malloc(sizeof(LinkNode));
+	s->data = x;
+	s->next = NULL;
+	Q.rear->next = s;
+	Q.rear = s;
+}
+
+bool DeQueue(LinkQueue &Q, int &x)
+{
+	if(Q.rear == Q.front)
+		return false;
+	LinkNode *p = Q.front->next;
+	x = p->data;
+	Q.front->next = p->next;
+	if(Q.rear == p)
+		Q.rear = Q.front;
+	free(p);
+	return true;
+}
+
+bool isEmpty(LinkQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		return false;
+}
+
+
+int reverse(int x)
+{
+	LinkQueue Q;
+	InitQueue(Q);
+	int cur = 0;
+	int temp = 0;
+	int reval = 0;
+	int max = 9999999;
+	int min = -9999999;
+	if(x > max || x < min)
+		return 0;
+	while(x)
+	{
+		temp = x % 10;
+		EnQueue(Q, temp);
+		x = x / 10;
+	}
+	while(!isEmpty(Q))
+	{
+		DeQueue(Q, reval);
+		cur = (cur * 10) + reval;
+		//printf("出队成功！");
+	}
+	return cur;
+}
+
+int main()
+{
+	int x = 2380;
+	int cur = reverse(x);
+	printf("%d\n", cur);
+	//printf("%d\n", -2^3);
+   	return 0;
+}
