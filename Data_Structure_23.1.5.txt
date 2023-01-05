@@ -1,0 +1,282 @@
+
+// 字符串变换整数
+
+
+#include <string.h>
+#include <climits>
+
+
+int myAtoi(string str)
+{
+	int res = 0;
+	int i = 0;
+	int flag = 1;
+	while(str[i] == ' ') i++;
+	if(str[i] == '-')flag = -1;
+	if(str[i] == '+' || str[i] == '-')i++;
+	while(i < str.size() && isdigit(str[i]))
+	{
+		int r = str[i] - '0';
+		if(res > INT_MAX / 10 || (res == INT_MAX / 10 && r > 7))
+		{
+			return flag > 0 ? INT_MAX : INT_MIN;
+		}
+		res = res * 10 + r;
+		i ++;
+	}
+	return flag > 0 ? res : -res;
+}
+
+
+int main()
+{
+   	char arr[] = "   1235555599995";
+	int r = myAtoi(arr);
+	printf("%d\n", r);
+   	return 0;
+}
+
+
+
+
+// 判断回文数
+
+
+#define MaxSize 10
+
+typedef struct LNode
+{
+	int data;
+	struct LNode *next, *prior;
+}LNode, *LinkList;
+
+bool InitList(LinkList &L)
+{
+	L = (LNode *)malloc(sizeof(LNode));
+	if(L == NULL)
+		return false;
+	L->next = NULL;
+	L->prior = NULL;
+	return true;
+}
+	
+
+bool Insert(LinkList &L, int x)
+{
+	LNode *p = L;
+	LNode *s = (LNode *)malloc(sizeof(LNode));
+	if(p == NULL || s == NULL)
+		return false;
+	s->data = x;
+	s->next = p->next;
+	if(p->next != NULL)
+		p->next->prior = s;
+	s->prior = p;
+	p->next = s;
+	return true;
+}
+
+bool isEmpty(LinkList L)
+{
+	if(L->next == NULL)
+		return true;
+	else
+		return false;
+}
+
+bool Judge(LinkList L)
+{
+	LNode *p = L->next, *s = L->next;
+	while(s->next != NULL)
+	{
+		s = s->next;
+	}
+	if(p != s)
+	{
+		while(p->data == s->data && (p->next != s || s->prior != p))
+		{
+			p = p->next;
+			s = s->prior;
+		}
+		return true;
+	}
+	return false;
+	
+}
+
+
+bool isPalindrome(int x)
+{
+	LinkList L;
+	InitList(L);
+	int r = 0;
+	int res = 0;
+	int i = 0;
+	int j = 0;
+	int arr[MaxSize] = {0};
+	if(x < 0)return false;
+	while(x)
+	{
+		if(x > INT_MAX / 10 || x < INT_MIN / 10)
+			return false;
+		r = x % 10;
+		arr[i] = r;
+		x = x / 10;
+		i++;
+	}
+	while(arr[j] == arr[--i] && j < i)
+	{
+		j++;	
+	}
+	if(j >= i)
+		return true;
+	else
+		return false;
+}
+
+
+
+int main()
+{
+	if(isPalindrome(1221))
+		printf("回文数！");
+	else
+		printf("不是回文数！");
+   	return 0;
+}
+
+
+
+// 解法二：
+
+bool isPalindrome_2(int x)
+{
+	if(x < 0 || (x % 10 == 0 && x != 0))
+	{
+		return false;
+	}
+	int revertedNumber = 0;
+	while(x > revertedNumber)
+	{
+		revertedNumber = revertedNumber * 10 + x % 10;
+		x /= 10;
+	}
+	return x == revertedNumber || x == revertedNumber / 10;
+}
+
+
+// 盛最多水的容器
+
+
+int maxArea(int[] height)
+{
+	int maxarea = 0, l = 0, r = height.length-1;
+	while(l < r)
+	{
+		maxarea = Math.max(maxarea, Math.min(height[l], height[r]) * (r - l));
+		if(heigth[l] < height[r])
+			l++;
+		else
+			r--;
+	}
+	return maxarea;
+}
+
+
+// 寻找二叉树中公共的父节点
+
+
+#define MaxSize 10
+
+// 顺序存储的二叉树
+typedef struct TreeNode
+{
+	int value;
+	bool isEmpty;
+}SqTree;
+SqTree t[MaxSize];
+
+
+int Comm_Ancestor(SqTree T, int i, int j)
+{
+	if(T[i] != '#' && T[j] != '#')
+		while(i != j)
+		{
+			if(i > j)
+				i = i / 2;
+			else
+				j = j / 2;
+		}
+	return T[i];
+}
+
+
+
+
+// 二叉树的创建
+
+
+#define MaxSize 10
+
+// 顺序存储的二叉树
+typedef struct TreeNode
+{
+	int value;
+	bool isEmpty;
+}SqTree;
+SqTree t[MaxSize];
+
+
+void InitTree(SqTree T)
+{
+	for(int i = 0; i < MaxSize; i++)
+		T[i].isEmpty = true;
+}
+
+
+// 链式存储的二叉树
+typedef struct BiTNode
+{
+	int data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, *BiTree;
+
+
+void InitBiTree(BiTree &T)
+{
+	T = (BiTree)malloc(sizeof(BiTNode));
+	T->data = {1};
+	T->lchild = NULL;
+	T->rchild = NULL;
+}
+
+void InsertBiTNode(BiTree &T, int x)
+{
+	BiTree *p = (BiTNode*)malloc(sizeof(BiTNode));
+	p->data = {x};
+	p->lchild = NULL;
+	p->rchild = NULL;
+	T->lchild = p;
+}
+	
+
+
+void Test()
+{
+	BiTree T = NULL;
+	InitBiTree(T);
+}
+
+
+int Comm_Ancestor(SqTree T, int i, int j)
+{
+	if(T[i] != '#' && T[j] != '#')
+		while(i != j)
+		{
+			if(i > j)
+				i = i / 2;
+			else
+				j = j / 2;
+		}
+	return T[i];
+}
