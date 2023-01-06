@@ -1,0 +1,465 @@
+
+
+// 链式存储的二叉树创建
+typedef struct BiTNode
+{
+	int data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, BiTree;
+
+
+// 先序遍历
+void PreOrder(BiTree T)
+{
+	if(T != NULL)
+	{
+		visit(T);
+		PreOrder(T->lchild);
+		PreOrder(T->rchild);
+	}
+}
+
+// 中序遍历
+
+void InOrder(BiTree T)
+{
+	if(T != NULL)
+	{
+		InOrder(T->lchild);
+		visit(T);
+		InOrder(T->rchild);
+	}
+}
+
+// 后序遍历
+void PostOrder(BiTree T)
+{
+	if(T != NULL)
+	{
+		PostOrder(T->lchild);
+		PostOrder(T->rchild);
+		visit(T);
+	}
+}
+
+
+
+void visit(BiTree T)
+{
+	if(T == NULL)
+		break;
+	printf("%d\n", T->data);
+}
+
+
+
+
+// 计算树的深度
+
+int treeDepth(BiTree T)
+{
+	if(T == NULL)
+		return 0;
+	else
+	{
+		int l = treeDepth(T->lchild);
+		int r = treeDepth(T->rchild);
+		return l > r ? l + 1 : r + 1 ;
+	}
+}
+
+
+// 罗马数字转换整数
+
+
+int romanToInt(string s)
+{
+	int sum = 0;
+	int i;
+	auto getValue = [](char &value)->int
+	{
+		switch(value)
+		{
+			case 'I':
+				return 1;
+			case'V':
+				return 5;
+			case 'X':
+				return 10;
+			case'C':
+				return 100;
+			case'D':
+				return 500;
+			case'M':
+				return 1000;
+			default:
+				return 0;
+		}
+	}
+	
+	
+
+	for(i = 0; i < s.size() - 1; i++)
+	{
+		sum += (getValue(s[i + 1]) > getValue(s[i])) ? (-getValue(s[i]) : getValue(s[i]));
+	}
+	sum += getValue(s[i]);
+	return sum;
+}
+
+
+
+
+// 二维数组的创建
+
+
+int main()
+{
+	char arr[][MaxSize] = {{"leets"}, {"leetcode"}, {"leeds"}};
+	int i = 0, j = 0;
+	char temp[] = {0};
+	while(arr[0][i])
+	{
+		temp[i] = arr[0][i];
+		i++;
+	}
+	while(j < i)
+	{
+		printf("%c\n", temp[j]);
+		j++;
+	}
+
+   	return 0;
+}
+
+
+
+// 最长公共前缀
+
+
+string longestCommonPrefix(vector<string>& strs)
+{
+	for(int i = 0; i < strs[0].length(); i++)
+	{
+		char c = strs[0][i];
+		for(int j = 1; j< strs.size(); j++)
+		{
+			if(i == strs[j].length() || strs[j][i] != c)
+			{
+				return strs[0].substr(0, i);
+			}
+		}
+	}
+	return strs[0];
+}
+
+// 最长公共前缀
+
+
+#define MaxSize 10
+
+
+void longestCommonPrefix(char arr[][MaxSize])
+{
+	int i = 0;
+	int j = 0;
+	int	k = 1;
+	char temp[] = {0};
+	while(arr[0][i])
+	{
+		temp[i] = arr[0][i];
+		i++;
+	}
+	while(k < 3)
+	{
+		printf("a");
+		if(arr[k][j] == temp[j])
+		{
+			j++;
+		}
+		else if(arr[k][j] != temp[j])
+		{
+			k++;
+			if(j != 0)
+			{
+				j = 0;
+				i--;
+			}
+		}
+	}
+	for(j = 0; j < i; j++)
+		printf("%c\n", temp[j]);
+	
+}
+
+
+void test(char arr[][MaxSize])
+{
+
+	printf("%c\n", arr[1][0]);
+}
+
+
+
+int main()
+{
+	char arr[][MaxSize] = {{"leets"}, {"leetcode"}, {"leeds"}};
+	longestCommonPrefix(arr);
+}
+
+
+
+// 三数之和
+
+
+vector<vector<int>> threeSum(vector<int>& nums)
+{
+	vector<vector<int>> ans;
+	sort(nums.begin(), nums.end());
+	for(int i = 0; i < nums.size(); i++)
+	{
+		if(i > 0 && nums[i] == nums[i - 1])continue;
+		int l = i + 1, r = nums.size()-1;
+		int target = 0 - nums[i];
+		while(l < r)
+		{
+			if(nums[l] + nums[r] == target)
+			{
+				ans.push_back({nums[i], nums[l], nums[r]});
+				while(l < r && nums[l] == nums[l + 1]) l++;
+				while(l < r && nums[r] == nums[r - 1]) r--;
+				l++, r--;
+			}
+			else if(nums[l] + nums[r] < target)
+			{
+				l++;
+			}
+			else
+			{
+				r--;
+			}
+		}
+	}
+	return ans;
+}
+
+
+
+// 树的层次遍历算法
+
+
+typedef struct BiTNode
+{
+	int data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, *BiTree;
+
+
+typedef struct LinkNode
+{
+	BiTNode* data;
+	struct LinkNode *next;
+}LinkNode;
+
+typedef struct 
+{
+	struct LinkNode *front, *rear;
+}LinkQueue;
+
+
+void InitQueue(LinkQueue &Q)
+{
+	Q.front = Q.rear = (LinkNode*)malloc(sizeof(LinkNode));
+	Q.front->next = NULL;
+	
+}
+
+void EnQueue(LinkQueue &Q, BiTNode* x)
+{
+	LinkNode *p = (LinkNode*)malloc(sizeof(LinkNode));
+	p->data = x;
+	p->next = NULL;
+	Q.rear->next = p;
+	Q.rear = p;
+}
+
+bool DeQueue(LinkQueue &Q, BiTNode* &x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	LinkNode *p = Q.front->next;
+	x = p->data;
+	Q.front->next = p->next;
+	if(Q.rear == p)
+		Q.rear = Q.front;
+	free(p);
+	return true;
+}
+
+bool isEmpty(LinkQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		return false;
+}
+
+
+void visit(BiTree T)
+{
+	printf("%d\n", T->data);
+}
+
+
+void LevelOrder(BiTree T)
+{
+	LinkQueue Q;
+	InitQueue(Q);
+	BiTree p;
+	EnQueue(Q, T);
+	while(!isEmpty(Q))
+	{
+		DeQueue(Q, p);
+		visit(p);
+		if(p->lchild != NULL)
+			EnQueue(Q, p->lchild);
+		if(p->rchild != NULL)
+			EnQueue(Q, p->rchild);
+	}
+}
+
+
+// 土办法找前驱
+
+typedef struct BiTNode
+{
+	int data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, *BiTree;
+
+
+void InOrder(BiTree T)
+{
+	if(T != NULL)
+	{
+		InOrder(T->lchild);
+		visit(T);
+		InOrder(T->rchild);
+	}
+}
+
+// 辅助全局变量
+BiTNode *p;
+BiTNode *pre = NULL;
+BiTNode *Final = NULL; 
+
+// 土办法查找节点i的前驱
+void visit(BiTNode* q)
+{
+
+	if(q == p)
+		Final = pre;
+	else
+		pre = q;
+}
+
+
+// 对二叉树进行线索化
+
+
+typedef struct ThreadNode
+{
+	int data;
+	struct ThreadNode *lchild, *rchild;
+	int ltag, rtag;
+}ThreadNode, *ThreadTree;
+
+// 辅助全局变量
+ThreadNode *pre = NULL;
+
+// 中序遍历,一边遍历一边线索化
+void InThread(ThreadTree T)
+{
+	if(T != NULL)
+	{
+		InThread(T->lchild);
+		visit(T);
+		InThread(T->rchild);
+	}
+}
+
+
+void visit(ThreadNode *q)
+{
+	if(q->lchild == NULL)
+	{
+		q->lchild = pre;
+		q->ltag = 1;
+	}
+	if(pre != NULL && pre->rchild == NULL)
+	{
+		pre->rchild = q;
+		pre->rtag = 1;
+	}
+	pre = q;
+}
+
+void CreateInThread(ThreadTree T)
+{
+	ThreadNode *pre = NULL;
+	if(T != NULL)
+	{
+		InThread(T);
+		if(pre->rchild == NULL)
+			pre->rtag = 1;
+	}
+}
+
+// 先序遍历，一边遍历一边线索化
+
+void PreThread(ThreadTree T)
+{
+	if(T != NULL)
+	{
+		visit(T);
+		// 防止出现死循环
+		if(T->ltag == 0)
+			PreThread(T->lchild);
+		PreThread(T->rchild);
+	}
+}
+
+
+// 中序线索二叉树找后继节点
+
+typedef struct ThreadNode
+{
+	int data;
+	struct ThreadNode *lchild, *rchild;
+	int ltag, rtag;
+}ThreadNode, *ThreadTree;
+
+
+// 指定节点的前驱节点
+ThreadNode *Firstnode(ThreadNode *p)
+{
+	while(p->ltag == 0) p = p->lchild;
+	return p;
+}
+
+// 指定节点的后继节点
+
+ThreadNode *Nextnode(ThreadNode *p)
+{
+	if(p->rtag == 0) 
+		return Firstnode(p->rchild);
+	else 
+		return p->rchild;
+}
+
+// 对中序线索二叉树进行中序遍历
+void Inorder(ThreadNode *T)
+{
+	for(ThreadNode *p = Firstnode(T); p != NULL; p = Nextnode(p))
+		visit(p);
+}
