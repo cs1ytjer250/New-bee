@@ -1,0 +1,200 @@
+// 最接近的三数之和
+
+
+int threeSumClosest(vector<int>& nums, int target)
+{
+	int ans = nums[0] + nums[1] + nums[2];
+	sort(nums.begin(), nums.end());
+	for(int i = 0; i< nums.size(); i++)
+	{
+		int l = i + 1, r= nums.size() - 1;
+		while(l < r)
+		{
+			int sum = nums[i] + nums[l] + nums[r];
+			if(sum == target) return sum;
+			if(abs(sum - target) < abs(ans - target)) ans = sum;
+			if(sum < target) l++;
+			else r--;
+		}
+	}
+	return ans;
+}
+
+
+// 电话号码的字母组合
+
+
+class Solution
+{
+	vector<string>ans;
+	string strs[10] = {
+	"", "", "abc", "def",
+	"ghi", "jkl", "mno",
+	"pqrs", "tuv", "wxyz"
+	};
+public:
+	vector<string> letterCombinations(string digits)
+	{
+		if(digits.empty()) return ans;
+		dfs(digits, 0, "");
+		return ans;
+	}
+	
+	void dfs(string &digits, int idx, string combine)
+	{
+		if(idx == digits.length())
+		{
+			ans.push_back(combine);
+			return;
+		}
+		string s = strs[digits[idx] - '0'];
+		for(int i = 0; i< s.length(); i++)
+		{
+			combine.push_back(s[i]);
+			dfs(digits, idx + 1, combine);
+			combine.pop_back();
+		}
+	}
+}
+
+
+
+// 找出数组中重复的数字
+
+
+bool duplicate(int nums[], int n, int* out)
+{
+	for(int i = 0; i < n; i++)
+	{
+		while(nums[i] != i)
+		{
+			if(nums[i] == nums[nums[i]])
+			{
+				out[0] = nums[i];
+				return true;
+			}
+			else
+				swap(nums[i], nums[nums[i]]);
+		}
+	}
+	return false;
+}
+
+
+
+// 不修改数组找出数组中重复的数字
+
+// 暴力解
+int duplicateInArray_Violence(vector<int>& nums)
+{
+	int n = nums.size();
+	for(int i = 0; i< n - 1; i++)
+	{
+		for(int j = i + 1; j < n; j++)
+		{
+			if(nums[i] ^ nums[j] == 0)
+				return nums[i];
+		}
+	}
+	return 0;
+}
+
+
+// 二分法
+int duplicateInArray_Binary(vector<int>& nums)
+{
+	int l = 1, r = nums.size()-1;
+	while(l < r)
+	{
+		int mid = l + r >> 1;
+		int s = 0;
+		for(int i = 0; i < nums.size(); i++)
+		{
+			if(nums[i] >= l && nums[i] <= mid) s++;
+		}
+		if(s > mid - l + 1)
+			r = mid;
+		else
+			l = mid + 1;
+	}
+	return r;
+	
+}
+
+
+##############################################
+
+// 线索二叉树，查找中序前驱和中序后继
+
+typedef struct ThreadNode
+{
+	int data;
+	struct ThreadNode *lchild, *rchild;
+	int rtag, ltag;
+}ThreadNode, *ThreadTree;
+
+
+// 线索二叉树，找中序后继
+ThreadNode *Lastnode(ThreadNode *p)
+{
+	while(p->rtag == 0) p = p->rchild;
+	return p;
+}
+
+// 线索二叉树，找中序前驱
+ThreadNode *Prenode(ThreadNode *p)
+{
+	if(p->ltag == 0) return Lastnode(p = p->lchild);
+	else return p->lchild;
+}
+
+
+// 对线索二叉树，进行中序逆序遍历
+void RevInorder(ThreadNode *T)
+{
+	// 其实p为二叉树T的最后一个节点，每次p移向p节点的前驱节点
+	for(ThreadNode *p = Lashnode(T); p != NULL; p = Prenode(p))
+		visit(p);
+}
+
+
+
+##############################################
+
+// 中序线索二叉树找后继节点
+
+typedef struct ThreadNode
+{
+	int data;
+	struct ThreadNode *lchild, *rchild;
+	int ltag, rtag;
+}ThreadNode, *ThreadTree;
+
+
+// 指定节点的前驱节点
+ThreadNode *Firstnode(ThreadNode *p)
+{
+	while(p->ltag == 0) p = p->lchild;
+	return p;
+}
+
+// 指定节点的后继节点
+
+ThreadNode *Nextnode(ThreadNode *p)
+{
+	if(p->rtag == 0) 
+		return Firstnode(p->rchild);
+	else 
+		return p->rchild;
+}
+
+
+// 对中序线索二叉树进行中序遍历(顺序)
+void Inorder(ThreadNode *T)
+{
+	// 开始时p指针指向T节点的左孩子，每次循环p都移向根节点T的后继节点
+	for(ThreadNode *p = Firstnode(T); p != NULL; p = Nextnode(p))  
+		visit(p);
+}
+
+##############################################
