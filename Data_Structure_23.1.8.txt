@@ -1,0 +1,349 @@
+// 线索二叉树定义
+typedef struct ThreadNode
+{
+	int data;
+	struct ThreadNode *lchild, *rchild;
+	int ltag, rtag;
+}ThreadNode, *ThreadTree;
+
+ThreadNode *Lastnode(ThreadNode *p)
+{
+	while(p->rtag == 0) p = p->rchild;
+	return p;
+}
+
+ThreadNode *Prenode(ThreadNode *p)
+{
+	if(p->ltag == 0) Lastnode(p->lchild);
+	else return p->lchild;
+}
+
+ThreadNode *Preorder(ThreadNode *T)
+{
+	for(ThreadNode *p = Prenode(T); p != NULL; p = Lastnode(T))
+		visit(p);
+}
+
+int main()
+{
+   cout << "Hello World";
+   return 0;
+}
+
+
+
+
+
+
+#define MaxSize 10
+
+
+// 链式存储二叉树定义(二叉链表)
+typedef struct BiTNode
+{
+	int data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, *BiTree;
+
+
+// 链式存储的栈定义方式
+
+typedef struct LinkNode
+{
+	int data;
+	struct LinkNode *next;
+}*LiStack;
+
+// 顺序存储的栈定义
+typedef struct Stack
+{
+	BiTNode *data[MaxSize];
+	int top;
+}SqStack;
+
+
+// 顺序存储的栈初始化
+void InitStack(SqStack &S)
+{
+	S.top = -1;
+}
+
+bool IsEmpty(SqStack S)
+{
+	if(S.top == -1)
+		return true;
+	else
+		 return false;
+}
+
+// 顺序存储的入栈
+bool push(SqStack &S, BiTNode *x)
+{
+	if(S.top == MaxSize -1)
+		return false;
+	S.data[++S.top] = x;
+	return true;
+}
+
+
+// 顺序存储的出栈
+
+bool pop(SqStack &S, BiTNode *&x)
+{
+	if(S.top == -1)
+		return false;
+	x = S.data[S.top--];
+	return true;
+}
+
+// 顺序存储，获取栈顶元素
+bool GetTop(SqStack S, BiTNode *&x)
+{
+	if(S.top == -1)
+		return false;
+	x = S.data[S.top];
+	return true;
+}
+
+void visit(BiTNode *T)
+{
+	printf("%d\n", T->data);
+}
+
+
+
+// 顺序存储队列定义
+
+typedef struct Queue
+{
+	BiTNode *data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+// 顺序队列：初始化
+void InitQueue(SqQueue &Q)
+{
+	Q.front = Q.rear = 0;
+}
+
+// 顺序队列：判空
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		return false;
+}
+
+
+// 顺序队列：入队
+bool EnQueue(SqQueue &Q, BiTNode *x)
+{
+	if((Q.rear + 1) % MaxSize == Q.front)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	return true;
+}
+
+// 顺序队列：出队
+
+bool DeQueue(SqQueue &Q, BiTNode *&x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	return true;
+}
+
+
+// 非递归算法后序遍历二叉树
+void PostOrder(BiTree T)
+{
+	SqStack S;
+	InitStack(S);
+	BiTree p = T;
+	BiTNode *r = NULL;
+	while(p || !IsEmpty(S))
+	{
+		if(p)
+		{
+			push(S,p);
+			p = p->lchild;
+		}
+		else
+		{
+			GetTop(S, p);
+			if(p->rchild && p->rchild != r)
+				p = p->rchild;
+			else
+			{
+				pop(S, p);
+				visit(p->data);
+				r = p;
+				p = NULL;
+			}
+		}
+	}
+}
+
+
+// 层序遍历二叉树（逆向）
+
+void InvertLevel(BiTree bt)
+{
+	SqStack S; SqQueue Q;
+	BiTNode *p;
+	if(bt != NULL)
+	{
+		InitStack(S);
+		InitQueue(Q);
+		EnQueue(Q, bt);
+		while(QueueEmpty(Q) == false)
+		{
+			DeQueue(Q, p);
+			push(S, p);
+			if(p->lchild)
+				EnQueue(Q, p->lchild);
+			if(p->rchild)
+				EnQueue(Q, p->rchild);
+		}
+		while(IsEmpty(S) == false)
+		{
+			pop(S, p);
+			visit(p->data);
+		}
+	}
+}
+
+
+// 非递归算法求解树的深度
+
+
+int Btdepth(BiTree T)
+{
+	if(!T)
+		return 0;
+	int front = -1, rear = -1;
+	int last = 0, level = 0;
+	BiTree Q[MaxSize];
+	Q[++rear] = T;
+	BiTree p;
+	while(front < rear)
+	{
+		p = Q[++fornt];
+		if(p->lchild)
+			Q[++rear] = p->lchild;
+		if(p->rchild)
+			Q[++rear] = p->rchild;
+		if(front == last)
+		{
+			level++;
+			last = rear;
+		}
+	}
+	return level;
+}
+
+
+
+// 递归算法求解树深度
+
+int Btdepth_2(BiTree T)
+{
+	if(T == NULL)
+		return 0;
+	ldep = Btdepth_2(T->lchild);
+	rdep = Btdepth_2(T->rchild);
+	if(ldep > rdep)
+		return ldep + 1;
+	else 
+		return rdep + 1;
+}
+
+
+
+// 根据先序和中序，确定二叉链表（递归算法）
+
+BiTree PreInCreat(int A[], int B[], int l1, int h1, int l2, int h2)
+{
+	BiTNode *root = (BiTNode*)malloc(sizeof(BiTNode));
+	root->data = A[l1];
+	for(int i = l2; B[i] != root->data; i++);
+	int llen = i - l2;
+	int rlen = h2 - i;
+	if(llen)
+		root->lchild = PreInCreat(A, B, l1+1, l1+llen, l2, l2+llen-1);
+	else
+		root->lchild = NULL;
+	if(rlen)
+		root->rchild = PreInCreat(A, B, h1-rlen+1, h1, h2-rlen+1, h2);
+	else
+		root->rchild = NULL;
+	return root;
+	
+}
+
+
+
+// 判断二叉树是否是完全二叉树
+
+bool IsComplete(BiTree T)
+{
+	SqQueue(Q);
+	InitQueue(Q);
+	BiTNode *p;
+	if(!T)
+		return 1;
+	EnQueue(Q, T);
+	while(!QueueEmpty(Q))
+	{
+		DeQueue(Q, p);
+		if(p)
+		{
+			EnQueue(Q, p->lchild);
+			EnQueue(Q, p->rchild);
+		}
+		else
+		{
+			while(!QueueEmpty(Q))
+			{
+				DeQueue(Q, p);
+				if(p)
+					return 0;
+			}
+		}
+	}
+	return 1;
+}
+
+
+// 计算一棵二叉树的双分支节点个数(递归算法)
+
+
+int DsonNodes(BiTree b)
+{
+	if(b == NULL)
+		return 0;
+	else if(b->lchild != NULL && b->rchild != NULL)
+		return DsonNodes(b->lchild) + DsonNodes(b->rhcild) + 1;
+	else
+		return DsonNodes(b->lchild) + DsonNodes(b->rchild);
+}
+
+
+
+// 对一个二叉链表进行左右孩子的互换（递归算法）
+
+void swap(BiTree b)
+{
+	if(b)
+	{
+		swap(b->lchild);
+		swap(b->rchild);
+		BiTNode *temp = b->lchild;
+		b->lchild = b->rchild;
+		b->rchild = temp;
+	}
+}
