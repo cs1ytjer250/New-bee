@@ -1,0 +1,330 @@
+
+// 图的遍历
+
+#define MaxVertexNum 150
+#define MaxSize 10
+
+typedef struct Queue
+{
+	Graph *data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+
+bool EnQueue(SqQueue &Q, Graph *x)
+{
+	if((Q.rear + 1) % MaxSize == Q.front)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	return true;
+}
+
+
+bool DeQueue(SqQueue &Q, Graph *x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	return true;
+}
+
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		 return false;
+}
+
+void InitQueue(SqQueue &Q)
+{
+	Q.front = Q.rear = -1;
+}
+
+
+// 边/弧
+typedef struct ArcNode
+{
+	int adjvex;
+	struct ArcNode *next;
+}ArcNode;
+
+
+// 邻接表
+typedef char VertexType;
+typedef int EdgeType;
+
+typedef struct VNode
+{
+	VertexType data;
+	ArcNode *first;
+}VNode, AdjList[MaxVertexNum];
+
+
+// 邻接矩阵
+typedef struct
+{
+	char Vex[MaxVertexNum];
+	int Edge[MaxVertexNum][MaxVertexNum];
+	int vexnum, arcnum;
+}Graph;
+
+
+// 图：广度优先遍历
+
+bool visited[MaxVertexNum];
+
+void BFSTraverse(Graph G)
+{
+	for(int i = 0; i < G.vexnum; ++i)
+	{
+		visited[i] = FALSE;
+	}
+	InitQueue(Q);
+	for(int i = 0; i < G.vexnum; ++i)
+	{
+		if(!visited[i])
+			BFS(G, i);
+	}
+}
+
+void BFS(Graph G, int v)
+{
+	visit(v);
+	visited[v] = TRUE;
+	Enqueue(Q, v);
+	while(!QueueEmpty(Q))
+	{
+		DeQueue(Q, v);
+		for(int w = FirstNeighbor(G, v); w >= 0; w = NextNeighbor(G, v, w))
+		{
+			if(!visited[w])
+			{
+				visit(w);
+				visited[w] = TRUE;
+				EnQueue(Q, w);
+			}
+		}
+	}
+}
+
+
+
+// 图：深度优先遍历
+
+bool visited[MaxVertexNum];
+
+void DFSTraverse(Graph G)
+{
+	for(int v = 0; v < G.vexnum; ++v)
+		visited[v] = FALSE;
+	for(int v = 0; v < G.vexnum; ++v)
+	{
+		if(!visited[v])
+			DFS(G, v);
+	}
+}
+
+void DFS(Graph G, int v)
+{
+	visit(v);
+	visited[v] = TRUE;
+	for(int w = FirstNeighbor(G, v); w >= 0; w = NextNeighbor(G, v))
+	{
+		if(!visited[w])
+		{
+			DFS(G, w);
+		}
+	}
+}
+
+
+// 判断一个无向图G是否为一棵树
+
+bool visited[[MaxVertexNum];]
+
+bool isTree(Graph &G)
+{
+	for(int i = 1; i < G.vexnum; i++)
+		visited[i] = FALSE;
+	int Vnum = 0; Enum = 0;
+	DFS(G, 1, Vnum, Enum, visited);
+	if(Vnum == G.vexnum && Enum == 2 * (G.vexnum - 1))
+		return true;
+	else
+		return false;
+}
+
+
+void DFS(Graph &G, int v, int & Vnum, int & Enum, int visited[])
+{
+	visited[v] = True; Vnum ++;
+	int w = FirstNeighbor(G, v);
+	while(w != -1)
+	{
+		Enum++;
+		if(!visited[w])
+			DFS(G, w, Vnum, Enum, visited);
+		w = NexNeighbor(G, v, w);
+	}
+}
+
+
+
+
+// 判断一个无向图G是否为一棵树
+
+
+typedef struct LinkNode
+{
+	Graph *data;
+	struct LinkNode *next;
+}*LiStack, LinkNode;
+
+void InitStack(LiStack S)
+{
+	S = (LinkNode*) malloc(sizeof(LinkNode));
+	if(S == NULL)
+		return;
+	S->next = NULL;
+}
+
+void Push(SqStack &S, Graph *g)
+{
+	LinkNode *p = (LinkNode*)malloc(sizeof(LinkNode));
+	p->data = g;
+	p->next = S->next;
+	S->next = p;
+}
+
+Graph* Pop(SqStack &S, Graph &x)
+{
+	if(S->next == NULL)
+		return true;
+	LinkNode *p = (LinkNode*)malloc(sizeof(LinkNode));
+	p = S->next;
+	while(p->next != NULL)
+	{
+		p = p->next;
+	}
+	x = p->data;
+	p = NULL;
+	return x;
+}
+
+
+bool visited[[MaxVertexNum];]
+
+void DFS_Non_RC(AGraph &G, int v)
+{
+	int w;
+	SqStack S;
+	InitStack(S);
+	for(int i = 0; i < G.vexnum; i++)
+		visited[i] = FALSE;
+	Push(S, v); visited[v] = TRUE;
+	while(!isEmpty(S))
+	{
+		Graph *k;
+		Pop(S, k);
+		visit(k);
+		for(w = FirstNeighbor(G, k); w >= 0; w = NextNeighbor(G, k, w))
+		{
+			if(!visited[w])
+			{
+				Push(S, w);
+				visited[w] = TRUE;
+			}
+		}
+	}
+}
+
+
+// 判断有向图中是否存在V1到V2的路径（广度优先和深度优先）
+int visited[[MaxVertexNum] = {0};
+			
+			
+// 深度优先
+void DFS(Graph G,int i, int j, bool &can_reach)
+{
+	if(i == j)
+	{
+		can_reach = true;
+		return;
+	}
+	visited[i] = 1;
+	for(int p = FirstNeighbor(G, i); p >= 0; p = NextNeighbor(G, i, p))
+	{
+		if(!visited[p] && !can_reach)
+			DFS(G, p, j, can_reach);
+	}
+}
+			
+			
+// 广度优先
+int BFS(Graph G, int i, int j)
+{
+	InitQueue(Q);EnQueue(Q, i);
+	while(!QueueEmpty(Q))
+	{
+		int u;
+		DeQueue(Q, u);
+		visited[u] = 1;
+		if(u == j) return 1;
+		for(int p = FirstNeighbor(G, i); p; p = NextNeighbor(G, u, p))
+		{
+			if(p == j)
+				return 1;
+			if(!visited[p])
+			{
+				EnQueue(Q, p);
+				visited[p] = 1;
+			}
+		}
+	}
+	return 0;
+}
+
+
+// 判断图中V1到V2的简单路径(路径中的节点不重复)
+
+// 边/弧
+typedef struct ArcNode
+{
+	int adjvex;
+	struct ArcNode *next;
+}ArcNode;
+
+
+// 邻接表
+typedef char VertexType;
+typedef int EdgeType;
+
+typedef struct VNode
+{
+	VertexType data;
+	ArcNode *first;
+}VNode, AGraph[MaxVertexNum];
+
+
+void FindPath(Graph *G, int u, int v, int path[], int d)
+{
+	int w, i;
+	ArcNode *p;
+	d++;
+	path[d] = u;
+	visited[u] = 1;
+	if(u == v)
+		printf(path[]);
+	p = G->adjlist[u].firstarc;
+	while(p != NULL)
+	{
+		w = p->adjvex;
+		if(visited[w] == 0)
+			FindPath(G, w, v, path, d);
+		p = p->nextarc;
+	}
+	visited[u] = 0;
+}
