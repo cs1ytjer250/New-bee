@@ -1,0 +1,277 @@
+
+##################      树        #####################
+// 线索二叉树定义
+typedef struct ThreadNode
+{
+	int data;
+	struct ThreadNode *lchild, *rchild;
+	int ltag, rtag;
+}ThreadNode, *ThreadTree;
+
+
+// 链式存储二叉树定义(二叉链表)
+typedef struct BiTNode
+{
+	int data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, *BiTree;
+
+
+// 树：孩子双亲表示法（顺序存储）
+typedef struct                                // 树的节点定义
+{
+	int data;                          // 数据元素  
+	int parent;                      // 双亲位置域
+}PTNode;
+typedef struct                              // 树的类型定义
+{
+	PTNode nodes[MaxSize];   // 双亲表示 
+	int n;                             // 节点数
+}PTree;
+
+
+// 树：孩子表示法
+struct CTNode
+{
+	int child;              // 孩子节点在数组中的位置
+	struct CTNode *next;    // 下一个孩子
+};
+typedef struct
+{
+	int data;
+	struct CTNode *firstChild;     // 第一个孩子
+}CTBox;
+typedef struct 
+{
+	CTBox nodes[MaxSize];
+	int n, r;              // 节点数和根的位置    
+}CTree;
+
+
+
+// 树：孩子兄弟表示法     重点
+
+typedef struct CSNode
+{
+	int data;
+	struct CSNode *firstchild, *nextsibling;
+}CSNode, *CSTree;
+
+
+##################     队列        #####################
+
+// 顺序存储队列定义
+
+typedef struct Queue
+{
+	int data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+
+// 顺序存储队列: 初始化
+void InitQueue(SqQueue &Q)
+{
+	Q.front = Q.rear = 0;
+}
+
+
+// 顺序存储队列:判空
+
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		return false;
+}
+
+// 顺序存储队列:入队
+
+bool EnQueue(SqQueue &Q, BiTNode *x)
+{
+	if((Q.rear + 1) % MaxSize == Q.front)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	return true;
+}
+
+
+// 顺序存储队列:出队
+bool DeQueue(SqQueue &Q, BiTNode *&x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	return true;
+}
+
+
+##################      栈        #####################
+
+// 栈定义：链式存储
+typedef struct LinkNode
+{
+	Graph *data;
+	struct LinkNode *next;
+}*LiStack;
+
+
+// 链栈：初始化
+void InitStack(LiStack S)
+{
+	S = (LinkNode*) malloc(sizeof(LinkNode));
+	if(S == NULL)
+		return;
+	S->next = NULL;
+}
+
+
+// 链栈：入栈
+void Push(SqStack &S, Graph *g)
+{
+	LinkNode *p = (LinkNode*)malloc(sizeof(LinkNode));
+	p->data = g;
+	p->next = S->next;
+	S->next = p;
+}
+
+// 链栈：出栈
+boolPop(SqStack &S, int &x)
+{
+	if(S->next == NULL)
+		return false;
+	LinkNode *p = (LinkNode*)malloc(sizeof(LinkNode));
+	p = S->next;
+	while(p->next != NULL)
+	{
+		p = p->next;
+	}
+	x = p->data;
+	p = NULL;
+	return true;
+}
+
+
+// 栈定义：顺序存储
+typedef struct Stack
+{
+	int data[MaxSize];
+	int top;
+}SqStack;
+
+
+// 顺序存储栈：初始化
+void InitStack(SqStack &S)
+{
+	S.top = -1;
+}
+
+
+// 顺序存储栈：判空
+bool IsEmpty(SqStack S)
+{
+	if(S.top == -1)
+		return true;
+	else
+		 return false;
+}
+
+// 顺序存储栈：入栈
+bool push(SqStack &S, BiTNode *x)
+{
+	if(S.top == MaxSize -1)
+		return false;
+	S.data[++S.top] = x;
+	return true;
+}
+
+
+// 顺序存储栈：出栈
+
+bool pop(SqStack &S, BiTNode *&x)
+{
+	if(S.top == -1)
+		return false;
+	x = S.data[S.top--];
+	return true;
+}
+
+// 顺序存储栈：获取栈顶元素
+bool GetTop(SqStack S, BiTNode *&x)
+{
+	if(S.top == -1)
+		return false;
+	x = S.data[S.top];
+	return true;
+}
+
+
+##################      图        #####################
+
+
+
+// 图的存储：邻接矩阵法
+
+#define MaxVertexNum 100                   // 顶点数目的最大值
+typedef struct 
+{
+	char Vex[MaxVertexNum];               // 顶点表
+	int Edge[MaxVertexNum][MaxVertexNum]; // 邻接矩阵，边表
+	int vexnum, arcnum;                   // 图的当前顶点数和边数/弧数
+}MGraph;
+
+
+
+// 邻接矩阵法存储 :  带权图（网）
+
+#define MaxVertexNum 100   
+#define INFINITY 100                             // 宏定义常量“无穷”
+
+typedef char VertexType;                         // 顶点的数据类型
+typedef int EdgeType;                            // 带权图中边上权值的数据类型
+typedef struct
+{
+	VertexType Vex[MaxVertexNum];                // 顶点
+	EdgeType Edge[MaxVertexNum][MaxVertexNum];   // 边的权
+	int vexnum, arcnum;                          // 图的当前定点数和弧数
+}
+
+
+// 边/弧
+
+typedef struct ArcNode
+{
+	int adjvex;              // 边/弧指向那个节点
+	struct ArcNode *next;    // 指向吓一跳弧的指针
+	// Infotype info;        // 边权值
+}ArcNode;   
+
+
+
+// 邻接表（顺序+链式）
+
+typedef char VertexType;                         // 顶点的数据类型
+typedef int EdgeType; 
+
+
+typedef struct VNode
+{
+	VertexType data;    // 顶点信息
+	ArcNode *first;     // 第一条边/弧
+}VNode, AdjList[MaxVertexNum];
+
+
+
+// 用邻接表存储的图
+typedef struct
+{
+	AdjList vertices;
+	int vexnum, arcnum;
+}ALGraph;
+
+
+
+    
