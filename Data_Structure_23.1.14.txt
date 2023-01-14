@@ -1,0 +1,239 @@
+#define MaxVertexNum 150
+#define MaxSize 10
+
+typedef struct Queue
+{
+	Graph *data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+
+bool EnQueue(SqQueue &Q, Graph *x)
+{
+	if((Q.rear + 1) % MaxSize == Q.front)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	return true;
+}
+
+
+bool DeQueue(SqQueue &Q, Graph *x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	return true;
+}
+
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		 return false;
+}
+
+void InitQueue(SqQueue &Q)
+{
+	Q.front = Q.rear = -1;
+}
+
+
+
+// 邻接矩阵
+typedef struct
+{
+	char Vex[MaxVertexNum];
+	int Edge[MaxVertexNum][MaxVertexNum];
+	int vexnum, arcnum;
+}Graph;
+
+
+// 图：广度优先遍历,生成最短路径  (非递归算法)
+
+
+bool visited[MaxVertexNum];
+void BFS_MIN_Distance(Graph G, int u)
+{
+	int d[], path[];
+	for(int i = 0; i < G.vexnum; i++)
+	{
+		d[i] = 999999999;
+		path[i] = -1;
+	}
+	d[u] = 0;
+	visited[u] = TRUE;
+	EnQueue(Q, u);
+	while(!QueueEmpty(Q))
+	{
+		DeQueue(Q, u);
+		for(w = FirstNeighbor(G, u); u >= 0; w = NextNeighbor(G, u, w))
+		{
+			if(!visited[w])
+			{
+				d[w] = d[u] + 1;
+				path[w] = u;
+				visited[w] = TRUE;
+				EnQueue(Q, w);
+			}
+		}
+	}
+}
+
+
+
+
+
+#define MaxVertexNum 150
+#define MaxSize 10
+
+typedef struct Queue
+{
+	Graph *data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+
+bool EnQueue(SqQueue &Q, Graph *x)
+{
+	if((Q.rear + 1) % MaxSize == Q.front)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	return true;
+}
+
+
+bool DeQueue(SqQueue &Q, Graph *x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	return true;
+}
+
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		 return false;
+}
+
+void InitQueue(SqQueue &Q)
+{
+	Q.front = Q.rear = -1;
+}
+
+
+
+// 邻接矩阵
+typedef struct
+{
+	char Vex[MaxVertexNum];
+	int Edge[MaxVertexNum][MaxVertexNum];
+	int vexnum, arcnum;
+}Graph;
+
+
+// 图：广度优先遍历,生成最短路径  (非递归算法)
+
+
+bool visited[MaxVertexNum];
+void BFS_MIN_Distance(Graph G, int u)
+{
+	int d[], path[];
+	for(int i = 0; i < G.vexnum; i++)
+	{
+		d[i] = 999999999;
+		path[i] = -1;
+	}
+	d[u] = 0;
+	visited[u] = TRUE;
+	EnQueue(Q, u);
+	while(!QueueEmpty(Q))
+	{
+		DeQueue(Q, u);
+		for(w = FirstNeighbor(G, u); u >= 0; w = NextNeighbor(G, u, w))
+		{
+			if(!visited[w])
+			{
+				d[w] = d[u] + 1;
+				path[w] = u;
+				visited[w] = TRUE;
+				EnQueue(Q, w);
+			}
+		}
+	}
+}
+
+
+
+// 拓扑排序
+
+typedef char VertexType;
+typedef int ArcNode;
+
+#define MaxVertexNum 100		// 图中顶点数目的最大值
+typedef struct ArcNode			// 边表节点
+{
+	int adjvex;					// 该弧指向的顶点的位置
+	struct ArcNode *nextarc;	// 指向下一条弧的指针
+	// InfoType info;			// 网的边权值
+}ArcNode;
+
+typedef struct VNode			// 顶点表节点
+{
+	VertexType data;			// 顶点信息
+	ArcNode *firstarc;			// 指向第一条依附该顶点的弧的指针
+}VNode, AdjList[MaxVertexNum];
+
+typedef struct
+{
+	AdjList vertices;			// 邻接表
+	int vexnum, arcnum;			// 图的顶点数和弧数
+}Graph;							// Graph是以邻接表存储的图类型
+
+typedef struct LinkNode
+{
+	int data;
+	struct LinkNode *next;
+}*LiStack;
+
+void InitStack(LiStack &S)
+{
+	S = (LinkNode *)malloc(sizeof(LinkNode));
+	if(S == NULL)
+		return;
+	S->next = NULL;
+}
+
+
+bool TopolopicalSort(Graph G)
+{
+	InitStack(S);
+	for(int i = 0; i < G.vexnum; i++)
+	{
+		if(indegree[i] == 0)
+			Push(S, i)
+	}// for
+	int count = 0;
+	while(!IsEmpty(S))
+	{
+		Pop(S, i);
+		print[count++] = i;
+		for(p = G.vertices[i].firstarc; p; p = p->nextarc)
+		{
+			v = p->advex;
+			if(!(--indegree[v]))
+				Push(S, v);
+		}
+	}// while
+	if(count < G.vexnum)
+		return false;
+	else
+		return true;
+}
