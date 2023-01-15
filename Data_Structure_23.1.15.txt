@@ -1,0 +1,333 @@
+#define MaxVertexNum 150
+#define MaxSize 10
+
+typedef struct Queue
+{
+	Graph *data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+
+bool EnQueue(SqQueue &Q, Graph *x)
+{
+	if((Q.rear + 1) % MaxSize == Q.front)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	return true;
+}
+
+
+bool DeQueue(SqQueue &Q, Graph *x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	return true;
+}
+
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		 return false;
+}
+
+void InitQueue(SqQueue &Q)
+{
+	Q.front = Q.rear = -1;
+}
+
+
+
+// 邻接矩阵
+typedef struct
+{
+	char Vex[MaxVertexNum];
+	int Edge[MaxVertexNum][MaxVertexNum];
+	int vexnum, arcnum;
+}Graph;
+
+
+// 图：广度优先遍历,最小生成树  (非递归算法)
+
+
+bool visited[MaxVertexNum];
+void BFS_MIN_Distance(Graph G, int u)
+{
+	int d[], path[];			// d:到该节点最小权值。path：到该节点的路径
+	for(int i = 0; i < G.vexnum; i++)	// 初始化d和path数组。
+	{
+		d[i] = 999999999;
+		path[i] = -1;
+	}
+	d[u] = 0;				// 将第一个节点权值置0
+	visited[u] = TRUE;			// 修改该节点在visited数组中的值
+	EnQueue(Q, u);
+	while(!QueueEmpty(Q))
+	{
+		DeQueue(Q, u);
+		for(w = FirstNeighbor(G, u); u >= 0; w = NextNeighbor(G, u, w))
+		{
+			if(!visited[w])
+			{
+				d[w] = d[u] + 1;	// 将w所在d数组中的值改为w之前节点权值加1
+				path[w] = u;	// w所在路径指向w之前节点
+				visited[w] = TRUE;	// 修改visited
+				EnQueue(Q, w);
+			}
+		}
+	}
+}
+
+
+
+
+
+#define MaxVertexNum 150
+#define MaxSize 10
+
+typedef struct Queue
+{
+	Graph *data[MaxSize];
+	int front, rear;
+}SqQueue;
+
+
+bool EnQueue(SqQueue &Q, Graph *x)
+{
+	if((Q.rear + 1) % MaxSize == Q.front)
+		return false;
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	return true;
+}
+
+
+bool DeQueue(SqQueue &Q, Graph *x)
+{
+	if(Q.front == Q.rear)
+		return false;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	return true;
+}
+
+bool QueueEmpty(SqQueue Q)
+{
+	if(Q.front == Q.rear)
+		return true;
+	else
+		 return false;
+}
+
+void InitQueue(SqQueue &Q)
+{
+	Q.front = Q.rear = -1;
+}
+
+
+
+// 邻接矩阵
+typedef struct
+{
+	char Vex[MaxVertexNum];
+	int Edge[MaxVertexNum][MaxVertexNum];
+	int vexnum, arcnum;
+}Graph;
+
+
+// 图：广度优先遍历,生成最短路径  (非递归算法)
+
+
+bool visited[MaxVertexNum];
+void BFS_MIN_Distance(Graph G, int u)
+{
+	int d[], path[];
+	for(int i = 0; i < G.vexnum; i++)
+	{
+		d[i] = 999999999;
+		path[i] = -1;
+	}
+	d[u] = 0;
+	visited[u] = TRUE;
+	EnQueue(Q, u);
+	while(!QueueEmpty(Q))
+	{
+		DeQueue(Q, u);
+		for(w = FirstNeighbor(G, u); u >= 0; w = NextNeighbor(G, u, w))
+		{
+			if(!visited[w])
+			{
+				d[w] = d[u] + 1;
+				path[w] = u;
+				visited[w] = TRUE;
+				EnQueue(Q, w);
+			}
+		}
+	}
+}
+
+
+
+// 拓扑排序
+
+typedef char VertexType;
+typedef int ArcNode;
+
+#define MaxVertexNum 100		// 图中顶点数目的最大值
+typedef struct ArcNode			// 边表节点
+{
+	int adjvex;					// 该弧指向的顶点的位置
+	struct ArcNode *nextarc;	// 指向下一条弧的指针
+	// InfoType info;			// 网的边权值
+}ArcNode;
+
+typedef struct VNode			// 顶点表节点
+{
+	VertexType data;			// 顶点信息
+	ArcNode *firstarc;			// 指向第一条依附该顶点的弧的指针
+}VNode, AdjList[MaxVertexNum];
+
+typedef struct
+{
+	AdjList vertices;			// 邻接表
+	int vexnum, arcnum;			// 图的顶点数和弧数
+}Graph;							// Graph是以邻接表存储的图类型
+
+typedef struct LinkNode
+{
+	int data;
+	struct LinkNode *next;
+}*LiStack;
+
+void InitStack(LiStack &S)
+{
+	S = (LinkNode *)malloc(sizeof(LinkNode));
+	if(S == NULL)
+		return;
+	S->next = NULL;
+}
+
+
+bool TopolopicalSort(Graph G)      
+{
+	InitStack(S);			// 初始化栈
+	for(int i = 0; i < G.vexnum; i++)	
+	{
+		if(indegree[i] == 0)		// indegree数组保存节点的入度，每个入度为0的节点都入栈
+			Push(S, i)	
+	}// for
+	int count = 0;			// 声明变量count
+	while(!IsEmpty(S))
+	{
+		Pop(S, i);
+		print[count++] = i;		// 记录入栈的顶点数
+		for(p = G.vertices[i].firstarc; p; p = p->nextarc)
+		{
+			v = p->advex;
+			if(!(--indegree[v]))
+				Push(S, v);
+		}
+	}// while
+	if(count < G.vexnum)		// 判断是否存在环路
+		return false;
+	else
+		return true;
+}
+
+
+
+
+// 定义数据结构保存，网络路由信息
+
+
+typedef struct
+{
+	unsigned int ID, IP;
+}LinkNode;						// Link的结构
+
+typedef struct
+{
+	unsigned int Prefix, Mask;
+}NetNode;						// Net的结构
+
+typedef struct Node
+{
+	int Flag;					// Flag = 1 为Link；Flag = 2 为Net
+	union
+	{
+		LinkNode Lnode;
+		NetNode Nnode;
+	}LinkORNet;
+	unsigned int Metric;
+	struct Node *next;
+}ArcNode;						// 弧节点
+
+typedef struct hNode
+{
+	unsigned int RouterID;
+	ArcNode *LN_link;
+	struct hNode *next;
+}HNODE;							// 表头节点
+
+
+
+
+// 深度优先遍历，进行拓扑排序
+
+
+#define MAX_VERTEX_NUM 100
+
+bool visited[MAX_VERTEX_NUM];
+void DFSTraverse(Graph G)
+{
+	int v = 0;
+	for(int v = 0; v < G.vexnum; v++)
+		visited[v] = FALSE;
+	int time = 0;
+	for(v = 0; v < G.vexnum; v++)
+	{
+		if(!visited[v]) DFS(G, v);
+	}
+}
+
+void DFS(Graph G, int v)
+{
+	visited[v] = TRUE;
+	visit(v);
+	for(w = FirstNeighbor(G, v); w >= 0; w = NextNeighbor(G, v, w))
+	{
+		if(!visited[w])
+			DFS(G, w);
+	}
+	time = time + 1; finishTime[v] = time;
+}
+
+
+
+// 顺序查找
+
+
+typedef struct
+{
+	int *elem;
+	int TableLen;
+}SSTable;
+
+int Search_Seq(SSTable ST, int key)
+{
+	int i;
+	for(i = 0; i < ST.TableLen && ST.elem[i] != key; i++);
+	return i == ST.TableLen ? -1 : i;
+}
+
+int Search_Seq_2(SSTable ST, int key)
+{
+	ST.elem[0] = key;
+	int i;
+	for(i = ST.TableLen; ST.elem[i] != key; i--);
+	return i;
+}
