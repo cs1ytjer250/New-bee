@@ -1,0 +1,276 @@
+// 判断一棵二叉树是否是二叉排序树
+
+int predt = -32767;			// 全局变量，保存节点前驱的值
+
+int JudgeBST(BiTree bt)
+{
+	int b1, b2;
+	if(bt == NULL)
+		return 1;
+	else
+	{
+		b1 = JudgeBST(bt->lchild);
+		if(b1 == 0 || predt >= bt->data)
+			return 0;
+		predt = bt->data;
+		b2 = JudgeBST(bt->rchild);
+		return b2;
+	}
+}
+
+
+// 给定一个节点，判断其所在二叉树中的层次
+
+int level(BiTree bt, BSTNode *p)
+{
+	int n = 0;
+	BiTree t = bt;
+	if(bt != NULL)
+	{
+		n++;
+		while(t->data != p->data)
+		{
+			if(p->data < t->data)
+				t = t->lchild;
+			else
+				 t = t->rchild;
+			n++;
+		}
+	}
+	return n;
+}
+
+
+// 判断一棵二叉树是否平衡
+
+void Judge_AVL(BiTree bt, int &balance, int &h)
+{
+	int b1 = 0, br = 0, h1 = 0, hr = 0;
+	if(bt == NULL)
+	{
+		h = 0;
+		balance = 1;
+	}
+	else if(bt->lchild == NULL && bt->rchild == NULL)
+	{
+		h = 1;
+		balance = 1;
+	}
+	else
+	{
+		Judge_AVL(bt->lchild, b1, h1);
+		Judge_AVL(bt->rchild, br, hr);
+		h = (h1 > hr ? h1 : hr) + 1;
+		if(abs(h1 - hr) < 2)
+			balance = b1 && br;
+		else
+			balance = 0;
+	}
+}
+
+
+// 二叉排序树中，最大和最小关键字节点
+
+
+int MinKey(BSTNode *bt)
+{
+	while(bt->lchild != NULL)
+		bt = bt->lchid;
+	return bt->data;
+}
+int MaxKey(BSTNode *bt)
+{
+	while(bt->rchild != NULL)
+		bt = bt->rchild;
+	return bt->data;
+}
+
+
+// 输出关键字比K大的值
+
+void OutPut(BSTNode *bt, int key)
+{
+	if(bt == NULL)
+		return ;
+	if(bt->rchild != NULL)
+		OutPut(bt->rchild, k);
+	if(bt->data >= k)
+		printf("%d", bt->data);
+	if(bt->lchild != NULL)
+		OutPut(bt->lchild, k);
+}
+
+
+// 寻找二叉排序数中，第k小的节点，并返回
+
+
+typedef struct BSTNode
+{
+	int key;
+	int count;					// 保存k节点的自己点数量
+	struct BSTNode *lchild, *rchild;
+}BSTNode, *BSTree;
+
+BSTNode *Search_Small(BSTNode *t, int k)
+{
+	if(k < 1 || k > t->count) return NULL;
+	if(t->lchild == NULL)
+	{
+		if(k == 1) return t;
+		else return Search_Small(t->rchild, k - 1);
+	}
+	else
+	{
+		if(t->lchild->count == k - 1) return t;
+		if(t->lchild->count > k - 1) return Search_Small(t->lchild, k);
+		if(t->lchild->count < k - 1)
+			return Search_Small(t->rchild, k - (t->lchild->count+1));
+	}
+}
+
+
+###################################################
+
+
+// 5阶B树
+struct Node
+{
+	int keys[4];				// 最多4个关键字
+	struct Node *child[5];		// 最多5个孩子
+	int num;					// 节点中有几个关键字
+};
+
+typedef struct BiTNode
+{
+	int data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, *BiTree
+
+
+typedef struct BSTNode
+{
+	int key;
+	struct BSTNode *lchild, *rchild;
+}BSTNode, *BSTree;
+
+typedef struct AVLNode
+{
+	int key;
+	int balance
+	struct AVLNode *lchild, *rchild;
+}AVLNode, *AVLTree;
+
+int predt = -32767;
+
+int JudgeBST(BiTree bt)
+{
+	int b1, b2;
+	if(bt == NULL)
+		return 1;
+	else
+	{
+		b1 = JudgeBST(bt->lchild);
+		if(b1 == 0 || predt >= bt->data)
+			return 0;
+		predt = bt->data;
+		b2 = JudgeBST(bt->rchild);
+		return b2;
+	}
+}
+
+
+int level(BiTree bt, BSTNode *p)
+{
+	int n = 0;
+	BiTree t = bt;
+	if(bt != NULL)
+	{
+		n++;
+		while(t->data != p->data)
+		{
+			if(p->data < t->data)
+				t = t->lchild;
+			else
+				 t = t->rchild;
+			n++;
+		}
+	}
+	return n;
+}
+
+void Judge_AVL(BiTree bt, int &balance, int &h)
+{
+	int b1 = 0, br = 0, h1 = 0, hr = 0;
+	if(bt == NULL)
+	{
+		h = 0;
+		balance = 1;
+	}
+	else if(bt->lchild == NULL && bt->rchild == NULL)
+	{
+		h = 1;
+		balance = 1;
+	}
+	else
+	{
+		Judge_AVL(bt->lchild, b1, h1);
+		Judge_AVL(bt->rchild, br, hr);
+		h = (h1 > hr ? h1 : hr) + 1;
+		if(abs(h1 - hr) < 2)
+			balance = b1 && br;
+		else
+			balance = 0;
+	}
+}
+
+
+int MinKey(BSTNode *bt)
+{
+	while(bt->lchild != NULL)
+		bt = bt->lchid;
+	return bt->data;
+}
+int MaxKey(BSTNode *bt)
+{
+	while(bt->rchild != NULL)
+		bt = bt->rchild;
+	return bt->data;
+}
+
+
+void OutPut(BSTNode *bt, int key)
+{
+	if(bt == NULL)
+		return ;
+	if(bt->rchild != NULL)
+		OutPut(bt->rchild, k);
+	if(bt->data >= k)
+		printf("%d", bt->data);
+	if(bt->lchild != NULL)
+		OutPut(bt->lchild, k);
+}
+
+
+typedef struct BSTNode
+{
+	int key;
+	int count;					// 保存k节点的自己点数量
+	struct BSTNode *lchild, *rchild;
+}BSTNode, *BSTree;
+
+BSTNode *Search_Small(BSTNode *t, int k)
+{
+	if(k < 1 || k > t->count) return NULL;
+	if(t->lchild == NULL)
+	{
+		if(k == 1) return t;
+		else return Search_Small(t->rchild, k - 1);
+	}
+	else
+	{
+		if(t->lchild->count == k - 1) return t;
+		if(t->lchild->count > k - 1) return Search_Small(t->lchild, k);
+		if(t->lchild->count < k - 1)
+			return Search_Small(t->rchild, k - (t->lchild->count+1));
+	}
+}
