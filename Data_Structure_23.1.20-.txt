@@ -1,0 +1,510 @@
+// 交换元素
+void swap(int &a, int &b)
+{
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
+// 冒泡排序(倒序)
+void BubbleSort(int A[], int n)
+{
+	for(int i = 0; i < n - 1; i++)
+	{
+		bool flag = false;
+		for(int j = n - 1; j > i; j--)
+		{
+			if(A[j - 1] > A[j])
+			{
+				swap(A[j - 1], A[j]);
+				flag = true;
+			}
+		}
+		if(flag == false)
+			return ;
+	}
+}
+
+
+
+// 冒泡排序(顺序)
+
+void BubbleSort_1(int A[], int n)
+{
+	for(int i = n - 1; i > 0; i--)
+	{
+		bool flag = false;
+		for(int j = 0; j < i; j++)
+		{
+			if(A[j] > A[j + 1])
+			{
+				swap(A[j], A[j + 1]);
+				flag = true;
+			}
+		}
+		if(flag == false)
+			return ;
+	}
+}
+
+
+
+// 快速排序
+
+// 用第一个元素将数组划分成左右两个部分
+int Partition(int A[], int low, int high)
+{
+	int pivot = A[low];
+	while(low < high)
+	{
+		while(low < high && A[high] >= pivot) --high;
+		A[low] = A[high];
+		while(low < high && A[low] <= pivot) ++low;
+		A[high] = A[low];
+	}
+	A[low] = pivot;
+	return low;
+}
+
+
+
+// 排序
+
+void QuickSort(int A[], int low, int high)
+{
+	if(low < high)
+	{
+		int pivotpos = Partition(A, low, high);
+		QuickSort(A, low, pivotpos - 1);
+		QuickSort(A, pivotpos + 1, high);
+	}
+}
+
+
+
+// 双向起泡
+
+void DBubble_Sort(int A[], int n)
+{
+	int low = 0, high = n - 1;
+	bool flag = true;
+	while(low < high && flag)
+	{
+		flag = false;
+		for(int i = low; i < high; i++)
+		{
+			if(A[i] > A[i + 1])
+			{
+				swap(A[i], A[i + 1]);
+				flag = true;
+			}
+		}
+		high--;
+		for(int i = high; i > low; i--)
+		{
+			if(A[i] < A[i - 1])
+			{
+				swap(A[i], A[i - 1]);
+				flag = true;
+			}
+		}
+		low++;
+	}
+}
+
+
+
+
+// 快速排序，将数组分为前一半为偶数，后一半为奇数
+void move(int A[], int len)
+{
+	int i = 0, j = len - 1;
+	while(i < j)
+	{
+		while(i < j && A[i] % 2 != 0) i++;
+		while(i < j && A[j] % 2 != 1) j--;
+		if(i < j)
+		{
+			swap(A[i], A[j]);
+			i++, j--;
+		}
+	}
+}
+
+
+
+
+// 快速排序（非递归）
+int Partition2(int A[], int low, int high)
+{
+	int rand_Index = low + rand() % (high - low + 1);
+	swap(A[rand_Index], A[low]);
+	int pivot = A[low];
+	int i = low;
+	for(int j = low + 1; j <= high; j++)
+	{
+		if(A[j] < pivot)
+			swap(A[++i], A[j]);
+	}
+	swap(A[i], A[low]);
+	return i;
+}
+
+
+
+// 寻找第k小的元素
+
+int kth_elem(int a[], int low, int high, int k)
+{
+	int pivot = a[low];
+	int low_temp = low;
+	int high_temp = high;
+	while(low < high)
+	{
+		while(low < high && a[high] >= pivot)
+			--high;
+		a[low] = a[high];
+		while(low < high && a[low] <= pivot)
+			++low;
+		a[high] = a[low];
+	}
+	a[low] = pivot;
+	if(low == k)
+		return a[low];
+	else if(low > k)
+		return kth_elem(a, low_temp, low - 1, k);
+	else
+		return kth_elem(a, low + 1, high_temp, k);
+}
+
+
+
+
+// 英国国旗问题
+
+typedef enum{RED, WHITE, BLUE} color;
+
+void Flag_Arrange(color a[], int n)
+{
+	int i = 0, j = 0, k = n - 1;
+	while(j <= k)
+	{
+		switch(a[j])
+		{
+			case RED: swap(a[i], a[j]); i++; j++; break;
+			case WHITE: j++; break;
+			case BLUE:swap(a[j], a[k]); k--; break;
+		}
+	}
+}
+
+
+// 集合分组，同时要求集合2中的元素加和减去集合1的元素加和的值最大
+int setPartition(int a[], int n)
+{
+	int pivotkey, low = 0, low0 = 0, high = n-1, high0 = n-1, flag = 1, k = n/2, i;
+	int s1 = 0, s2 = 0;
+	while(flag)
+	{
+		pivotkey = a[low];
+		while(low < high)
+		{
+			while(low < high && a[high] >= pivotkey) --high;
+			if(low != high) a[low] = a[high];
+			while(low < high && a[low] <= pivotkey) ++low;
+			if(low != high) a[high] = a[low];
+		}
+		a[low] = pivotkey;
+		if(low == k-1)
+			flag = 0;
+		else
+		{
+			if(low < k-1)
+			{
+				low0 = ++low;
+				high = high0;
+			}
+			else
+			{
+				high0 = --high;
+				low = low0;
+			}
+		}
+	}
+	for(i = 0; i < k; i++) s1 += a[i];
+	for(i = k; i < n; i++) s2 += a[i];
+	return s2 - s1;
+}
+
+
+
+// 简单选择排序
+
+void SelectSort(int a[], int n)
+{
+	for(int i = 0; i < n-1; i++)
+	{
+		int min = i;
+		for(int j = i + 1; j < n; j++)
+			if(a[j] < a[min]) min = j;
+		if(min != i) swap(a[i], a[min]);
+	}
+}
+
+
+
+
+
+
+#################################################
+#include <iostream>
+using namespace std;
+
+// 交换元素
+void swap(int &a, int &b)
+{
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
+// 冒泡排序
+void BubbleSort(int A[], int n)
+{
+	for(int i = 0; i < n - 1; i++)
+	{
+		bool flag = false;
+		for(int j = n - 1; j > i; j--)
+		{
+			if(A[j - 1] > A[j])
+			{
+				swap(A[j - 1], A[j]);
+				flag = true;
+			}
+		}
+		if(flag == false)
+			return ;
+	}
+}
+
+void BubbleSort_1(int A[], int n)
+{
+	for(int i = n - 1; i > 0; i--)
+	{
+		bool flag = false;
+		for(int j = 0; j < i; j++)
+		{
+			if(A[j] > A[j + 1])
+			{
+				swap(A[j], A[j + 1]);
+				flag = true;
+			}
+		}
+		if(flag == false)
+			return ;
+	}
+}
+
+// 快速排序
+
+// 用第一个元素将数组划分成左右两个部分
+int Partition(int A[], int low, int high)
+{
+	int pivot = A[low];
+	while(low < high)
+	{
+		while(low < high && A[high] >= pivot) --high;
+		A[low] = A[high];
+		while(low < high && A[low] <= pivot) ++low;
+		A[high] = A[low];
+	}
+	A[low] = pivot;
+	return low;
+}
+
+
+
+// 排序
+
+void QuickSort(int A[], int low, int high)
+{
+	if(low < high)
+	{
+		int pivotpos = Partition(A, low, high);
+		QuickSort(A, low, pivotpos - 1);
+		QuickSort(A, pivotpos + 1, high);
+	}
+}
+
+
+
+// 双向起泡
+
+void DBubble_Sort(int A[], int n)
+{
+	int low = 0, high = n - 1;
+	bool flag = true;
+	while(low < high && flag)
+	{
+		flag = false;
+		for(int i = low; i < high; i++)
+		{
+			if(A[i] > A[i + 1])
+			{
+				swap(A[i], A[i + 1]);
+				flag = true;
+			}
+		}
+		high--;
+		for(int i = high; i > low; i--)
+		{
+			if(A[i] < A[i - 1])
+			{
+				swap(A[i], A[i - 1]);
+				flag = true;
+			}
+		}
+		low++;
+	}
+}
+
+
+// 快速排序，将数组分为前一半为偶数，后一半为奇数
+void move(int A[], int len)
+{
+	int i = 0, j = len - 1;
+	while(i < j)
+	{
+		while(i < j && A[i] % 2 != 0) i++;
+		while(i < j && A[j] % 2 != 1) j--;
+		if(i < j)
+		{
+			swap(A[i], A[j]);
+			i++, j--;
+		}
+	}
+}
+
+
+// 快速排序（非递归）
+int Partition2(int A[], int low, int high)
+{
+	int rand_Index = low + rand() % (high - low + 1);
+	swap(A[rand_Index], A[low]);
+	int pivot = A[low];
+	int i = low;
+	for(int j = low + 1; j <= high; j++)
+	{
+		if(A[j] < pivot)
+			swap(A[++i], A[j]);
+	}
+	swap(A[i], A[low]);
+	return i;
+}
+
+
+// 寻找第k小的元素
+
+int kth_elem(int a[], int low, int high, int k)
+{
+	int pivot = a[low];
+	int low_temp = low;
+	int high_temp = high;
+	while(low < high)
+	{
+		while(low < high && a[high] >= pivot)
+			--high;
+		a[low] = a[high];
+		while(low < high && a[low] <= pivot)
+			++low;
+		a[high] = a[low];
+	}
+	a[low] = pivot;
+	if(low == k)
+		return a[low];
+	else if(low > k)
+		return kth_elem(a, low_temp, low - 1, k);
+	else
+		return kth_elem(a, low + 1, high_temp, k);
+}
+
+
+// 英国国旗问题
+
+typedef enum{RED, WHITE, BLUE} color;
+
+void Flag_Arrange(color a[], int n)
+{
+	int i = 0, j = 0, k = n - 1;
+	while(j <= k)
+	{
+		switch(a[j])
+		{
+			case RED: swap(a[i], a[j]); i++; j++; break;
+			case WHITE: j++; break;
+			case BLUE:swap(a[j], a[k]); k--; break;
+		}
+	}
+}
+
+
+// 集合分组，同时要求集合2中的元素加和减去集合1的元素加和的值最大
+int setPartition(int a[], int n)
+{
+	int pivotkey, low = 0, low0 = 0, high = n-1, high0 = n-1, flag = 1, k = n/2, i;
+	int s1 = 0, s2 = 0;
+	while(flag)
+	{
+		pivotkey = a[low];
+		while(low < high)
+		{
+			while(low < high && a[high] >= pivotkey) --high;
+			if(low != high) a[low] = a[high];
+			while(low < high && a[low] <= pivotkey) ++low;
+			if(low != high) a[high] = a[low];
+		}
+		a[low] = pivotkey;
+		if(low == k-1)
+			flag = 0;
+		else
+		{
+			if(low < k-1)
+			{
+				low0 = ++low;
+				high = high0;
+			}
+			else
+			{
+				high0 = --high;
+				low = low0;
+			}
+		}
+	}
+	for(i = 0; i < k; i++) s1 += a[i];
+	for(i = k; i < n; i++) s2 += a[i];
+	return s2 - s1;
+}
+
+
+// 简单选择排序
+
+void SelectSort(int a[], int n)
+{
+	for(int i = 0; i < n-1; i++)
+	{
+		int min = i;
+		for(int j = i + 1; j < n; j++)
+			if(a[j] < a[min]) min = j;
+		if(min != i) swap(a[i], a[min]);
+	}
+}
+
+int main()
+{
+	int arr[] = {-1,-2,-3,-4,-5,-6,-7,-9,-8};
+	BubbleSort_1(arr,9);
+	for(int i = 0; i < 9; i++)
+		printf("%d ", arr[i]);
+   	return 0;
+}
+
