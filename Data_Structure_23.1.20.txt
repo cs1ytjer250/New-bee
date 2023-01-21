@@ -1,0 +1,282 @@
+// 大根堆的建立
+void BuildMaxHeap(int a[], int len)
+{
+	for(int i = len / 2; i > 0; i--)
+		HeadAdjust(a, i, len);
+}
+
+
+
+// 将以k为根的子树调整为大根堆
+void HeadAdjust(int a[], int k, int len)
+{
+	a[0] = a[k];
+	for(int i = 2 * k; i <= len; i *= 2)
+	{
+		if(i < len && a[i] < a[i + 1])
+			i++;
+		if(a[0] >= a[i]) break;
+		else
+		{
+			a[k] = a[i];
+			k = i;
+		}
+	}
+	a[k] = a[0];
+}
+
+
+
+// 完整逻辑
+
+void HeapSort(int a[], int len)
+{
+	BuildMaxHeap(a, len);
+	for(int i = len; i > 1; i--)
+	{
+		swap(a[i], a[1]);
+		HeadAdjust(a, 1, i - 1);
+	}
+}
+
+
+
+// 对一个单链表进行简单排序
+
+void selectSort(LinkedList &L)
+{
+	LinkNode *h = L, *p, *q, *r, *s;
+	L = NULL;
+	while(h != NULL)
+	{
+		p = s = h; q = r = NULL;
+		while(p != NULL)
+		{
+			if(p->data > s->data){s = p; r = q;}
+			q = p; p = p->next;
+		}
+		if(s == h)
+			h = h->next;
+		else
+			r->next = s->next;
+		s->next = L; L = s;
+	}
+}
+
+
+
+
+// 判断一个数据序列是否构成一个小根堆
+
+bool IsMinHeap(int a[], int len)
+{
+	if(len % 2 == 0)				// 判断元素个数是奇数还是偶数
+	{
+		if(a[len / 2] > a[len])		// 判断单分支
+			return false;
+		for(int i = len / 2 - 1; i >= 1; i--)	// 判断双分支
+		{
+			if(a[i] > a[2 * i] || a[i] > a[2 * i + 1])
+				return false;
+		}
+	}
+	else
+	{
+		for(int i = len / 2; i >= 1; i--)
+		{
+			if(a[i] > a[2 * i] || a[i] > a[2 * i + 1])
+				return false;
+		}
+	}
+	return true;
+}
+
+
+
+// 归并排序（各自有序）
+int n = 1;
+int *b = (int *)malloc(n * sizeof(int));
+
+void Merge(int a[], int low, int mid, int high)
+{
+	int i, j, k;
+	for(k = low; k <= high; k++)
+		b[k] = a[k];
+	for(i = low, j = mid + 1, k = i; i <= mid && j <= high; k++)
+	{
+		if(b[i] <= b[j])
+			a[k] = b[i++];
+		else
+			a[k] = b[j++];
+	}
+	while(i <= mid) a[k++] = b[i++];
+	while(j <= high) a[k++] = b[j++];
+}
+
+
+// 完整逻辑
+void MergeSort(int a[], int low, int high)
+{
+	if(low < high)
+	{
+		int mid = (low + high) / 2;
+		MergeSort(a, low, mid);
+		MergeSort(a, mid + 1, high);
+		Merge(a, low, mid, high);
+	}
+}
+
+
+
+
+###########################################################
+
+
+
+
+#include <iostream>
+using namespace std;
+
+
+
+typedef struct LinkNode
+{
+	int data;
+	struct LinkNode *next;
+}LinkNode, *LinkedList;
+
+
+void InitList(LinkedList &L)
+{
+	L = NULL;
+}
+
+// 大根堆的建立
+void BuildMaxHeap(int a[], int len)
+{
+	for(int i = len / 2; i > 0; i--)
+		HeadAdjust(a, i, len);
+}
+
+
+
+// 将以k为根的子树调整为大根堆
+void HeadAdjust(int a[], int k, int len)
+{
+	a[0] = a[k];
+	for(int i = 2 * k; i <= len; i *= 2)
+	{
+		if(i < len && a[i] < a[i + 1])
+			i++;
+		if(a[0] >= a[i]) break;
+		else
+		{
+			a[k] = a[i];
+			k = i;
+		}
+	}
+	a[k] = a[0];
+}
+
+
+
+// 完整逻辑
+
+void HeapSort(int a[], int len)
+{
+	BuildMaxHeap(a, len);
+	for(int i = len; i > 1; i--)
+	{
+		swap(a[i], a[1]);
+		HeadAdjust(a, 1, i - 1);
+	}
+}
+
+
+// 对一个单链表进行简单排序
+
+void selectSort(LinkedList &L)
+{
+	LinkNode *h = L, *p, *q, *r, *s;
+	L = NULL;
+	while(h != NULL)
+	{
+		p = s = h; q = r = NULL;
+		while(p != NULL)
+		{
+			if(p->data > s->data){s = p; r = q;}
+			q = p; p = p->next;
+		}
+		if(s == h)
+			h = h->next;
+		else
+			r->next = s->next;
+		s->next = L; L = s;
+	}
+}
+
+
+// 判断一个数据序列是否构成一个小根堆
+
+bool IsMinHeap(int a[], int len)
+{
+	if(len % 2 == 0)
+	{
+		if(a[len / 2] > a[len])
+			return false;
+		for(int i = len / 2 - 1; i >= 1; i--)
+		{
+			if(a[i] > a[2 * i] || a[i] > a[2 * i + 1])
+				return false;
+		}
+	}
+	else
+	{
+		for(int i = len / 2; i >= 1; i--)
+		{
+			if(a[i] > a[2 * i] || a[i] > a[2 * i + 1])
+				return false;
+		}
+	}
+	return true;
+}
+
+
+// 归并排序（各自有序）
+int n = 1;
+int *b = (int *)malloc(n * sizeof(int));
+
+void Merge(int a[], int low, int mid, int high)
+{
+	int i, j, k;
+	for(k = low; k <= high; k++)
+		b[k] = a[k];
+	for(i = low, j = mid + 1, k = i; i <= mid && j <= high; k++)
+	{
+		if(b[i] <= b[j])
+			a[k] = b[i++];
+		else
+			a[k] = b[j++];
+	}
+	while(i <= mid) a[k++] = b[i++];
+	while(j <= high) a[k++] = b[j++];
+}
+
+
+// 完整逻辑
+void MergeSort(int a[], int low, int high)
+{
+	if(low < high)
+	{
+		int mid = (low + high) / 2;
+		MergeSort(a, low, mid);
+		MergeSort(a, mid + 1, high);
+		Merge(a, low, mid, high);
+	}
+}
+
+int main()
+{
+   cout << "Hello World";
+   return 0;
+}
