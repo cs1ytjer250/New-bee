@@ -1,0 +1,338 @@
+int Out_Min(int a[], int &len)
+{
+	int min = a[0];
+	int i, j, k = 0;
+	for(i = 0; i < len; i++)
+	{
+		if(len == 0)
+			return 0;
+		for(j = i + 1; j < len; j++)
+		{
+			if(min <= a[j])
+			{
+				j++;
+			}
+			else
+			{
+				min = a[j];
+				k = j;
+			}
+		}
+	}
+	a[k] = a[len - 1];
+	len--;
+	return min;
+}
+
+int my_strlen(int arr[])
+{
+	int i = 0;
+	int count = 0;
+	while(arr[++i])
+	{
+		count++;
+	}
+	return count;
+}
+
+
+int main()
+{
+	
+	int arr[] = {-111,-22,-335,-45,-54,-68,-79,-18,-229};
+	int len = my_strlen(arr);
+	int min = Out_Min(arr, len);
+	cout << len << endl;
+	cout << min << endl;
+	for(int i = 0; i < len; i++)
+		cout << "  " << arr[i];
+}
+
+// 删除顺序表中，值最小的元素，并用最后一个元素填补
+
+bool Del_Min(SqList &L, int &value)
+{
+	if(L.length == 0)
+		return false;
+	value = L.data[0];
+	int pos = 0;
+	for(int i = 1; i < L.length; i++)
+	{
+		if(L.data[i] < value)
+		{
+			value = L.data[i];
+			pos = i;
+		}
+	}
+	L.data[pos] = L.data[L.length - 1];
+	L.length--;
+	return true;
+}
+
+
+// 翻转顺序表
+
+void Reverse(SqList &L)
+{
+	int temp;
+	for(int i = 0; i < L.length / 2; i++)
+	{
+		temp = L.data[i];
+		L.data[i] = L.data[L.length - i - 1];
+		L.data[L.length - i - 1] = temp;
+	}
+}
+
+
+
+###################      待修改  #####################
+
+
+// 栈：定义
+
+typedef struct 
+{
+	int top;
+	int data[MaxSize];
+}SqStack;
+
+void InitStack(SqStack &S)
+{
+	S.top = -1;
+}
+
+bool Push(SqStack &S, int e)
+{
+	if(S.top = MaxSize -1)
+		return false;
+	S.data[++S.top] = e;
+	return true;
+}
+
+bool Pop(SqStack &S, int &e)
+{
+	if(S.top == -1)
+		return false;
+	e = S.data[S.top];
+	S.top = S.top - 1;
+	return true;
+}
+
+bool IsEmpty(SqStack S)
+{
+	if(S.top == -1)
+		return true;
+	else
+		return false;
+}
+
+void Reverse(SqList &L)
+{
+	SqStack S;
+	InitStack(S);
+	int i = 0;
+	int temp;
+	/*
+	for(int j = 0; j < L.length; j++)
+		cout << " " << L.data[j];
+	*/
+	
+	while(L.data[i])
+	{
+		Push(S, L.data[i]);
+		i++;
+		///*
+		if(i < L.length)
+		{
+			cout << " " << S.data[S.top--];
+			
+		}
+		//*/
+	}
+	i = 0;
+	while(!IsEmpty(S) && i < L.length)
+	{
+		bool flag = Pop(S, temp);
+		//cout << temp << endl;
+		//cout << flag << endl;
+		L.data[i++] = temp;
+
+	}
+	
+
+}
+
+################################################
+
+
+
+
+
+#include <iostream>
+using namespace std;
+#include <string>
+#define Day 7
+
+# define MaxSize 10
+
+// 顺序表：定义
+typedef struct
+{
+	int data[MaxSize];
+	int length;
+}SqList;
+
+
+// 顺序表：初始化
+void InitSqList(SqList &L)
+{
+	for(int i = 0; i < MaxSize; i++)
+	{
+		L.data[i] = i + 2;
+		L.length += 1;
+	}
+}
+
+// 栈：定义
+
+typedef struct 
+{
+	int top;
+	int data[MaxSize];
+}SqStack;
+
+void InitStack(SqStack &S)
+{
+	S.top = -1;
+}
+
+bool Push(SqStack &S, int e)
+{
+	if(S.top = MaxSize -1)
+		return false;
+	S.data[++S.top] = e;
+	return true;
+}
+
+bool Pop(SqStack &S, int &e)
+{
+	if(S.top == -1)
+		return false;
+	e = S.data[S.top];
+	S.top = S.top - 1;
+	return true;
+}
+
+bool IsEmpty(SqStack S)
+{
+	if(S.top == -1)
+		return true;
+	else
+		return false;
+}
+
+void Reverse(SqList &L)
+{
+	int temp;
+	for(int i = 0; i < L.length / 2; i++)
+	{
+		temp = L.data[i];
+		L.data[i] = L.data[L.length - i - 1];
+		L.data[L.length - i - 1] = temp;
+	}
+}
+
+
+bool Del_Min(SqList &L, int &value)
+{
+	if(L.length == 0)
+		return false;
+	value = L.data[0];
+	int pos = 0;
+	for(int i = 1; i < L.length; i++)
+	{
+		if(L.data[i] < value)
+		{
+			value = L.data[i];
+			pos = i;
+		}
+	}
+	L.data[pos] = L.data[L.length - 1];
+	L.length--;
+	return true;
+}
+
+
+int Out_Min(int a[], int &len)
+{
+	int min = a[0];
+	int i, j, k = 0;
+	for(i = 0; i < len; i++)
+	{
+		if(len == 0)
+			return 0;
+		for(j = i + 1; j < len; j++)
+		{
+			if(min <= a[j])
+			{
+				j++;
+			}
+			else
+			{
+				min = a[j];
+				k = j;
+			}
+		}
+	}
+	a[k] = a[len - 1];
+	len--;
+	return min;
+}
+
+int my_strlen(int arr[])
+{
+	int i = 0;
+	int count = 0;
+	while(arr[++i])
+	{
+		count++;
+	}
+	return count;
+}
+
+
+
+int main()
+{
+	SqList L;
+	InitSqList(L);
+	Reverse(L);
+	///*
+	for(int i = 0; i < L.length; i++)
+		cout << "  " << L.data[i];
+	//*/
+		
+	/*
+	SqList L;
+	InitSqList(L);
+	int value = 0;
+	Del_Min(L, value);
+	cout << value << endl;
+	cout << L.length << endl;
+	for(int i = 0; i < L.length; i++)
+		cout << " " << L.data[i];
+	*/
+	
+	
+	/*
+	int arr[] = {-111,-22,-335,-45,-54,-68,-79,-18,-229};
+	int len = my_strlen(arr);
+	int min = Out_Min(arr, len);
+	cout << len << endl;
+	cout << min << endl;
+	for(int i = 0; i < len; i++)
+		cout << "  " << arr[i];
+	*/
+	
+   	return 0;
+}

@@ -1,0 +1,181 @@
+#include <iostream>
+using namespace std;
+#include <string>
+#define Day 7
+
+int main()
+{
+	// 条件判断
+	
+	
+	
+	
+	
+	/*
+	// 逻辑运算符
+	int a = 4;
+	char b = '\0';
+	bool c = false;
+	cout << (a && b) << endl;
+	cout << (a || b) << endl;
+	cout << (!c) << endl;
+	cout << (!a) << endl;
+	cout << (!!a) << endl;
+	*/
+	
+	
+	
+	/*
+	// 比较运算符
+	int a = 4;
+	int b = 3;
+	bool c = a > b;
+	bool d = a < b;
+	bool e = a != b;
+	cout << c << endl;
+	cout << d << endl;
+	cout << e << endl;
+	// cout << (a += 2) << endl;  // 需要对程序运行顺序进行控制。
+	*/
+	
+	
+	
+	/*
+	// 赋值运算符
+	int a = 10;
+	a += 2;
+	cout << a << endl;
+	*/
+	
+	/*
+	// 算术运算符
+	int a = 10;
+	int b = 3;
+	float c = a / b;		// 除法中，只要有一个数时float类型，则结果也为float，否则，结果为整型
+	//cout << c << endl;
+	
+	int x = 10;
+	int y = 0;
+	//cout << x % y << endl;	// illegal;
+	
+	float x1 = 3.14;
+	float y1 = 1.1;
+	//cout << x1 % y1 << endl;	// illegal; 两个小数不能进行模运算
+	
+	int x2 = 3;
+	int y2 = 1;
+	cout <<"x2++ =" << x2++ << endl;
+	cout <<"x2 = " << x2 << endl;
+	cout << "y2 = " << y2 << endl;
+	cout << "--y2 = " << --y2 << endl;
+	
+	int a3 = 10;
+	int b3 = a3++ * 10;
+	int a4 = 10;
+	int b4 = ++a4 * 10;
+	cout << "a3 = " << a3 << endl;
+	cout << "b3 = " << b3 << endl;
+	cout << "a4 = " << a4 << endl;
+	cout << "b4 = " << b4 << endl;
+	*/
+	
+	
+	
+	
+	/*
+	// 数据的输入
+	
+	int a = 0;
+	cout << "请给整型数据a赋值" << endl;
+	cin >> a;							// 简易编译器中，无法接收用户输入信息
+	cout << "a的值为：" << a << endl;
+	
+	bool flag = 'z';
+	bool flag2 = NULL;
+	cout << flag << endl;
+	cout << flag2 << endl;
+	*/
+	
+	
+	
+	/*
+	// 布尔型数据
+	cout << "布尔类型所占内存空间大小：" << sizeof(bool) << endl;
+	bool flag = true;
+	bool flag2 = false;
+	cout << !flag && flag2;
+	*/
+	
+	/*
+	// 字符串
+	string str = "abcdef";						// c++
+	char str2[] = {'a', 's', 'z', 'c','\0'};	// c
+	cout << str << endl;
+	cout << str2 << endl;
+	*/
+	
+	
+	
+	/*
+	// 转义字符
+	
+	cout << "\\\n\\\t\\" << endl; // endl == \n
+	cout << "hello world" ;
+	*/
+	
+	
+	
+	/*
+	// 字符型
+	char a = 150;
+	char b = 48;
+	char arr[] = "abcdef";
+	char arr2[] = {'a', 's', 'g','2','\0'};
+	//cout << a || b << '\n';
+	cout << arr << '\n';
+	cout << arr2 << '\n';
+	cout << "a 所占内存空间为:" << sizeof(a) << '\n';
+	cout << "arr 所占内存空间为:" << sizeof(arr) << '\n';
+	cout << "arr2 所占内存空间为:" << sizeof(arr2) << '\n';
+	cout << (int)a;
+	*/
+	
+	
+	
+	/*
+	// c++ 浮点型数据：只能输出6位有效数字
+	float p = 366.14159;
+	double p2 = 3.141592678;
+	cout << "单精度浮点型：" << p << "\n";
+	cout << "双精度浮点型:" << p2 << '\n';
+
+	// 科学计数法
+	cout << "hello world\n";
+	float a = 3e2;				// e后面的数字为：幂
+	float b = 3e-3;
+	cout << a << '\n';
+	cout << b;
+	*/
+	
+	
+	/*
+	// 整型
+	cout << "short所占内存空间大小为：" << sizeof(short) << " 字节." << endl;
+	cout << "int所占内存空间大小为：" << sizeof(int) << endl;
+	cout << "long所占内存空间大小为：" << sizeof(long) << endl;
+	cout << "long long所占内存空间大小为：" << sizeof(long long) << endl;
+	
+	printf("short所占内存空间大小为:", sizeof(short)," 字节");
+	
+	short a = 32768;
+	cout << a;
+	
+	
+	 char a = 'a'；
+   	cout << "一周总共有几天：" << Day << "天";
+	system("pause");
+	*/
+	
+	
+   	return 0;
+}
