@@ -1,0 +1,787 @@
+// 删除顺序表中，值为x的元素
+// 解法1：
+void del_x_1(SqList &L, int x)
+{
+	int k = 0, i;
+	for(i = 0; i < L.length; i++)
+	{
+		if(L.data[i] != x)
+		{
+			L.data[k] = L.data[i];
+			k++;
+		}
+	}
+	L.length = k;
+}
+
+
+// 解法2
+void del_x_2(SqList &L, int x)
+{
+	int k = 0, i = 0;
+	while(i < L.length)
+	{
+		if(L.data[i] == x)
+			k++;
+		else
+			L.data[i - k] = L.data[i];
+		i++;
+	}
+	L.length = L.length - k;
+}
+
+
+
+// 删除介于x和y之前的元素
+
+bool Del_s_t2(SqList &L, int s, int t)
+{
+	int i, j;
+	if(s >= t || L.length == 0)
+		return false;
+	for(i = 0; i < L.length && L.data[i] < s; i++);
+	if(i >= L.length)
+		return false;
+	for(j = i; j < L.length && L.data[j] <= t; j++);
+	for(;j < L.length; i++, j++)
+		L.data[i] = L.data[j];
+	L.length = i;
+	return true;
+}
+
+
+// 在有序顺序表中，删除值相同的元素
+bool Delete_Same(SqList &L)
+{
+	if(L.length == 0)
+		return false;
+	int i, j;
+	for(i = 0, j = 1; j < L.length; j++)
+	{
+		if(L.data[i] != L.data[j])
+			L.data[++i] = L.data[j];
+	}
+	L.length = i + 1;
+	return true;
+}
+
+// 将一个包含m+n元素的数组，翻转为n+m
+void Reverse(int a[], int left, int right, int arraySize)
+{
+	if(left >= right || right >= arraySize)
+		return false;
+	int mid = (left + right) / 2;
+	for(int i = 0; i <= mid - left; i++)
+	{
+		int temp = a[left + i];
+		a[left + i] = a[right - i];
+		a[right - i] = temp;
+	}
+}
+
+void Exchange(int a[], int m , int n, int arraySize)
+{
+	Reverse(a, 0, m + n - 1, arraySize);
+	Reverse(a, 0, n -1, arraySize);
+	Reverse(a, n, m + n - 1, arraySize);
+}
+
+
+
+// 找到数组中，值为x的元素，并将其与后继元素交换
+void SearchExchangeInsert(int a[], int x)
+{
+	int low = 0, high = n - 1, mid;
+	while(low <= high)
+	{
+		mid = (low + high) / 2;
+		if(a[mid] == x) break;
+		else if(a[mid] < x) low = mid + 1;
+		else high = mid - 1;
+	}
+	if(a[mid] == x && mid != n - 1)
+	{
+		t = a[mid]; a[mid] = a[mid + 1]; a[mid + 1] = t;
+	}
+	if(low > high)
+	{
+		for(i = n - 1; i > high; i--) a[i + 1] = a[i];
+		a[i + 1] = x;
+	}
+}
+
+
+// 将数组循环左移p个位置
+void Reverse(int r[], int from, int to)
+{
+	int i, temp;
+	for(i = 0; i < (to - from) / 2; i++)
+	{
+		temp = r[from + i];
+		r[from + i] = r[to - i];
+		r[to - i] = temp ;
+	}
+}
+
+void Convere(int r[], int n, int p)
+{
+	Reverse(r, 0, p - 1);
+	Reverse(r, p, n - 1);
+	Reverse(r, 0, n - 1);
+}
+
+
+
+// 找出数组A和B的中位数
+
+int M_Search(int a[], int b[], int n)
+{
+	int s1 = 0, d1 = n - 1, m1, s2 = 0, d2 = n - 1, m2;
+	while(s1 != d1 || s2 != d2)
+	{
+		m1 = (s1 + d1) / 2;
+		m2 = (s2 + d2) / 2;
+		if(a[m1] == b[m2])
+			return a[m1];
+		if(a[m1] < b[m2])
+		{
+			if((s1 + d1) % 2 == 0)
+			{
+				s1 = m1;
+				d2 = m2;
+			}
+			else
+			{
+				s1 = m1 + 1;
+				d2 = m2;
+			}
+		}
+		else
+		{
+			if((s2 + d2) % 2 == 0)
+			{
+				d1 = m1;
+				s2 = m2;
+			}
+			else
+			{
+				d1 = m1;
+				s2 = m2 + 1;
+			}
+		}
+	}
+	return a[s1] < b[s2] ? a[s1] : b[s2];
+}
+
+
+
+// 找出数组中的主元素（个数大于n/2）
+int Majority(int a[], int n)
+{
+	int i, c, count = 1;
+	c = a[0];
+	for(i = 1; i < n; i++)
+	{
+		if(a[i] == c)
+			count++;
+		else
+		{
+			if(count > 0)
+				count--;
+			else
+			{
+				c = a[i];
+				count = 1;
+			}
+		}
+	}
+	if(count > 0)
+	{
+		for(i = count = 0; i < n; i++)
+		{
+			if(a[i] == c)
+				count++;
+		}
+	}
+	if(count > n/2) return c;
+	else
+		return -1;
+}
+
+
+// 找出数组中未出现的最小正整数
+int findMissMin(int a[], int n)
+{
+	int i, *b;
+	b = (int*)malloc(sizeof(int) * n);
+	memset(b, 0, sizeof(int) * n);
+	for(i = 0; i < n; i++)
+	{
+		if(a[i] > 0 && a[i] <= n)
+			b[a[i] - 1] = 1;
+	}
+	for(i = 0; i < n; i++)
+	{
+		if(b[i] == 0) break;
+	}
+	return i + 1;
+}
+
+
+
+// 求一个三元组的最小距离
+# define INT_MAX 0x7fffffff
+
+int abs_(int a)
+{
+	if(a < 0) return -a;
+	else
+		return a;
+}
+bool xls_min(int a, int b, int c)
+{
+	if(a <= b && a <= c)
+		return true;
+	else
+		return false;
+}
+
+int findMinofTrip(int a[], int n, int b[], int m, int c[], int p)
+{
+	int i = 0, j = 0, k = 0, D_min = INT_MAX, D;
+	while(i < n && j < m && k < p && D_min > 0)
+	{
+		D = abs_(a[i] - b[j]) + abs_(n[j] - c[k]) + abs_(c[k] - a[i]);
+		if(D < D_min) D_min = D;
+		if(xls_min(a[i], b[j], c[k])) i++;
+		else if(xls_min(b[j], c[k], a[i])) j++;
+		else k++;
+	}
+	return D_min;
+}
+
+
+// 删除带头节点链表中，所有值为x的节点
+void Del_x_1(LinkList &L, int x)
+{
+	LNode *p = L->next, *pre = L, *q;
+	while(p != NULL)
+	{
+		if(p->data == x)
+		{
+			q = p;
+			p = p->next;
+			pre->next = p;
+			free(q);
+		}
+		else
+		{
+			pre = p;
+			p = p->next;
+		}
+	}
+}
+
+
+
+// 删除不带头节点链表中，值为X的节点（递归）
+void Del_X_3(LinkList &L, int x)
+{
+	LNode *p;
+	if(L == NULL)
+		return;
+	if(L->data == x)
+	{
+		p = L;
+		L = L->next;
+		free(p);
+		Del_X_3(L, x);
+	}
+	else
+	{
+		Del_X_3(L->next, x);
+	}
+}
+
+
+
+// 删除带头节点链表中，所有值为x的节点
+// 解法1
+void Del_x_1(LinkList &L, int x)
+{
+	LNode *p = L->next, *pre = L, *q;
+	while(p != NULL)
+	{
+		if(p->data == x)
+		{
+			q = p;
+			p = p->next;
+			pre->next = p;
+			free(q);
+		}
+		else
+		{
+			pre = p;
+			p = p->next;
+		}
+	}
+}
+
+// 解法2(推荐)
+void Del_x_2(LinkList &L, int x)
+{
+	LNode *p = L->next, *r = L, *q;
+	while(p != NULL)
+	{
+		if(p->data != x)
+		{
+			r->next = p;
+			r = p;
+			p = p->next;
+		}
+		else
+		{
+			q = p;
+			p = p->next;
+			free(q);
+		}
+	}
+	r->next = NULL;
+}
+
+
+// 逆向输出带头节点链表（递归）
+void R_Print(LinkList L)
+{
+	if(L->next != NULL)
+		R_Print(L->next);		// 递归调用，直到最后一个节点
+	if(L != NULL) print(L->data);		// 输出节点
+}
+
+void R_Ignore_Head(LinkList L)		// 跳过头结点
+{
+	if(L->next != NULL) R_Print(L->next;)
+}
+
+
+
+
+###########################################################
+
+#include <iostream>
+using namespace std;
+
+
+#define MaxSize 10
+
+typedef struct LNode
+{
+	int data;
+	struct LNode *next;
+}LNode, *LinkList;
+
+
+// 链表：带头节点初始化
+bool InitLiList_H(LinkList &L)
+{
+	L = (LNode*)malloc(sizeof(LNode));
+	if(L == NULL)
+		return false;
+	L->next = NULL;
+	return true;
+}
+
+// 链表：不带头结点初始化
+void InitLiList(LinkList &L)
+{
+	L = NULL;
+}
+
+// 链表：不带头结点判空
+bool IsEmpty(LinkList L)
+{
+	return (L == NULL);
+}
+
+// 单链表：带头结点判空
+bool IsEmpty_H(LinkList L)
+{
+	if(L->next == NULL)
+		return true;
+	else
+		 return false;
+}
+
+// 删除带头节点链表中，所有值为x的节点
+void Del_x_1(LinkList &L, int x)
+{
+	LNode *p = L->next, *pre = L, *q;
+	while(p != NULL)
+	{
+		if(p->data == x)
+		{
+			q = p;
+			p = p->next;
+			pre->next = p;
+			free(q);
+		}
+		else
+		{
+			pre = p;
+			p = p->next;
+		}
+	}
+}
+
+
+
+// 删除不带头节点链表中，值为X的节点（递归）
+void Del_X_3(LinkList &L, int x)
+{
+	LNode *p;
+	if(L == NULL)
+		return;
+	if(L->data == x)
+	{
+		p = L;
+		L = L->next;
+		free(p);
+		Del_X_3(L, x);
+	}
+	else
+	{
+		Del_X_3(L->next, x);
+	}
+}
+
+
+
+typedef struct 
+{
+	int data[MaxSize];
+	int length;
+}SqList;
+
+void InitList(SqList &L)
+{
+	for(int i = 0; i < MaxSize; i++)
+	{
+		L.data[i] = i + 2;
+		L.length ++;
+	}
+}
+
+
+// 求一个三元组的最小距离
+# define INT_MAX 0x7fffffff
+
+int abs_(int a)
+{
+	if(a < 0) return -a;
+	else
+		return a;
+}
+bool xls_min(int a, int b, int c)
+{
+	if(a <= b && a <= c)
+		return true;
+	else
+		return false;
+}
+
+int findMinofTrip(int a[], int n, int b[], int m, int c[], int p)
+{
+	int i = 0, j = 0, k = 0, D_min = INT_MAX, D;
+	while(i < n && j < m && k < p && D_min > 0)
+	{
+		D = abs_(a[i] - b[j]) + abs_(n[j] - c[k]) + abs_(c[k] - a[i]);
+		if(D < D_min) D_min = D;
+		if(xls_min(a[i], b[j], c[k])) i++;
+		else if(xls_min(b[j], c[k], a[i])) j++;
+		else k++;
+	}
+	return D_min;
+}
+
+
+
+// 找出数组中未出现的最小正整数
+int findMissMin(int a[], int n)
+{
+	int i, *b;
+	b = (int*)malloc(sizeof(int) * n);
+	memset(b, 0, sizeof(int) * n);
+	for(i = 0; i < n; i++)
+	{
+		if(a[i] > 0 && a[i] <= n)
+			b[a[i] - 1] = 1;
+	}
+	for(i = 0; i < n; i++)
+	{
+		if(b[i] == 0) break;
+	}
+	return i + 1;
+}
+
+
+// 找出数组中的主元素（个数大于n/2）
+int Majority(int a[], int n)
+{
+	int i, c, count = 1;
+	c = a[0];
+	for(i = 1; i < n; i++)
+	{
+		if(a[i] == c)
+			count++;
+		else
+		{
+			if(count > 0)
+				count--;
+			else
+			{
+				c = a[i];
+				count = 1;
+			}
+		}
+	}
+	if(count > 0)
+	{
+		for(i = count = 0; i < n; i++)
+		{
+			if(a[i] == c)
+				count++;
+		}
+	}
+	if(count > n/2) return c;
+	else
+		return -1;
+}
+
+
+// 找出数组A和B的中位数
+
+int M_Search(int a[], int b[], int n)
+{
+	int s1 = 0, d1 = n - 1, m1, s2 = 0, d2 = n - 1, m2;
+	while(s1 != d1 || s2 != d2)
+	{
+		m1 = (s1 + d1) / 2;
+		m2 = (s2 + d2) / 2;
+		if(a[m1] == b[m2])
+			return a[m1];
+		if(a[m1] < b[m2])
+		{
+			if((s1 + d1) % 2 == 0)
+			{
+				s1 = m1;
+				d2 = m2;
+			}
+			else
+			{
+				s1 = m1 + 1;
+				d2 = m2;
+			}
+		}
+		else
+		{
+			if((s2 + d2) % 2 == 0)
+			{
+				d1 = m1;
+				s2 = m2;
+			}
+			else
+			{
+				d1 = m1;
+				s2 = m2 + 1;
+			}
+		}
+	}
+	return a[s1] < b[s2] ? a[s1] : b[s2];
+}
+
+
+
+// 将数组循环左移p个位置
+void Reverse(int r[], int from, int to)
+{
+	int i, temp;
+	for(i = 0; i < (to - from) / 2; i++)
+	{
+		temp = r[from + i];
+		r[from + i] = r[to - i];
+		r[to - i] = temp ;
+	}
+}
+
+void Convere(int r[], int n, int p)
+{
+	Reverse(r, 0, p - 1);
+	Reverse(r, p, n - 1);
+	Reverse(r, 0, n - 1);
+}
+
+
+
+// 找到数组中，值为x的元素，并将其与后继元素交换
+void SearchExchangeInsert(int a[], int x)
+{
+	int low = 0, high = n - 1, mid;
+	while(low <= high)
+	{
+		mid = (low + high) / 2;
+		if(a[mid] == x) break;
+		else if(a[mid] < x) low = mid + 1;
+		else high = mid - 1;
+	}
+	if(a[mid] == x && mid != n - 1)
+	{
+		t = a[mid]; a[mid] = a[mid + 1]; a[mid + 1] = t;
+	}
+	if(low > high)
+	{
+		for(i = n - 1; i > high; i--) a[i + 1] = a[i];
+		a[i + 1] = x;
+	}
+}
+
+
+
+
+// 将一个包含m+n元素的数组，翻转为n+m
+void Reverse(int a[], int left, int right, int arraySize)
+{
+	if(left >= right || right >= arraySize)
+		return false;
+	int mid = (left + right) / 2;
+	for(int i = 0; i <= mid - left; i++)
+	{
+		int temp = a[left + i];
+		a[left + i] = a[right - i];
+		a[right - i] = temp;
+	}
+}
+
+void Exchange(int a[], int m , int n, int arraySize)
+{
+	Reverse(a, 0, m + n - 1, arraySize);
+	Reverse(a, 0, n -1, arraySize);
+	Reverse(a, n, m + n - 1, arraySize);
+}
+
+
+
+// 将两个有序顺序表，合并为一个顺序表（归并排序）
+bool Merge(SqList a, SqList b, SqList &c)
+{
+	if(a.length + b.length > c.length)
+		return false;
+	int i = 0; j = 0; k = 0;
+	while(i < a.length && j < b.length)
+	{
+		if(a.data[i] <= b.data[j])
+			c.data[k++] = a.data[i++];
+		else
+			c.data[k++] = b.data[j++];
+	}
+	while(i < a.length)
+		c.data[k++] = a.data[i++];
+	while(j < b.length)
+		c.data[k++] = b.data[j++];
+	c.length = k;
+	return true;
+}
+
+
+// 在有序顺序表中，删除值相同的元素
+
+bool Delete_Same(SqList &L)
+{
+	if(L.length == 0)
+		return false;
+	int i, j;
+	for(i = 0, j = 1; j < L.length; j++)
+	{
+		if(L.data[i] != L.data[j])
+			L.data[++i] = L.data[j];
+	}
+	L.length = i + 1;
+	return true;
+}
+
+
+// 删除介于x和y之前的元素(含s和t)
+bool Del_s_T(SqList &L, int s, int t)
+{
+	int i, k = 0;
+	if(L.length == 0 || s >=t)
+		return false;
+	for(i = 0; i < L.length; i++)
+	{
+		if(L.data[i] >= s && L.data[i] <= t)
+			k++;
+		else
+			L.data[i - k] = L.data[i];
+	}
+	L.length -= k;
+	return true;
+}
+
+
+
+// 删除介于x和y之前的元素
+
+bool Del_s_t2(SqList &L, int s, int t)
+{
+	int i, j;
+	if(s >= t || L.length == 0)
+		return false;
+	for(i = 0; i < L.length && L.data[i] < s; i++);
+	if(i >= L.length)
+		return false;
+	for(j = i; j < L.length && L.data[j] <= t; j++);
+	for(;j < L.length; i++, j++)
+		L.data[i] = L.data[j];
+	L.length = i;
+	return true;
+}
+
+
+// 删除顺序表中，值为x的元素
+// 解法1：
+void del_x_1(SqList &L, int x)
+{
+	int k = 0, i;
+	for(i = 0; i < L.length; i++)
+	{
+		if(L.data[i] != x)
+		{
+			L.data[k] = L.data[i];
+			k++;
+		}
+	}
+	L.length = k;
+}
+
+
+// 解法2
+void del_x_2(SqList &L, int x)
+{
+	int k = 0, i = 0;
+	while(i < L.length)
+	{
+		if(L.data[i] == x)
+			k++;
+		else
+			L.data[i - k] = L.data[i];
+		i++;
+	}
+	L.length = L.length - k;
+}
+
+
+
+int main()
+{
+   cout << "Hello World";
+   return 0;
+}
