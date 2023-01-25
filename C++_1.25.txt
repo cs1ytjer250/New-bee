@@ -1,0 +1,240 @@
+#include <iostream>
+using namespace std;
+
+
+void swap(int &num1, int &num2)
+{
+	int temp;
+	cout << "交换前" << endl;
+	cout << "num1 =" << num1 << endl;
+	cout << "num2 =" << num2 << endl;
+	temp = num1;
+	num1 = num2;
+	num2 = temp;
+	cout << "交换后" << endl;
+	cout << "num1 =" << num1 << endl;
+	cout << "num2 =" << num2 << endl;
+}
+
+typedef struct
+{
+	string name;
+	int age;
+}student;
+
+
+typedef struct
+{
+	string name;
+	int age;
+	student stu;
+}teacher;
+
+
+typedef struct
+{
+	string name;
+	int age;
+}person;
+
+// 先进行声明
+int max_2(int num1, int num2);
+void Bubble_Sort(int *a, int n);
+
+void printMember(const person &p)
+{
+	cout << p.name << endl;
+	cout << p.age << endl;
+	//p.name = "路子";				// const 修饰之后，在子函数中，无法修改结构体的元素
+	//p.age = 34;
+}
+
+
+int main()
+{
+	
+	
+	
+	
+	/*
+	// 结构体传参
+	person p = {"刘浪", 46};
+	printMember(p);
+	cout << p.name << endl;
+	cout << p.age << endl;
+	*/
+	
+
+	
+	/*
+	// 结构体嵌套
+	teacher t = {"张罗", 36,{"sunqi", 17}};
+	t.name = "罗张";
+	t.age = 23;
+	t.stu.name = "lisi";
+	t.stu.age = 18;
+	cout << t.name <<endl;
+	cout << t.age <<endl;
+	cout << t.stu.name <<endl;
+	cout << t.stu.age <<endl;
+	*/
+	
+	
+	
+	
+	/*
+	// 结构体指针
+	People p = {"张三", 35};
+	People *s = &p;
+	cout << p.name << endl;
+	cout << p.age << endl;
+	cout << s->name << endl;
+	cout << s->age << endl;
+	*/
+	
+	/*
+	//结构体数组
+	People p[3] = {{"zhaoliu", 23}, {"qianqi", 53}, {"sunba", 45}};
+	p[0].name = "caijiu";
+	
+	for(int i = 0; i < 3; i++)
+		cout << p[i].name << '\t' << p[i].age << endl; 
+	cout << p[0].name << endl;
+	cout << p[1].name << endl;
+	cout << p[2].name << endl;
+	cout << p[0].age << endl;
+	*/
+	
+	
+	
+	/*
+	People p = {"张三", 23};
+	p.name = "李四";
+	cout << p.name << endl;
+	cout << p.age << endl;
+	
+	string arr[] = {"张大帅", "a", "linag"};
+	cout << arr[0] << endl;
+	*/
+	
+	
+	/*
+	// 冒泡排序
+	int arr[5] = {5,4,3,2,1};
+	int n = 5;
+	Bubble_Sort(arr, 5);
+	for(int i = 0; i < n; i++)
+		cout << arr[i] << endl;
+	*/
+	
+	/*
+	// 指针和数组
+	int arr[5] = {1,2,3,4,5};
+	int *p = arr;
+	//cout << p[1] << endl;
+	//cout << *(p++) << endl;
+	for(int i = 0; i < 5; i++)
+		cout << *(++p) << endl;
+	*/
+	
+	
+	/*
+	// const
+	int a = 10;
+	int b = 80;
+	
+	const int *s = & b;
+	*s = 23;			//error  const在指针前，只能修改指针指向的地址。  常量指针
+	
+	int* const p  = &a;
+	p = &b;				// error  const在变量名前，只能修改指针指向地址的值。  指针常量
+	
+	const int* const t = &a;		
+	t = &b;				// error const既修饰了指针，也修饰了值。
+	*t = 21;			// error
+	*/
+	
+	
+	/*
+	// 指针
+	int a = 10;
+	int *p;
+	p = &a;
+	cout << "a的地址为：" << &a << endl;
+	cout << "a 的值为：" << a << endl;
+	cout << "p的地址为：" << p << endl;
+	
+	*p = 15;
+	cout << "p 的值为" << *p << endl;
+	cout << "a 的值为" << a << endl;
+	
+	char *s;
+	cout << "指针p的大小为：" << sizeof(p) << endl;
+	cout << "指针s的大小为：" << sizeof(s) << endl;
+	*/
+	
+	/*
+	// 函数的声明
+	int a = 10;
+	int b = 9;
+	int c = max_2(a, b);
+	cout << c << endl;
+	*/
+	
+	/*
+	// 函数
+	int a = 10;
+	int b = 20;
+	cout << "a = " << a << endl;
+	cout << "b = " << b << endl;
+	swap(a, b);
+	cout << "a = " << a << endl;
+	cout << "b = " << b << endl;
+	*/
+	
+	
+	
+	
+	/*
+	// 数组的使用
+   	int arr[3][3] = {{100, 100, 100}, {90, 50, 100}, {60,80, 70}};
+	string ch[3] = {"张三", "王五", "李四"};
+	string ch2[3] = {"语文", "数学", "英语"};
+	for(int i = 0; i < 3; i++)
+	{
+		int sum = 0;
+		for(int j = 0; j < 3; j++)
+		{
+			sum += arr[i][j];
+			cout << ch[i] << ch2[i] << "成绩为：" << arr[i][j] << '\t';
+		}
+		cout << ch[i]<< "的总分为：" << sum << endl;
+	}
+	*/
+	
+   	return 0;
+}
+
+void Bubble_Sort(int *a, int n)
+{
+	int temp;
+	for(int i = 0; i < n; i++)
+	{
+		for(int j = 0; j <= n-1-i; j++)
+		{
+			if(a[j] > a[j + 1])
+			{
+				temp = a[j];
+				a[j] = a[j + 1];
+				a[j + 1] = temp;
+			}
+		}
+	}
+}
+
+
+
+int max_2(int num1, int num2)
+{
+	return num1 > num2 ? num1 : num2;
+}

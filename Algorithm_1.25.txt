@@ -1,0 +1,714 @@
+// 删除值最小的节点
+LinkList Delete_Min(LinkList &L)
+{
+	LNode *pre = L, *p = pre->next;
+	LNode *minpre = pre, *minp = p;
+	while(p != NULL)
+	{
+		if(p->data < minp->data)
+		{
+			minp = p;
+			minpre = pre;
+		}
+		pre = p;
+		p = p->next;
+	}
+	minpre->next = minp->next;
+	free(minp);
+	return L;
+}
+
+
+
+// 就地逆置单链表
+// 解法1
+LinkList Reverse_1(LinkList L)
+{
+	LNode *p, *r;
+	p = L->next;
+	L->next = NULL;
+	while(p != NULL)
+	{
+		r = p->next;
+		p->next = L->next;
+		L->next = p;
+		p = r;
+	}
+	return L;
+}
+
+// 解法2
+LinkList Reverse_2(LinkList L)
+{
+	LNode *pre, *p = L->next, *r = p->next;
+	p->next = NULL;
+	while(r != NULL)
+	{
+		pre = p;
+		p = r;
+		r = r->next;
+		p->next = pre;
+	}
+	L->next = p;
+	return L;
+}
+
+
+
+// 递增排序单链表(直接插入排序)
+
+void Sort(LinkList &L)
+{
+	LNode *p = L->next, *pre;
+	LNode *r = p->next;
+	p->next = NULL;
+	p = r;
+	while(p != NULL)
+	{
+		r = p->next;
+		pre = L;
+		while(pre->next != NULL && pre->next->data < p->data)
+			pre = pre->next;
+		p->next = pre->next;
+		pre->next = p;
+		p = r;
+	}
+}
+
+
+// 删除单链表中介于s和t之间的元素
+void RangeDelete(LinkList &L, int min, int max)
+{
+	LNode *pr = L, *p = L->link;
+	while(p != NULL)
+	{
+		if(p->data > min && p->data < max)
+		{
+			pr->link = p->link;
+			free(p);
+			p = pr->link;
+		}
+		else
+		{
+			pr = p;
+			p = p->link;
+		}
+	}
+}
+
+
+
+// 增序输出单链表，并同时进行空间释放
+
+void Min_Delete(LinkList &head)
+{
+	while(head->next != NULL)
+	{
+		LNode *pre = head;
+		LNode *p = pre->next;
+		LNode *u;
+		while(p->next != NULL)
+		{
+			if(p->next->data < pre->next->data)
+				pre = p;
+			p = p->next;
+		}
+		print(pre->next->data);
+		u = pre->next;
+		pre->next = u->next;
+		free(u);
+	}
+	free(head);
+}
+
+
+
+// 将一个链表分解为两个链表，a链表保存序号为奇数的元素，b链表保存序号为偶数的元素
+
+LinkList DisCreat_1(LinkList &a)
+{
+	int i = 0;
+	LinkList b = (LNode *)malloc(sizeof(LNode));
+	b->next = NULL;
+	LNode *ra = a, *rb = b, *p;
+	
+	p = a->next;
+	a->next = NULL;
+	while(p != NULL)
+	{
+		i++;
+		if(i % 2 == 0)
+		{
+			rb->next = p;
+			rb = p;
+		}
+		else
+		{
+			ra->next = p;
+			ra = p;
+		}
+		p = p->next;
+	}
+	ra->next = NULL;
+	rb->next = NULL;
+	return b;
+}
+
+
+
+
+// 找到两个链表中的公共节点
+
+LinkList Search_1st_Common(LinkList L1,LinkList L2)
+{
+	int len1 = Length(L1), len2 = Length(L2);
+	int dist;
+	LinkList longList, shortList;
+	if(len1 > len2)
+	{
+		longList = L1->next; shortList = L2->next;
+		dist = len1 - len2;
+	}
+	else
+	{
+		longList = L2->next; shortList = L1->next;
+		dist = len2 - len1;
+	}
+	while(dis--)
+		longList = longList->next;
+	while(longList != NULL)
+	{
+		if(longList == shortList)
+			return longList;
+		else
+		{
+			longList = longList->next;
+			shortList = shortList->next;
+		}
+	}
+	return NULL;
+}
+
+
+// 删除有序单链表中，重复的元素
+void Del_Same(LinkList &L)
+{
+	LNode *p = L->next, *q;
+	if(p == NULL)
+		return;
+	while(p->next != NULL)
+	{
+		q = p->next;
+		if(p->data == q->data)
+		{
+			p->next = q->next;
+			free(q);
+		}
+		else
+			p = p->next;
+	}
+}
+
+
+// 将两个增序排列的单链表归并为一个减序排列的单链表
+void MergeList(LinkList &La, LinkList &Lb)
+{
+	LNode *r, *pa = La->next, *pb = Lb->next;
+	La->next = NULL;
+	
+	while(pa && pb)
+	{
+		if(pa->data <= pb->data)
+		{
+			r = pa->next;
+			pa->next = La->next;
+			La->next = pa;
+			pa = r;
+		}
+		else
+		{
+			r = pb->next;
+			pb->next = La->next;
+			La->next = pb;
+			pb = r;
+		}
+	}
+	if(pa)
+		pb = pa;
+	while(pb)
+	{
+		r = pb->next;
+		pb->next = La->next;
+		La->next = pb;
+		pb = r;
+	}
+	free(Lb);
+}
+
+
+
+// 建立一个单链表，保存另外两个单链表中的公共元素。
+void Get_Common(LinkList a, LinkList b)
+{
+	LNode *p = a->next, *q = b->next, *r, *s;
+	LinkList c = (LinkList)malloc(sizeof(LNode));
+	r = c;
+	while(p != NULL && q != NULL)
+	{
+		if(p->data < q->data)
+			p = p->data;
+		else if(p->data > q->data)
+			q = q->data;
+		else
+		{
+			s = (LNode*)malloc(sizeof(LNode));
+			s->data = p->data;
+			r->next = s;
+			r = s;
+			p = p->next;
+			q = q->next;
+		}
+	}
+	r->next = NULL;
+}
+
+
+
+// 找出两个单链表中的交集，并用第一个链表保存
+
+LinkList Union(LinkList &la, LinkList &lb)
+{
+	LNode *pa = la->next;
+	LNode *pb = lb->next;
+	Lnode *u, *pc = la;
+	while(pa && pb)
+	{
+		if(pa->data == pb->data)
+		{
+			pc->next = pa;
+			pc = pa;
+			pa = pa->next;
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+		else if(pa->data < pb->data)
+		{
+			u = pa;
+			pa = pa->next;
+			free(u);
+		}
+		else
+		{
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+	}
+	while(pa)
+	{
+		u = pa;
+		pa = pa->next;
+		free(u);
+	}
+	while(pb)
+	{
+		u = pb;
+		pb = pb->next;
+		free(u);
+	}
+	pc->next = NULL;
+	free(lb);
+	return la;
+}
+
+
+
+#####################################################
+
+
+
+#include <iostream>
+using namespace std;
+
+typedef struct LNode
+{
+	int data;
+	struct LNode *next;
+}LNode, *LinkList;
+
+
+// 找出两个单链表中的交集，并用第一个链表保存
+
+LinkList Union(LinkList &la, LinkList &lb)
+{
+	LNode *pa = la->next;
+	LNode *pb = lb->next;
+	Lnode *u, *pc = la;
+	while(pa && pb)
+	{
+		if(pa->data == pb->data)
+		{
+			pc->next = pa;
+			pc = pa;
+			pa = pa->next;
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+		else if(pa->data < pb->data)
+		{
+			u = pa;
+			pa = pa->next;
+			free(u);
+		}
+		else
+		{
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+	}
+	while(pa)
+	{
+		u = pa;
+		pa = pa->next;
+		free(u);
+	}
+	while(pb)
+	{
+		u = pb;
+		pb = pb->next;
+		free(u);
+	}
+	pc->next = NULL;
+	free(lb);
+	return la;
+}
+
+
+
+
+
+// 建立一个单链表，保存另外两个单链表中的公共元素。
+void Get_Common(LinkList a, LinkList b)
+{
+	LNode *p = a->next, *q = b->next, *r, *s;
+	LinkList c = (LinkList)malloc(sizeof(LNode));
+	r = c;
+	while(p != NULL && q != NULL)
+	{
+		if(p->data < q->data)
+			p = p->data;
+		else if(p->data > q->data)
+			q = q->data;
+		else
+		{
+			s = (LNode*)malloc(sizeof(LNode));
+			s->data = p->data;
+			r->next = s;
+			r = s;
+			p = p->next;
+			q = q->next;
+		}
+	}
+	r->next = NULL;
+}
+
+
+
+
+// 将两个增序排列的单链表归并为一个减序排列的单链表
+void MergeList(LinkList &La, LinkList &Lb)
+{
+	LNode *r, *pa = La->next, *pb = Lb->next;
+	La->next = NULL;
+	
+	while(pa && pb)
+	{
+		if(pa->data <= pb->data)
+		{
+			r = pa->next;
+			pa->next = La->next;
+			La->next = pa;
+			pa = r;
+		}
+		else
+		{
+			r = pb->next;
+			pb->next = La->next;
+			La->next = pb;
+			pb = r;
+		}
+	}
+	if(pa)
+		pb = pa;
+	while(pb)
+	{
+		r = pb->next;
+		pb->next = La->next;
+		La->next = pb;
+		pb = r;
+	}
+	free(Lb);
+}
+
+
+
+
+
+// 删除有序单链表中，重复的元素
+void Del_Same(LinkList &L)
+{
+	LNode *p = L->next, *q;
+	if(p == NULL)
+		return;
+	while(p->next != NULL)
+	{
+		q = p->next;
+		if(p->data == q->data)
+		{
+			p->next = q->next;
+			free(q);
+		}
+		else
+			p = p->next;
+	}
+}
+
+
+
+
+// 将一个链表分解为两个链表，a链表保存序号为奇数的元素，b链表保存序号为偶数的元素（变种）
+LinkList DisCreat_2(LinkList &a)
+{
+	LinkList b = (LinkList)malloc(sizeof(LNode));
+	b->next = NULL;
+	LNode *p = a->next, *q;
+	Lnode *ra = a;
+	while(p != NULL)
+	{
+		ra->next = p; ra = p;
+		p = p->next;
+		if(p != NULL)
+		{
+			q = p->next;
+			p->next = b->next;
+			b->next = p;
+			p = q;
+		}
+	}
+	ra->next =NULL;
+	return b;
+}
+
+
+
+
+// 将一个链表分解为两个链表，a链表保存序号为奇数的元素，b链表保存序号为偶数的元素
+
+LinkList DisCreat_1(LinkList &a)
+{
+	int i = 0;
+	LinkList b = (LNode *)malloc(sizeof(LNode));
+	b->next = NULL;
+	LNode *ra = a, *rb = b, *p;
+	
+	p = a->next;
+	a->next = NULL;
+	while(p != NULL)
+	{
+		i++;
+		if(i % 2 == 0)
+		{
+			rb->next = p;
+			rb = p;
+		}
+		else
+		{
+			ra->next = p;
+			ra = p;
+		}
+		p = p->next;
+	}
+	ra->next = NULL;
+	rb->next = NULL;
+	return b;
+}
+
+
+
+// 增序输出单链表，并同时进行空间释放
+
+void Min_Delete(LinkList &head)
+{
+	while(head->next != NULL)
+	{
+		LNode *pre = head;
+		LNode *p = pre->next;
+		LNode *u;
+		while(p->next != NULL)
+		{
+			if(p->next->data < pre->next->data)
+				pre = p;
+			p = p->next;
+		}
+		print(pre->next->data);
+		u = pre->next;
+		pre->next = u->next;
+		free(u);
+	}
+	free(head);
+}
+
+
+
+
+// 找到两个链表中的公共节点
+
+LinkList Search_1st_Common(LinkList L1,LinkList L2)
+{
+	int len1 = Length(L1), len2 = Length(L2);
+	int dist;
+	LinkList longList, shortList;
+	if(len1 > len2)
+	{
+		longList = L1->next; shortList = L2->next;
+		dist = len1 - len2;
+	}
+	else
+	{
+		longList = L2->next; shortList = L1->next;
+		dist = len2 - len1;
+	}
+	while(dis--)
+		longList = longList->next;
+	while(longList != NULL)
+	{
+		if(longList == shortList)
+			return longList;
+		else
+		{
+			longList = longList->next;
+			shortList = shortList->next;
+		}
+	}
+	return NULL;
+}
+
+
+
+
+
+
+// 删除单链表中介于s和t之间的元素
+void RangeDelete(LinkList &L, int min, int max)
+{
+	LNode *pr = L, *p = L->link;
+	while(p != NULL)
+	{
+		if(p->data > min && p->data < max)
+		{
+			pr->link = p->link;
+			free(p);
+			p = pr->link;
+		}
+		else
+		{
+			pr = p;
+			p = p->link;
+		}
+	}
+}
+
+
+
+
+// 递增排序单链表(直接插入排序)
+
+void Sort(LinkList &L)
+{
+	LNode *p = L->next, *pre;
+	LNode *r = p->next;
+	p->next = NULL;
+	p = r;
+	while(p != NULL)
+	{
+		r = p->next;
+		pre = L;
+		while(pre->next != NULL && pre->next->data < p->data)
+			pre = pre->next;
+		p->next = pre->next;
+		pre->next = p;
+		p = r;
+	}
+}
+
+
+
+
+
+// 就地逆置单链表
+// 解法1
+LinkList Reverse_1(LinkList L)
+{
+	LNode *p, *r;
+	p = L->next;
+	L->next = NULL;
+	while(p != NULL)
+	{
+		r = p->next;
+		p->next = L->next;
+		L->next = p;
+		p = r;
+	}
+	return L;
+}
+
+// 解法2
+LinkList Reverse_2(LinkList L)
+{
+	LNode *pre, *p = L->next, *r = p->next;
+	p->next = NULL;
+	while(r != NULL)
+	{
+		pre = p;
+		p = r;
+		r = r->next;
+		p->next = pre;
+	}
+	L->next = p;
+	return L;
+}
+
+
+
+
+
+// 删除值最小的节点
+LinkList Delete_Min(LinkList &L)
+{
+	LNode *pre = L, *p = pre->next;
+	LNode *minpre = pre, *minp = p;
+	while(p != NULL)
+	{
+		if(p->data < minp->data)
+		{
+			minp = p;
+			minpre = pre;
+		}
+		pre = p;
+		p = p->next;
+	}
+	minpre->next = minp->next;
+	free(minp);
+	return L;
+}
+
+
+
+int main()
+{
+   cout << "Hello World";
+   return 0;
+}
