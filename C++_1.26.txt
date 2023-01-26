@@ -1,0 +1,126 @@
+#include <iostream>
+using namespace std;
+
+// 全局变量：正文段
+int g_a = 10;
+int g_b = 20;
+
+// 实参传递：栈区
+int func(int b)
+{
+	b = 10;
+	return b;
+}
+
+int* func2()
+{
+	int *p = new int(10);
+	return p;
+}
+
+// 开辟一个整型空间
+void test01()
+{
+	int *p = func2();
+	cout << *p << endl;
+	cout << *p << endl;
+	delete p;
+	cout << *p << endl;
+}
+
+
+// 开辟一个数组空间
+void test02()
+{
+	int *p = new int[10];
+	for(int i = 0; i < 10; i++)
+	{
+		p[i] = i + 2;
+	}
+	for(int i = 0; i < 10; i++)
+		cout << p[i] << endl;
+	delete[] p;
+	cout << p[2] << endl;
+}
+
+
+int main()
+{
+	
+	
+	
+	
+	/*
+	// 引用
+	int a = 10;
+	int &b = a;
+	cout << a << endl;
+	cout << b << endl;
+	
+	b = 20;
+	a = 13;
+	cout << a << endl;
+	cout << b << endl;
+	
+	int c = 30;
+	b = c;
+	cout << a << endl;
+	cout << b << endl;
+	
+	&b = c;
+	cout << a << endl;
+	cout << b << endl;
+	*/
+	
+	
+	
+	//test01();
+	//test02();
+	
+	
+	
+	/*
+	int *p = func2();
+	cout << *(++p) << endl;
+	*/
+	
+	
+	/*
+	int a = 5;
+	int p = func(a);
+	cout << p << endl;
+	cout << &p << endl;
+	*/
+	
+	
+	/*
+	// 内存分区
+	
+	// 动态分配内存：堆段
+	int *arr = (int*)malloc(sizeof(int) * 5);
+	char *ch = (char*)malloc(sizeof(char) * 5);
+	//cout << ch << endl;
+	cout << arr << endl;
+	
+	// 未赋值局部变量：栈段
+	int a = 10;
+	int b = 20;
+	cout << &a << endl;
+	cout << &b << endl;
+	
+	
+	// 静态变量：正文段
+	static int a1 = 20;
+	static int a2 = 30;
+	cout << &g_a << endl;
+	cout << &g_b << endl;
+	cout << &a1 << endl;
+	cout << &a2 << endl;
+	
+	// 常量：正文段
+	cout << &"hello world" << endl;
+	*/
+	
+
+   	return 0;
+}
