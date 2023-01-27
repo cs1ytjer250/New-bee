@@ -1,0 +1,566 @@
+// 16：判断b链表是否是a链表的子序列(不带头节点)
+int Pattern(LinkList a, LinkList b)
+{
+	LNode *p = a;
+	LNode *pre = p;
+	LNode *q = b;
+	while(p && a)
+	{
+		if(p->data == q->data)
+		{
+			p = p->next;
+			q = q->next;
+		}
+		else
+		{
+			pre = pre->next;
+			p = pre;
+			q = b;
+		}
+	}
+	if(q == NULL)
+		return 1;
+	else
+		return 0;
+}
+
+
+// 17:判断循环双链表是否对称
+
+int Symmetry(DLinkList L)
+{
+	DNode *p = L->next, *q = L->prior;
+	while(p != q && q->next != p)
+	{
+		if(p->data == q->data)
+		{
+			p = p->next;
+			q = q->prior;
+		}
+		else
+			return 0;
+	}
+	return 1;
+}
+
+
+// 18: 拼接两个循环单链表
+
+LinkList Link(LinkList &h1, LinkList &h2)
+{
+	LNode *p, *q;
+	p = h1;
+	while(p->next != h1)
+		p = p->next;
+	q = h2;
+	while(q->next != h2)
+		q = q->next;
+	p->next = h2;
+	q->next = h1;
+	return h1;
+}
+
+
+
+
+// 链表：19.删除循环单链表中值最小的元素
+
+void Del_All(LinkList &L)
+{
+	LNode *p, *pre, *minp, *minpre;
+	while(L->next != L)
+	{
+		p = L->next; pre = L;
+		minp = p; minpre = pre;
+		while(p != L)
+		{
+			if(p->data < minp->data)
+			{
+				minp = p;
+				minpre = pre;
+			}
+			pre = p;
+			p = p->next;
+		}
+		printf("%d", minp->data);
+		minpre->next = minp->next;
+		free(minp);
+	}
+}
+
+
+
+// 链表：20.按频度排序一个双链表（频度递减）
+DLinkList Locate(DLinkList &L, int x)
+{
+	DNode *p = L->next, *q;
+	while(p && p->data != x)
+		p = p->next;
+	if(p)
+		exit(0);
+	else
+	{
+		p->freq++;
+		if(p->pre == L || p->pre->freq > p->freq)
+			return p;
+		if(p->next != NULL) p->next->pre = p->pre;
+		p->pre->next = p->next;
+		q = p->pre;
+		while(q != L && q->freq <= p->freq)
+			q = q->pre;
+		p->next = q->next;
+		if(q->next != NULL) q->next->pre = p;
+		p->pre = q;
+		q->next = p;
+	}
+	return p;
+}
+
+
+// 链表：21.判断一个单链表是否有环
+
+LNode *FindLoopStart(LNode *head)
+{
+	LNode *fast = head, *slow = head;
+	while(fast != NULL && fast->next != NULL)
+	{
+		slow = slow->next;
+		fast = fast->next->next;
+		if(slow == fast) break;
+	}
+	if(slow == NULL || fast->next == NULL)
+		return NULL;
+	LNode *p1 = head, *p2 = slow;
+	while(p1 != p2)
+	{
+		p1 = p1->next;
+		p2 = p2->next;
+	}
+	return p1;
+}
+
+
+// 链表：22.找出单链表中倒数第K个元素
+
+int Search_k(LinkList list, int k)
+{
+	LNode *p = list->link, *q = list->link;
+	int count = 0;
+	while(p != NULL)
+	{
+		if(count < k) count++;
+		else q = q->link;
+		p = p->link;
+	}
+	if(count < k)
+		return 0;
+	else
+	{
+	 	cout << "%d" << q->data << endl;
+		return 1;
+	 }
+}
+
+
+
+// 链表：23.找出两个单链表中公共节点
+
+// 求表长
+int listLen(SNode *head)		// 不取地址传参，用头结点指针作为工作指针
+{
+	int len = 0;
+	while(head->next != NULL)
+	{
+		len++;
+		head = head->next;
+	}
+	return len;
+}
+
+SNode* find_addr(SNode *str1, SNode *str2)
+{
+	int m, n;
+	SNode *p, *q;
+	m = listLen(str1);
+	n = listLen(str2);
+	for(p = str1; m > n; m--)
+		p = p->next;
+	for(q = str2; m < n; n--)
+		q = q->next;
+	while(p->next != NULL && p->next != q->next)
+	{
+		p = p->next;
+		q = q->next;
+	}
+	return p->next;
+}
+
+
+
+// 链表：24.删除单链表中，绝对值相等的所有元素
+
+void func(PNODE h, int n)
+{
+	PNODE p = h, r;
+	int *q, m;
+	q = (int *)malloc(sizeof(int) * (n + 1));
+	for(int i = 0; i < n + 1; i++)
+		*(q + i) = 0;
+	while(p->link != NULL)
+	{
+		m = p->link->data > 0 ? p->link->data : -(p->link->data);
+		if(*(q + m) == 0)
+		{
+			*(q + m) = 1;
+			p = p->link;
+		}
+		else
+		{
+			r = p->link;
+			p->link = r->link;
+			free(r);
+		}
+	}
+	free(q);
+}
+
+
+
+
+// 链表：25.将单链表重新排序（1,2,3,4,5,6）-》（1,5,2,4,3,6）
+
+void change_list(NODE *h)
+{
+	NODE *p, *r, *s;
+	p = q = h;
+	while(q->next != NULL)			// 找到链表的中间节点
+	{
+		p = p->next;
+		q = q->next;
+		if(q->next != NULL) q = q->next;
+	}
+	q = p->next;
+	p->next = NULL;
+	while(q != NULL)				// 逆置后半部分
+	{
+		r = q->next;
+		q->next = p->next;
+		p->next = q;
+		q = r;
+	}
+	s = h->next;
+	q = p->next;
+	p->next = NULL;
+	while(q != NULL)				// 开始插入
+	{
+		r = q->next;
+		q->next = s->next;
+		s->next = q;
+		s = q->next;
+		q = r;
+	}
+}
+
+
+
+
+
+
+###############################################################
+
+#include <iostream>
+using namespace std;
+
+typedef struct LNode
+{
+	int data;
+	struct LNode *next;
+}LNode, *LinkList;
+
+typedef struct DNode
+{
+	int data;
+	struct DNode *next, *prior;
+}DNode, *DLinkList;
+
+// 链表：25.将单链表重新排序（1,2,3,4,5,6）-》（1,5,2,4,3,6）
+
+void change_list(NODE *h)
+{
+	NODE *p, *r, *s;
+	p = q = h;
+	while(q->next != NULL)			// 找到链表的中间节点
+	{
+		p = p->next;
+		q = q->next;
+		if(q->next != NULL) q = q->next;
+	}
+	q = p->next;
+	p->next = NULL;
+	while(q != NULL)				// 逆置后半部分
+	{
+		r = q->next;
+		q->next = p->next;
+		p->next = q;
+		q = r;
+	}
+	s = h->next;
+	q = p->next;
+	p->next = NULL;
+	while(q != NULL)				// 开始插入
+	{
+		r = q->next;
+		q->next = s->next;
+		s->next = q;
+		s = q->next;
+		q = r;
+	}
+}
+
+
+
+// 链表：24.删除单链表中，绝对值相等的所有元素
+
+void func(PNODE h, int n)
+{
+	PNODE p = h, r;
+	int *q, m;
+	q = (int *)malloc(sizeof(int) * (n + 1));
+	for(int i = 0; i < n + 1; i++)
+		*(q + i) = 0;
+	while(p->link != NULL)
+	{
+		m = p->link->data > 0 ? p->link->data : -(p->link->data);
+		if(*(q + m) == 0)
+		{
+			*(q + m) = 1;
+			p = p->link;
+		}
+		else
+		{
+			r = p->link;
+			p->link = r->link;
+			free(r);
+		}
+	}
+	free(q);
+}
+
+
+
+
+
+// 链表：23.找出两个单链表中公共节点
+
+// 求表长
+int listLen(SNode *head)		// 不取地址传参，用头结点指针作为工作指针
+{
+	int len = 0;
+	while(head->next != NULL)
+	{
+		len++;
+		head = head->next;
+	}
+	return len;
+}
+
+SNode* find_addr(SNode *str1, SNode *str2)
+{
+	int m, n;
+	SNode *p, *q;
+	m = listLen(str1);
+	n = listLen(str2);
+	for(p = str1; m > n; m--)
+		p = p->next;
+	for(q = str2; m < n; n--)
+		q = q->next;
+	while(p->next != NULL && p->next != q->next)
+	{
+		p = p->next;
+		q = q->next;
+	}
+	return p->next;
+}
+
+
+
+
+// 链表：22.找出单链表中倒数第K个元素
+
+int Search_k(LinkList list, int k)
+{
+	LNode *p = list->link, *q = list->link;
+	int count = 0;
+	while(p != NULL)
+	{
+		if(count < k) count++;
+		else q = q->link;
+		p = p->link;
+	}
+	if(count < k)
+		return 0;
+	else
+	{
+	 	cout << "%d" << q->data << endl;
+		return 1;
+	 }
+}
+
+
+
+
+// 链表：21.判断一个单链表是否有环
+
+LNode *FindLoopStart(LNode *head)
+{
+	LNode *fast = head, *slow = head;
+	while(fast != NULL && fast->next != NULL)
+	{
+		slow = slow->next;
+		fast = fast->next->next;
+		if(slow == fast) break;
+	}
+	if(slow == NULL || fast->next == NULL)
+		return NULL;
+	LNode *p1 = head, *p2 = slow;
+	while(p1 != p2)
+	{
+		p1 = p1->next;
+		p2 = p2->next;
+	}
+	return p1;
+}
+
+
+// 链表：20.按频度排序一个双链表（频度递减）
+DLinkList Locate(DLinkList &L, int x)
+{
+	DNode *p = L->next, *q;
+	while(p && p->data != x)
+		p = p->next;
+	if(p)
+		exit(0);
+	else
+	{
+		p->freq++;
+		if(p->pre == L || p->pre->freq > p->freq)
+			return p;
+		if(p->next != NULL) p->next->pre = p->pre;
+		p->pre->next = p->next;
+		q = p->pre;
+		while(q != L && q->freq <= p->freq)
+			q = q->pre;
+		p->next = q->next;
+		if(q->next != NULL) q->next->pre = p;
+		p->pre = q;
+		q->next = p;
+	}
+	return p;
+}
+
+
+
+
+
+
+// 链表：19.删除循环单链表中值最小的元素
+
+void Del_All(LinkList &L)
+{
+	LNode *p, *pre, *minp, *minpre;
+	while(L->next != L)
+	{
+		p = L->next; pre = L;
+		minp = p; minpre = pre;
+		while(p != L)
+		{
+			if(p->data < minp->data)
+			{
+				minp = p;
+				minpre = pre;
+			}
+			pre = p;
+			p = p->next;
+		}
+		printf("%d", minp->data);
+		minpre->next = minp->next;
+		free(minp);
+	}
+	free(L);
+}
+
+
+
+
+// 链表：18.拼接两个循环单链表
+
+LinkList Link(LinkList &h1, LinkList &h2)
+{
+	LNode *p, *q;
+	p = h1;
+	while(p->next != h1)
+		p = p->next;
+	q = h2;
+	while(q->next != h2)
+		q = q->next;
+	p->next = h2;
+	q->next = h1;
+	return h1;
+}
+
+
+
+// 17:判断循环双链表是否对称
+
+int Symmetry(DLinkList L)
+{
+	DNode *p = L->next, *q = L->prior;
+	while(p != q && q->next != p)
+	{
+		if(p->data == q->data)
+		{
+			p = p->next;
+			q = q->prior;
+		}
+		else
+			return 0;
+	}
+	return 1;
+}
+
+
+// 链表：16.判断b链表是否是a链表的子序列
+int Pattern(LinkList a, LinkList b)
+{
+	LNode *p = a;
+	LNode *pre = p;
+	LNode *q = b;
+	while(p && a)
+	{
+		if(p->data == q->data)
+		{
+			p = p->next;
+			q = q->next;
+		}
+		else
+		{
+			pre = pre->next;
+			p = pre;
+			q = b;
+		}
+	}
+	if(q == NULL)
+		return 1;
+	else
+		return 0;
+}
+
+
+
+
+int main()
+{
+   cout << "Hello World";
+   return 0;
+}
+
