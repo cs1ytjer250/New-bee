@@ -1,0 +1,197 @@
+// 类的嵌套
+class Point
+{
+public:
+	void set_x(int x)
+	{
+		m_x = x;
+	}
+	
+	int get_x()
+	{
+		return m_x;
+	}
+	
+	void set_y(int y)
+	{
+		m_y = y;
+	}
+	
+	int get_y()
+	{
+		return m_y;
+	}
+	
+	
+private:
+	int m_x;
+	int m_y;
+};
+
+
+class Circle
+{
+public:
+	void setR(int r)
+	{
+		m_R = r;
+	}
+	
+	int getR()
+	{
+		return m_R;
+	}
+	
+	void setCenter(Point center)
+	{
+		m_Center = center;
+	}
+	
+	Point getCenter()
+	{
+		return m_Center;
+	}
+	
+	
+private:
+	int m_R;
+	Point m_Center;
+};
+
+
+void isInCircle(Circle &c, Point &p)
+{
+	int Distance = 
+		(c.getCenter().get_x() - p.get_x()) * (c.getCenter().get_x() - p.get_x()) +
+		(c.getCenter().get_y() - p.get_y()) * (c.getCenter().get_y() - p.get_y());
+	int cDistance = c.getR() * c.getR();
+	
+	if(Distance == cDistance)
+		cout << "点在圆上" << endl;
+	else if(Distance > cDistance)
+		cout << "点在圆外" << endl;
+	else
+		cout << "点在圆内" << endl;
+}
+
+
+
+int main()
+{
+   	Circle c;
+	c.setR(10);
+	Point center;
+	center.set_x(10);
+	center.set_y(0);
+	c.setCenter(center);
+	
+	Point p;
+	p.set_x(10);
+	p.set_y(-11);
+	
+	isInCircle(c, p);
+   	return 0;
+}
+
+
+
+
+// 构造函数（初始化）和析构函数（格式化）
+class Person
+{
+public:
+	Person()
+	{
+		cout << "Person构造函数的调用" << endl;
+	}
+	
+	~Person()
+	{
+		cout << "Person析构函数的调用" << endl;
+	}
+};
+
+
+void test()
+{
+	Person p;
+}
+
+int main()
+{
+	Person p;
+	
+	system("pause");
+	
+   	return 0;
+}
+
+
+
+
+
+// 构造函数的分类和调用
+class Person
+{
+public:
+
+	// 普通构造
+	Person()
+	{
+		cout << "Person 的无参构造函数调用" << endl;
+	}
+	
+	Person(int a)
+	{
+		age = a;
+		cout << "Person 的有参构造函数调用" << endl;
+	}	
+	
+	// 拷贝构造
+	Person(const Person &p)
+	{
+		age = p.age;
+		cout << "Person 的拷贝构造函数调用" << endl;
+	}
+	
+	
+	~Person()
+	{
+		cout << "Person 的析构函数调用" << endl;
+	}
+	
+	int age;
+};
+
+void test01()
+{
+	// 1.括号法
+	/*
+	Person p;
+	Person p2(10);
+	Person p3(p2);
+	*/
+	
+	
+	//cout << "p2的年龄：" << p2.age << endl;
+	//cout << "p3的年龄：" << p3.age << endl;
+	
+	// 2.显示法
+	/*
+	Person p1;
+	Person p2 = Person(10);		// 右侧为匿名对象
+	Person p3 = Person(p2);
+	*/
+	
+	//Person(10);					// 匿名对象的特点：当前行代码执行结束，会立即回收匿名对象
+	//cout << "aaaa" << endl; 
+	
+	// 不要用拷贝对象，创建拷贝函数
+	//Person(p3); 				//Error:系统会认为Person(p3) == Person p3
+	
+	
+	// 3.隐式转换法
+	Person p4 = 10;
+	Person p5 = p4;
+	
+}
