@@ -1,0 +1,336 @@
+#include <iostream>
+using namespace std;
+
+class Person
+{
+public:
+	
+	Person()
+	{
+		cout << "Person 无参构造函数的调用" << endl;
+	}
+	
+	Person(int a)
+	{
+		age  = a;
+		cout << "Person 有参构造函数的调用" << endl;
+	}
+	
+
+	Person(const Person &p)
+	{
+		age = p.age;
+		cout << "Person 拷贝函数的调用" << endl;
+	}
+
+	
+	~Person()
+	{
+		cout << "Person 析构函数的调用" << endl;
+	}
+	
+	int age;
+};
+
+void test01()
+{
+	Person p ;
+	Person p1(10);
+	p.age = 210;
+	Person p2(p);	// 拷贝函数有默认值：age = p.age;
+	cout << "p2 的年龄为：" << p2.age << endl;
+}
+
+int main()
+{
+ 	test01();  	
+   	return 0;
+}
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+
+class Person
+{
+public:
+	/*
+	Person()
+	{
+		cout << "Person 无参构造函数" << endl;
+	}
+	*/
+	
+	
+	Person(int a)
+	{
+		age = a;
+		cout << "Person 有参构造函数" << endl;
+	}
+	
+	/*
+	Person(const Person &p)
+	{
+		age = p.age;
+		cout << "Person 拷贝构造函数" << endl;
+	}
+	*/
+	
+	int age;
+};
+
+
+void test01()
+{
+	//Person p;		// Error
+	Person p1(10);	// correct
+	Person p2(p1);
+	cout << "p2的年龄为：" << p2.age << endl; // correct
+}
+
+int main()
+{
+  	test01();
+   	return 0;
+}
+
+
+
+
+// 深拷贝和浅拷贝
+// 浅拷贝：等号赋值
+// 深拷贝：开辟一块内存空间，保存数据，如果不手动销毁，则一直存在.
+
+
+class Person
+{
+public:
+	Person()
+	{
+		cout << "Person 无参构造函数的调用" << endl;
+	}
+	
+	
+	Person(int a, int height)
+	{
+		age = a;
+		m_Height = new int(height);
+		cout << "Person 有参构造函数的调用" << endl;
+	}
+
+	Person(const Person &p)
+	{
+		age = p.age;
+		m_Height = new int(*p.m_Height);
+		cout << "Person 拷贝构造函数的调用" << endl;
+	}
+	
+	~Person()
+	{
+		if(m_Height != NULL)
+		{
+			delete m_Height;
+			m_Height = NULL;
+		}
+		cout << "Person 析构构造函数的调用" << endl;
+	}
+	
+	int age;
+	int *m_Height;
+};
+
+void test01()
+{
+	Person p1(14, 160);
+	cout << "p1的年龄为：" << p1.age << " p2的身高为：" << *p1.m_Height << endl;
+	
+	Person p2(p1);
+	cout << "p1的年龄为：" << p2.age << " p2的身高为：" << *p2.m_Height << endl;
+}
+
+int main()
+{
+  	test01();
+   	return 0;
+}
+
+
+
+
+
+// 初始化列表
+
+class Person
+{
+public:
+	// 传统初始化
+	/*
+	Person(int a, int b, int c)
+	{
+		m_a = a;
+		m_b = b;
+		m_c = c;
+	}
+	*/
+	
+	// 初始化列表赋初值
+	Person(int a, int b, int c): m_a(a), m_b(b), m_c(c)
+	{}
+	
+	int m_a;
+	int m_b;
+	int m_c;
+};
+
+void test01()
+{
+	//Person p1(10, 20, 30);
+	Person p1(30, 20, 10);
+	cout << p1.m_a << p1.m_b << p1.m_c << endl;
+}
+
+int main()
+{
+   	test01();
+   	return 0;
+}
+
+
+
+
+
+// 类对象作为类成员
+// 对析构函数和构造函数的调用顺序和栈类似，都是先进后出
+
+class Phone
+{
+public:
+	
+	Phone(string name)
+	{
+		pName = name;
+		cout << "Phone 有参构造函数的调用" << endl;
+	}
+	
+	~Phone()
+	{
+		cout << "Phone 析构函数的调用" << endl;
+	}
+	
+	string pName;
+};
+
+class Person
+{
+public:
+	
+	Person(string name, string pName):m_name(name), m_Phone(pName)
+	{
+		cout << "Person 有参构造函数的调用" << endl;
+	}
+	
+	~Person()
+	{
+		cout << "Person 析构函数的调用" << endl;
+	}
+	string m_name;
+	Phone m_Phone;
+};
+
+void test01()
+{
+	Person p1("张三", "华为");
+	cout << "姓名：" << p1.m_name << " 手机：" << p1.m_Phone.pName << endl;
+}
+
+int main()
+{
+   	test01();
+   	return 0;
+}
+
+
+
+
+
+// 静态成员变量
+class Person
+{
+public:
+	static int m_a;
+private:	// 静态变量有作用域，出了作用域也无法进行访问
+	static int m_b;
+};
+
+class Person2
+{
+public:
+	int m_a = 10;
+};
+
+
+int Person:: m_a = 100;
+//int Person:: m_b;
+
+
+void test01()
+{
+	Person p;
+	cout << p.m_a << endl;
+	
+	Person p2;
+	p2.m_a = 200;
+	cout << p.m_a << endl;
+}
+
+void test02()
+{
+	// 类名方式访问静态变量
+	cout << Person::m_a << endl;
+	//cout << Person::m_b << endl;	// Error
+	//cout << Person2::m_a << endl;	// Error:非静态变量，且类外没有声明
+}
+
+
+
+// 静态成员函数
+// 所有对象共享同一个函数
+// 静态成员函数只能访问静态成员变量
+
+class Person
+{
+public:
+	static void func()
+	{
+		m_a = 100;		// 优先级高于类外声明
+		cout << "static void func()的调用" << endl;
+		func2();		//	可以通过增加对外接口进行私有静态成员函数的访问
+	}
+	static int m_a;
+	
+private:
+	// 和静态成员变量相同，超出访问权限则禁止访问
+	static void func2()
+	{
+		cout << "static void func2的调用" << endl;
+	}
+};
+
+int Person::m_a;
+
+void test02()
+{
+	// 通过对象访问
+	Person p;
+	p.func();
+	
+	// 通过类名访问
+	Person::func();
+	//Person::func2();	// Error
+	
+	cout << p.m_a << endl;
+}
