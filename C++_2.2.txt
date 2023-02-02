@@ -1,0 +1,351 @@
+// 赋值运算符重载
+
+class Person
+{
+	friend ostream &operator<<(ostream &cout, Person &p);
+public:
+	
+	Person(int age)
+	{
+		m_age = new int(age);
+	}
+	
+	~Person()
+	{
+		if(m_age != NULL)
+		{
+			delete m_age;
+			m_age = NULL;
+		}
+		cout << "Person 析构函数的调用" << endl;
+	}
+	
+	Person &operator=(Person &p)
+	{
+		if(m_age != NULL)
+		{
+			delete m_age;
+			m_age = NULL;
+		}
+		m_age = new int(*p.m_age);
+		return *this;
+	}
+private:
+	int *m_age;
+};
+
+
+ostream &operator<<(ostream &cout, Person &p)
+{
+	cout << *p.m_age;
+	return cout;
+}
+
+void test01()
+{
+	Person p(18);
+	Person p2(21);
+	Person p3(32);
+	p3 = p2 = p;
+	cout << p << endl;
+	cout << p2 << endl;
+	cout << p3 << endl;
+}
+
+
+
+
+// 关系运算符重载
+
+class Person
+{
+	
+	friend ostream &operator<<(ostream &cout, Person &p);
+public:
+	Person(string m_name, int m_age)
+	{
+		this->m_name = m_name;
+		this->m_age = m_age;
+	}
+	
+	bool operator==(Person &p)
+	{
+		if(this->m_name == p.m_name && this->m_age == p.m_age)
+			return true;
+		else
+			 return false;
+	}
+	
+	bool operator!=(Person &p)
+	{
+		if(this->m_name == p.m_name && this->m_age == p.m_age)
+			return false;
+		else
+			 return true;
+	}
+private:
+	string m_name;
+	int m_age;
+};
+
+
+ostream &operator<<(ostream &cout, Person &p)
+{
+	cout << p.m_age;
+	return cout;
+}
+
+void test01()
+{
+	Person p("Tom", 20);
+	Person p2("Tom", 20);
+
+	if(p == p2)
+		cout << "相等" << endl;
+	else
+		cout << "不相等" << endl;
+	if(p != p2)
+		cout << "不相等" << endl;
+	else
+		cout << "相等" << endl;
+	cout << p;
+	
+}
+
+
+
+// 仿函数
+
+class MyPrint
+{
+public:
+	void operator()(string text)
+	{
+		cout << text;
+	}
+
+};
+
+// 仿函数很灵活，没有固定写法
+// 加法类
+class MyAdd
+{
+public:
+	int operator()(int n, int m)
+	{
+		return n + m;
+	}
+};
+
+
+void Myprint02(string text)
+{
+	cout << text;
+}
+
+void test01()
+{
+	MyPrint print;
+	print("League of Legends");
+	Myprint02("Legendary");
+}
+
+void test02()
+{
+	MyAdd madd;
+	int num = madd(1, 4);
+	cout << num << endl;
+	
+	// 匿名函数对象（执行过后立即销毁）
+	cout << MyAdd()(100, 201) << endl;
+}
+
+
+
+
+// 继承
+
+// 普通实现页面
+
+// java
+
+class BasePage
+{
+public:
+	void header()
+	{
+		cout << "头部" << endl;
+	}
+	
+	void footer()
+	{
+		cout << "尾部" << endl;
+	}
+	
+	void left()
+	{
+		cout << "左部" << endl;
+	}
+	
+};
+
+class Java : public BasePage
+{
+public:
+	void content()
+	{
+		cout << "Java学科视频" << endl;;
+	}
+};
+
+
+class Cpp : public BasePage
+{
+public:
+	void content()
+	{
+		cout << "C++学科视频" << endl;;
+	}
+};
+
+void test01()
+{
+	Java ja;
+	ja.header();
+	ja.footer();
+	ja.left();
+	ja.content();
+	
+	cout << "--------------------------------------" << endl;
+	
+	Cpp cpp;
+	cpp.header();
+	cpp.footer();
+	cpp.left();
+	cpp.content();
+}
+
+
+// 继承的模式
+class Base1
+{
+public:
+	int m_a ;
+protected:
+	int m_b;
+private:
+	int m_c;
+
+};
+
+// 公共继承
+class Son1 : public Base1
+{
+public:
+	void func()
+	{
+		m_a = 10;
+		m_b = 21;
+		//m_c = 32; // purview error
+	}
+};
+
+
+// 保护继承
+
+class Son2 : protected Base1
+{
+public:
+	void func()
+	{
+		m_a = 32;
+		m_b = 97;
+		//m_c = 32; // purview error
+	}
+};
+
+
+// 私有继承
+class Son3 : private Base1
+{
+public:
+	void func()
+	{
+		m_a = 78;
+		m_b = 25;
+		//m_c = 32; // purview error
+	}
+};
+
+void test01()
+{
+	Son3 s;
+	//s.m_a = 32;	// purview error
+	//s.m_b = 53; // purview error
+	//cout << s.m_a << endl;
+}
+
+
+
+// 继承中的对象模型
+class Base
+{
+public:
+	int m_a;
+protected:
+	int m_b;
+private:
+	int m_c;
+};
+
+class Son : public Base
+{
+public:
+	int m_d;
+};
+
+void test01()
+{
+	Son s;
+	cout << "size of Son = " << sizeof(s) << endl; // 16B
+}
+
+
+
+
+// 继承：构造和析构的调用顺序
+
+
+class Base
+{
+public:
+	Base()
+	{
+		cout << "Base 的构造函数调用" << endl;
+	}
+	~Base()
+	{
+		cout << "Base 的析构函数调用" << endl;
+	}
+};
+
+
+class Son : public Base
+{
+public:
+	Son()
+	{
+		cout << "Son 的构造函数调用" << endl;
+	}
+	
+	~Son()
+	{
+		cout << "Son 的析造函数调用" << endl;
+	}
+};
+
+
+void test01()
+{
+	Son s;
+}
