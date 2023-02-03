@@ -1,0 +1,145 @@
+// 成员变量和成员函数分开存储
+class Person
+{
+	int m_a;
+	
+	static int m_b;	// 静态成员变量不属于类空间
+	
+	void func()		// 成员函数也不属于类空间
+	{
+		;
+	}
+	
+	static void func2(){} // 静态成员函数也不属于类空间
+};
+
+int Person::m_b = 0;
+
+void test01()
+{
+	Person p;
+	// 1B
+	cout << "size of p :" << sizeof(p) << endl;
+}
+
+void test02()
+{
+	Person p;
+	// 4B
+	cout << "size of p :" << sizeof(p) << endl;
+}
+
+
+
+// this 指针
+class Person
+{
+public:
+	Person(int age)
+	{
+		// 解决名称冲突
+		this->age = age;
+	}
+	
+	Person& PersonAddAge(Person &p)
+	{
+		// 返回对象本身
+		this->age += p.age;
+		return *this;
+	}
+	
+	int age;
+};
+
+
+void test01()
+{
+	Person p(18);
+	cout << "p的年龄为：" << p.age << endl;
+}
+
+
+void test02()
+{
+	Person p(18);
+	Person p2(10);
+	p2.PersonAddAge(p).PersonAddAge(p).PersonAddAge(p);
+	
+	cout << "p2的年龄为：" << p2.age << endl;
+}
+
+
+
+
+// 空指针调用成员函数
+
+class Person
+{
+public:
+	
+	void func()
+	{
+		cout << "this is Person class" << endl;
+	}
+	
+	void func2()
+	{
+		if(this == NULL)
+			return;
+		cout << "age = " << m_age << endl;
+	}
+		
+	int m_age; 
+};
+
+
+void test01()
+{
+	Person *p = NULL;
+	p->func();		// correct
+	p->func2();	// error
+}
+
+
+// 常函数
+
+class Person
+{
+public:
+	
+	void func()
+	{
+		m_a = 100;		// correct
+	}
+	
+	void func2() const
+	{
+		//this->m_a = 100; // error
+		this->m_b = 20;
+	}
+	
+	void func3(){}
+	
+	int m_a;
+	mutable int m_b;
+};
+
+
+void test01()
+{
+	Person p;
+	p.func2();
+	cout << "p的年龄：" << p.m_b << endl;
+}
+
+// 常对象
+void test02()
+{
+	const Person p1;
+	p1.func2();	// correct
+	//p1.func3();	// error
+	//p.m_a = 100;	// error
+	p.m_b = 32;
+	//cout << "p的值为：" << p.m_b <<endl;
+	
+}
