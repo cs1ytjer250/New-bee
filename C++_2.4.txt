@@ -1,0 +1,190 @@
+// 同名成员处理
+
+class Base
+{
+public:
+	Base();
+	
+	void func();
+	
+	void func(int a);
+
+	int m_a;
+};
+
+
+class Son : public Base
+{
+public:
+	Son()
+	{
+		m_a = 200;
+	}
+	
+	void func()
+	{
+		cout << "Son-func()调用" << endl;
+	}
+	int m_a;
+};
+
+Base::Base()
+{
+	m_a = 100;
+}
+
+
+void Base::func()
+{
+	cout << "Base - func() 调用" << endl;
+}
+
+void Base::func(int a)
+{
+	cout << "Base - func(int a) 调用" << endl;
+}
+
+
+void test01()
+{
+	Son s;
+	cout << s.m_a << endl;
+	cout << s.Base::m_a << endl;  // 添加作用域
+	s.func();
+	s.Base::func();
+	s.Base::func(100);
+}
+
+
+
+// 重名静态成员和函数处理
+
+class Base
+{
+public:
+	static int m_a;
+	
+	static void func()
+	{
+		cout << "Base-func()调用" << endl;
+	}
+};
+
+class Son : public Base
+{
+public:
+	static int m_a;
+	
+	static void func()
+	{
+		cout << "Son-func()调用" << endl;
+	}
+};
+
+int Son::m_a = 20;
+int Base::m_a = 10;
+
+void test01()
+{
+	Son s;
+	
+	s.func();
+	s.Base::func();
+	/*
+	cout << &s.func() << endl;		// Error:函数的地址无法获取
+	cout << &s.Base::func() << endl;
+	*/
+	
+	/*
+	// 通过对象访问
+	cout << s.m_a << endl;
+	cout << &s.m_a << endl;
+	cout << s.Base::m_a <<endl;
+	cout << &s.Base::m_a << endl;
+	
+	// 通过类名访问
+	cout << Son::m_a << endl;
+	cout << &Son::m_a << endl;
+	cout << Base::m_a <<endl;
+	cout << &Base::m_a << endl;
+	cout << Son::Base::m_a << endl;	// 通过子类名访问父类成员
+	*/
+}
+
+
+
+// 多继承语法
+
+class Daddy
+{
+public:
+	Daddy()
+	{
+		m_a = 23;
+	}
+	int m_a;
+};
+
+class Baba
+{
+public:
+	
+	Baba()
+	{
+		m_a = 53;
+	}
+	int m_a;
+};
+
+class Son:public Daddy, public Baba
+{
+public:
+	Son()
+	{
+		m_a = 32;
+	}
+	int m_a;
+};
+
+void test01()
+{
+	Son s;
+	cout << s.m_a << endl;
+	cout << s.Daddy::m_a << endl;
+	cout << s.Baba::m_a << endl;
+	cout << sizeof(s) << endl;
+}
+
+
+
+
+// 菱形继承
+
+class Animal
+{
+public:
+	int m_age;
+};
+
+class Sheep : public Animal
+{
+public:
+	int m_age2;
+};
+
+class Camel : public Animal
+{
+public:
+	int m_age3;
+};
+
+class Alpace : public Sheep, public Camel
+{
+public:
+	int m_age4;
+};
+
+void test01()
+{
+	;
+}
