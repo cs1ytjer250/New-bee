@@ -1,0 +1,166 @@
+// 菱形继承
+
+class Animal
+{
+public:
+	int m_age;
+};
+
+// 利用虚继承解决菱形继承的问题，关键字virtual
+class Sheep : virtual public Animal{};
+
+class Camel : virtual public Animal{};
+
+class Alpaca : public Sheep, public Camel{};
+
+void test01()
+{
+	Alpaca a;
+	a.Sheep::m_age = 100;
+	a.Camel::m_age = 321;
+	cout << a.Sheep::m_age << endl;
+	cout << a.Camel::m_age << endl;
+	cout << a.m_age << endl;
+}
+
+
+
+
+// 多态
+// 动态的分配内存
+class Animal
+{
+public:
+	// 当增加了关键字virtual之后，该父类就变为了一个vftable指针，指向虚表。大小由1个字节变为4个字节
+	virtual void Speak()
+	{
+		cout << "动物在说话。。。" << endl;
+	}
+};
+
+class Cat : public Animal
+{
+public:
+	void Speak()
+	{
+		cout << "猫在说话....." << endl;
+	}
+};
+
+class Dog: public Animal
+{
+public:
+	void Speak()
+	{
+		cout << "狗在说话........" << endl;
+	}
+};
+
+void doSpeak(Animal &animal)
+{
+	animal.Speak();
+}
+
+void test01()
+{
+	Cat c;
+   	doSpeak(c);
+	Dog d;
+	doSpeak(d);
+}
+
+
+
+
+// 计算机类
+
+/*
+// 常规编写
+class Calculator
+{
+public:
+	Calculator(int m_num1, int m_num2)
+	{
+		this->m_num1 = m_num1;
+		this->m_num2 = m_num2;
+	}
+	
+	int func(string oper)
+	{
+		if(oper == "+")
+			return m_num1 + m_num2;
+		else if(oper == "-")
+			return m_num1 - m_num2;
+		else if(oper == "*")
+			return m_num1 * m_num2;
+		else 
+			return 0;
+	}
+	
+	int m_num1;
+	int m_num2;
+};
+*/
+
+// 使用多态语法编写
+
+class AbstractCalculator
+{
+public:
+	virtual int getResult()
+	{
+		return 0;
+	}
+	int m_num1;
+	int m_num2;
+};
+
+
+class AddCalculator: public AbstractCalculator
+{
+public:
+	int getResult()
+	{
+		return m_num1 + m_num2;
+	}
+};
+
+class SubCalculator: public AbstractCalculator
+{
+public:
+	int getResult()
+	{
+		return m_num1 - m_num2;
+	}
+};
+
+class MulCalculator: public AbstractCalculator
+{
+public:
+	int getResult()
+	{
+		return m_num1 * m_num2;
+	}
+};
+
+
+void doCal(AbstractCalculator &cal)
+{
+	cout << "result = " << cal.getResult() << endl;
+}
+void test01()
+{
+	/*
+	MulCalculator c;
+	c.m_num1 = 32;
+	c.m_num2 = 43;
+	doCal(c);
+	*/
+	
+	
+	AbstractCalculator *abc = new AddCalculator;
+	abc->m_num1 = 32;
+	abc->m_num2 = 12;
+	cout << abc->getResult() << endl;
+	
+}

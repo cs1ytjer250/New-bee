@@ -1,0 +1,436 @@
+// 链表：1.递归删除所有值为x的节点
+
+void Del_x_3(LinkList &L, int x)
+{
+	LNode *p;
+	if(L == NULL)
+		return;
+	if(L->data == x)
+	{
+		p = L;
+		L = L->next;
+		free(p);
+		Del_x_3(L, x);
+	}
+	else
+	{
+		Del_x_1(L->next, x)
+	}
+	return true;	
+}
+
+
+
+// 链表：2.删除所有值为x的节点
+
+// 解法1：
+void Del_x_4(LinkList &L, int x)
+{
+	LNode *p, *pre;
+	pre = L;
+	p = pre->next;
+	if(L->next == NULL)
+		return;
+	while(p != NULL)
+	{
+		if(p->data == x)
+		{
+			q = p;
+			p = p->next;
+			pre->next = p;
+			free(q);
+		}
+		else
+		{
+			pre = p;
+			p = p->next;
+		}
+	}
+}
+
+// 解法2：
+void Del_x_2(LinkList &L, int x)
+{
+	LNode *p = L->next, *r = L, *q;
+	while(p != NULL)
+	{
+		if(p->data != x)
+		{
+			r->next = p;
+			r = p;
+			p = p->next;
+		}
+		else
+		{
+			q = p;
+			p = p->next;
+			free(q);
+		}
+	}
+	r->next = NULL;
+}
+
+
+
+// 链表：3.反向输出链表
+
+void R_Print(LinkList L)
+{
+	if(L->next != NULL)
+		R_Print(L->next);
+	if(L != NULL) print(L->data);
+}
+void R_Ignore_Head(LinkList L)
+{
+	if(L->next != NULL)R_Print(L->next);
+}
+
+
+
+// 链表：4.删除最小值节点
+
+LinkList Del_Min(LinkList &L, int &x)
+{
+	LNode *p = L->next, *pre = L;
+	LNode *minpre = pre, minp = p;
+	while(p != NULL)
+	{
+		if(p->data < minp->data)
+		{
+			minp = p;
+			minpre = pre;
+		}
+		pre = p;
+		p = p->next;
+	}
+	minpre->next = minp->next;
+	free(minp);
+	return L;
+}
+
+
+
+// 链表：5.就地逆置单链表
+
+// 解法1：
+LinkList Reverse_1(LinkList L)
+{
+	LNode *p, *r;
+	p = L->next;
+	while(p != NULL)
+	{
+		r = p->next;
+		p->next = L->next
+		L->next = p;
+		p = r;
+	}
+	return L;
+}
+
+// 解法2：
+LinkList Reverse_2(LinkList L)
+{
+	LNode *pre, *p = L->next, *r = p->next;
+	p->next = NULL;
+	while(r != NULL)
+	{
+		pre = p;
+		p = r;
+		r = r->next;
+		p->next = pre;
+	}
+	L->next = p;
+	return L;
+}
+
+
+
+// 链表：6.递增排序单链表
+void Asending_Sort(LinkList &L)
+{
+	LNode *p = L->next, *r = p->next, *pre;
+	p->next = NULL;
+	p = r;
+	while(p != NULL)
+	{
+		r = p->next;
+		pre = L;
+		while(pre->next != NULL && pre->next->data < p->data)
+		{
+			pre = pre->next;
+		}
+		p->next = pre->next;
+		pre->next = p;
+		p = r;
+	}
+}
+
+
+
+// 链表：7.删除节点值介于S和T之间的所有元素
+
+void RangeDelete(LinkList &L, int x, int t)
+{
+	LNode *p = L->next, *pre = L;
+	while(p != NULL)
+	{
+		if(p->data > s && p->data < t)
+		{
+			pre->next = p->next;
+			free(p);
+			p = pre->next;
+		}
+		else
+		{
+			pre = p;
+			p = p->next;
+		}
+	}
+}
+
+
+
+// 链表：8.找出公共链表
+LinkList Common_Node(LinkList L1, LinkList L2)
+{
+	int len1, len2, dist;
+	LinkList shortLen, longLen;
+	len1 = Length(L1);
+	len2 = Length(L2);
+	if(len1 > len2)
+	{
+		longLen = L1->next;
+		shortLen = L2->next;
+		dist = len1 - len2;
+	}
+	else
+	{
+		longLen = L2->next;
+		shortLen = L1->next;
+		dist = len2 - len1;
+	}
+	while(dist--)
+	{
+		longLen = longLen->next;
+	}
+	while(longLen != NULL)
+	{
+		if(longLen == shortLen)
+			return longLen;
+		else
+		{
+			longLen = longLen->next;
+			shortLen = shortLen->next
+		}
+	}
+	return NULL
+}
+
+
+// 链表：9.增序输出单链表
+void Ascending_Out(LinkList &head)
+{
+	while(head->next != NULL)
+	{
+		LNode *p = head->next, *pre = head, *u;
+		pre->next = NULL;
+		while(p->next != NULL)
+		{
+			if(p->next->data < pre->next->data)
+				pre = p;
+			p = p->next;
+		}
+
+		print(p->next->data);
+		u = pre->next;
+		pre->next = u->next;
+		free(u);
+	}
+	free(head);
+}
+
+
+
+// 链表：10.分解链表奇偶下标元素
+
+LinkList DisCreat_1(LinkList &A)
+{
+	int i = 0;
+	LinkList B = new LNode;
+	B->next = NULL;
+	LNode *ra = A, *rb = B, *p;
+	p = A->next;
+	A->next = NULL;
+	while(p!= NULL)
+	{
+		i++;
+		if(i % 2 == 0)
+		{
+			rb->next = p;
+			rb = p;
+		}
+		else
+		{
+			ra->next = p;
+			ra = p;
+		}
+		p = p->next;
+	}
+	ra->next = NULL;
+	rb->next = NULL;
+	return B;
+}
+
+
+
+// 链表：11.拆分链表
+LinkList DisCreat_2(LinkList &A)
+{
+	LinkList B = new LNode;
+	B->next = NULL;
+	LNode *p = A->next, *q;
+	LNode *ra = A;
+	while(p != NULL)
+	{
+		ra->next = p; ra = p;
+		p = p->next;
+		if(p != NULL)
+		{
+			q = p->next;
+			p->next = B->next;
+			B->next = p;
+			p = q;
+		}
+	}
+	ra->next = NULL;
+	return B;
+}
+
+
+
+// 链表：12.删除重复元素
+void Del_Same(LinkList &L)
+{
+	LNode *p = L->next, *q;
+	if(p == NULL)
+		return;
+	while(p->next != NULL)
+	{
+		q = p->next;
+		if(p->data == q->data)
+		{
+			p->next = q->next;
+			free(q);
+		}
+		else
+			p = p->next;
+	}
+}
+
+
+// 链表：13.归并两个链表
+void MergeList(LinkList &La, LinkList &Lb)
+{
+	LNode *r, *pa = La->next, *pb = Lb->next;
+	La->next = NULL;
+	
+	while(pa && pb)
+	{
+		if(pa->data <= pb->data)
+		{
+			r = pa->next;
+			pa->next = La->next;
+			La->next = pa;
+			pa = r;
+		}
+		else
+		{
+			r = pb->next;
+			pb->next = La->next;
+			La->next = pb;
+			pb = r;
+		}
+	}
+	if(pa)
+		pb = pa;
+	while(pb)
+	{
+		r = pb->next;
+		pb->next = La->next;
+		La->next = pb;
+		pb = r;
+	}
+	free(Lb);
+}
+
+
+
+// 链表：14.用公共节点创建链表
+void Get_Common(LinkList A, LinkList B)
+{
+	LNode *p = A->next, *q = B->next, *r, *s;
+	LinkList C = new LNode;
+	r = C;
+	while(p != NULL && q != NULL)
+	{
+		if(p->data < q->data)
+			p = p->next;
+		else if(p->data > q->data)
+			q = q->next;
+		else
+		{
+			s = new LNode;
+			s->data = p->data;
+			r->next = s;
+			r = s;
+			p = p->next;
+			q = q->next;
+		}
+	}
+}
+
+
+
+// 链表：15.创建交集链表
+LinkList Union(LinkList &la, LinkList &lb)
+{
+	LNode *pa = la->next;
+	LNode *pb = lb->next;
+	LNode *u, *pc = la;
+	while(pa && pb)
+	{
+		if(pa->data == pb->data)
+		{
+			pc->next = pa;
+			pc = pa;
+			pa = pa->next;
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+		else if(pa->data < pb->data)
+		{
+			u = pa;
+			pa = pa->next;
+			free(u);
+		}
+		else
+		{
+			u = pb;
+			pb = pb->next;
+			free(u);
+		}
+	}
+	while(pa)
+	{
+		u = pa;
+		pa = pa->next;
+		free(u);
+	}
+	while(pb)
+	{
+		u = pb;
+		pb = pb->next;
+		free(u);
+	}
+}
