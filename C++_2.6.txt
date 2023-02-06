@@ -1,0 +1,320 @@
+// 纯虚函数和抽象类
+
+class Base
+{
+public:
+	virtual void func() = 0;
+};
+
+class Son : public Base
+{
+public:
+	virtual void func()
+	{
+		cout << "纯虚函数调用" << endl;
+	}
+};
+
+void test01()
+{
+	// 常规声明
+	Son s;
+	s.func();
+	
+	// 多态引用
+	Base * son = new Son;
+	son->func();
+}
+
+
+
+// 多态案例
+
+class AbstractDrinking
+{
+public:
+	virtual void Boil() = 0;
+	
+	virtual void Brew() = 0;
+	
+	virtual void PourInCup() = 0;
+	
+	virtual void PutSomething() = 0;
+	
+	void makeDrink()
+	{
+		Boil();
+		Brew();
+		PourInCup();
+		PutSomething();
+	}
+};
+
+class MakeCoffee: public AbstractDrinking
+{
+public:
+	virtual void Boil()
+	{
+		cout << "煮开水" << endl;
+	}
+	
+	virtual void Brew()
+	{
+		cout << "冲泡咖啡" << endl;
+	}
+	
+	virtual void PourInCup()
+	{
+		cout << "倒入杯中" << endl;
+	}
+	
+	virtual void PutSomething()
+	{
+		cout << "加奶，加糖" << endl;
+	}
+};
+
+
+
+class MakeTea: public AbstractDrinking
+{
+public:
+	virtual void Boil()
+	{
+		cout << "煮山泉" << endl;
+	}
+	
+	virtual void Brew()
+	{
+		cout << "冲泡茶叶" << endl;
+	}
+	
+	virtual void PourInCup()
+	{
+		cout << "倒入杯中" << endl;
+	}
+	
+	virtual void PutSomething()
+	{
+		cout << "加蜂蜜。。" << endl;
+	}
+};
+
+
+void doWork(AbstractDrinking *work)// AbstractDrinking *work = new MakeTea
+{
+	work->makeDrink();
+	delete work;
+}
+
+
+void test01()
+{
+	doWork(new MakeTea);
+	cout << endl;
+	doWork(new MakeCoffee);
+	
+	
+	
+	/*
+	AbstractDrinking *T = new MakeTea;
+	AbstractDrinking *C = new MakeCoffee;
+	T->func();
+	cout << endl;
+	C->func();
+	*/
+}
+
+
+
+// 虚析构和纯虚析构
+// 用于解决子类，开辟的空间在堆区，需要进行回收的问题
+
+class Animal
+{
+public:
+	Animal()
+	{
+		cout << "Animal的构造函数。。。。" << endl;
+	}
+	
+	virtual void Speak() = 0;
+	
+	// 虚析构解决子类无法调用析构函数的问题
+	/*
+	virtual ~Animal()
+	{
+		cout << "Animal的虚析构函数调用。。。" << endl;
+	}
+	*/
+	
+	// 纯虚析构解决子类问题,使用纯虚析构，需要进行类外实现
+	virtual ~Animal() = 0;
+};
+
+Animal::~Animal()
+{
+	cout << "Animal 纯虚析构函数调用" << endl;
+}
+
+
+class Cat : public Animal
+{
+public:
+	Cat(string name)
+	{
+		cout << " Cat构造函数调用。。" << endl; 
+		m_name = new string(name);
+	}
+
+	virtual void Speak()
+	{
+		cout << *m_name << "在说话......" << endl;
+	}
+	
+	~Cat()
+	{
+		if(m_name != NULL)
+		{
+			cout << "Cat析构函数调用。。。。" << endl;
+			delete m_name;
+			m_name = NULL;
+		}
+	}
+	string *m_name;
+};
+
+void doSpeak(Animal *animal)
+{
+	animal->Speak();
+	delete animal;
+}
+
+void test01()
+{
+	doSpeak(new Cat("Tom"));
+}
+
+
+
+// 多态案列
+
+class CPU
+{
+public:
+	virtual void calculator() = 0;
+};
+
+class VideoCard
+{
+public:
+	virtual void display() = 0;
+};
+
+class Memory
+{
+public:
+	virtual void storage() = 0;
+};
+
+
+class Computer
+{
+public:
+	Computer(CPU *cpu, VideoCard *vc, Memory *mem)
+	{
+		m_cpu = cpu;
+		m_vc = vc;
+		m_mem = mem;
+	}
+	
+	void work()
+	{
+		m_cpu->calculator();
+		m_vc->display();
+		m_mem->storage();
+	}
+	
+	~Computer()
+	{
+		if(m_cpu != NULL)
+		{
+			delete m_cpu;
+			m_cpu = NULL;
+		}
+		if(m_vc != NULL)
+		{
+			delete m_vc;
+			m_vc = NULL;
+		}
+		if(m_mem != NULL)
+		{
+			delete m_mem;
+			m_mem = NULL;
+		}
+		cout << "Computer 析构函数调用。。。" << endl;
+	}
+private:
+	CPU *m_cpu;
+	VideoCard *m_vc;
+	Memory *m_mem;
+};
+
+
+
+class Intel : public CPU
+{
+public:
+	virtual void calculator()
+	{
+		cout << "因特尔的CPU开始工作了" << endl;
+	}
+};
+
+
+class Invida : public VideoCard
+{
+public:
+	virtual void display()
+	{
+		cout << "英伟达的显卡开始工作了" << endl;
+	}
+};
+
+class Kingston : public Memory
+{
+public:
+	virtual void storage()
+	{
+		cout << "金士顿的内存开始工作了" << endl;
+	}
+};
+
+
+void test01()
+{
+	CPU *intel = new Intel;
+	VideoCard *invida = new Invida;
+	Memory *kingston = new Kingston;
+	
+	Computer *computer = new Computer(intel, invida, kingston);
+	computer->work();
+	delete computer;
+	
+	cout << endl; 
+	Computer *computer2 = new Computer(new Intel, new Invida, new Kingston);
+	computer2->work();
+	delete computer2;
+}
+
+
+
+// 写文件
+void test01()
+{
+	ofstream ofs;
+	ofs.open("test.txt", ios::out);
+	ofs << "姓名：张三" << endl;
+	ofs << "性别：男" << endl;
+	ofs.close();
+}
