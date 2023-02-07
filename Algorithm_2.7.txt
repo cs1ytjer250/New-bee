@@ -1,0 +1,433 @@
+// 栈：1.判断出栈入栈序列是否合法
+
+int Judge(char a[])
+{
+	int i = 0;
+	int j = 0;
+	while(a[i] != '\0')
+	{
+		switch(a[i])
+		{
+			case 'I': j++; break;
+			case 'O': k++;
+				if(k > j ) { printf("序列非法\n"); exit(0)}
+		}
+		i++;
+	}
+	if(j != k)
+	{
+		printf("序列非法\n");
+		return 0;
+	}
+	else
+	{
+		printf("序列合法\n");
+		return true;
+	}
+}
+
+
+// 栈：2.判断是否中心对称
+int Symmetry(LinkList L, int n)
+{
+	int i;
+	char s[n/2];
+	p = L->next;
+	for(i = 0; i < n/2; i++)
+	{
+		s[i] = p->data;
+		p = p->next;
+	}
+	i--;
+	if(n % 2 == 1)
+		p = p->next;
+	while(p != NULL && s[i] == p->data)
+	{
+		i--;
+		p = p->next;
+	}
+	if(i == -1)
+		return 1;
+	else
+		return 0;
+}
+
+// 栈：3.双向存储栈
+
+typedef struct
+{
+	int stack[MaxSize];
+	int top[2];
+}stk;
+stk s;
+
+int push(int i, int x)
+{
+	if(i < 0 || i > 1)
+	{
+		printf("栈号输入不对");
+		exit(0);
+	}
+	if(s.top[1] - s.top[0] == 1)
+	{
+		printf("栈已满\n");
+		return 0;
+	}
+	switch(i)
+	{
+		case 0: s.stack[++s.top[0]] = x; return 1; break;
+		case 1: s.stack[--s.top[1]] = x; return 1; break;
+	}
+}
+
+int pop(int i)
+{
+	if(i < 0 || i > 1)
+	{
+		printf("栈号输入错误");
+		exit(0);
+	}
+	switch(i)
+	{
+		case 0:
+			if(s.top[0] == -1)
+			{
+				printf("栈空");
+				return -1;
+			}
+			else
+				return s.stack[s.top[0]--];
+			break;
+		case 1:
+			if(s.top[1] == MaxSize)
+			{
+				printf("栈空");
+				return -1;
+			}
+			else
+				return s.stack[s.top[1]++];
+			break;
+	}
+}
+
+
+// 栈：4.括号匹配
+bool BracketsCheck(char *str)
+{
+	InitStack(S);
+	int i = 0;
+	while(str[i] != '\0')
+	{
+		switch(str[i])
+		{
+			case '(' : Push(S, '('); break;
+			case '[' : Push(S, '['); break;
+			case '{' : Push(S, '{'); break;
+			case ')' : Pop(S, e);
+				if(e != '(') return false;
+				break;
+			case ']' : Pop(S, e);
+				if(e != ']') return false;
+				break;
+			case '} : Pop(S, e);
+				if(e != '}'); return false;
+				break;
+			default :
+				break;
+		}
+		i++;
+	}
+	if(!IsEmpty(S))
+	{
+		printf("括号不匹配");
+		return false;
+	}
+	else
+	{
+		printf("括号匹配！");
+		return false;
+	}
+}
+
+
+// 栈：5.火车座位调整
+void Train_Arrange(char *train)
+{
+	char *p = train, *q = train, c;
+	stack s;
+	InitStack(S);
+	while(*p)
+	{
+		if(*p == 'H')
+			Push(S, *p);
+		else
+			*(q++) = *p;
+		p++;
+	}
+	while(!StackEmpty(s))
+	{
+		Pop(s, c);
+		*(q++) = c;
+	}
+}
+
+
+
+// 栈：6.函数计算
+
+double p(int n, double x)
+{
+	struct stack
+	{
+		int no;
+		double val;
+	}st[MaxSize];
+	int top = -1, i;
+	double fv1 = 1, fv2 = 2 * x;
+	for(i = n; i >= 2; i--)
+	{
+		top++;
+		st[top].no = i;
+	}
+	while(top >= 0)
+	{
+		st[top].val = 2 * x * fv2 - 2 * (st[top].no - 1) * fv1;
+		fv1 = fv2;
+		fv2 = st[top].val;
+		top--;
+	}
+	if(n == 0)
+		return fv1;
+	return fv2;
+}
+
+
+// 队列：1.调整循环队列
+int EnQueue1(SqQueue &Q, int x)
+{
+	if(Q.front == Q.rear && Q.tag == 1)
+	{
+		return 0;
+	}
+	Q.data[Q.rear] = x;
+	Q.rear = (Q.rear + 1) % MaxSize;
+	Q.tag = 1;
+	return 1;
+}
+
+int DeQueue(SqQueue &Q, int &x)
+{
+	if(Q.front == Q.rear && Q.tag == 0)
+		return 0;
+	x = Q.data[Q.front];
+	Q.front = (Q.front + 1) % MaxSize;
+	Q.tag = 0;
+	return 1;
+}
+
+
+
+// 队列：2.使用队列和栈实现逆置
+void Inverse(Stack &S, Queue &Q)
+{
+	while(!QueueEmpty(Q))
+	{
+		x = DeQueue(Q);
+		Push(S, x);
+	}
+	while(!StackEmpty(S))
+	{
+		Pop(S, x);
+		EnQueue(Q, x);
+	}
+}
+
+
+
+// 队列：3.使用两个栈模拟队列
+int EnQueue(Stack &S1, Stack &S2, int e)
+{
+	if(!StackOverflow(S1))
+	{
+		Push(S1, e);
+		return 1;
+	}
+	if(StackOverflow(S1) && !StackEmpty(S2))
+	{
+		printf("队列满");
+		return 0;
+	}
+	if(StackOverflow(S1) && StackEmpty(S2))
+	{
+		while(!StackEmpty(S1))
+		{
+			Pop(S1, e);
+			Push(S2, e);
+		}
+	}
+	Push(S1, e);
+	return 1;
+}
+
+
+int DeQueue(Stack &S1, Stack &S2, int &e)
+{
+	if(!StackEmpty(S2))
+	{
+		Pop(S2, e);
+	}
+	else if(StackEmpty(S1))
+	{
+		printf("队列为空");
+	}
+	else
+	{
+		while(!StackEmpty(S1))
+		{
+			Pop(S1, e);
+			Push(S2, e);
+		}
+	}
+	Pop(S2, e);
+}
+
+int QueueEmpty(Stack S1, Stack S2)
+{
+	if(StackEmpty(S1) && StackEmpty(S2))
+		return 1;
+	else
+		 return 0;
+}
+
+
+
+// 队列：4.渡船调度
+
+Queue Q1; // 渡船队列
+Queue Q2; // 客车队列
+Queue Q3; // 火车队列
+void Manager()
+{
+	int i = 0, j = 0;
+	while(j < 10)
+	{
+		if(!QueueEmpty(q1) && i < 4)
+		{
+			DeQueue(q1, x);
+			EnQueue(q, x);
+			i++;
+			j++;
+		}
+		else if(i == 4 && !QueueEmpty(Q2))
+		{
+			DeQueue(q2, x);
+			EnQueue(q, x);
+			j++;
+			i = 0;
+		}
+		else
+		{
+			while(j < 10 && i < 4 && !QueueEmpty(q2))
+			{
+				DeQueue(q2, x);
+				EnQueue(q, x);
+				i++;
+				j++;
+			}
+			i = 0;
+		}
+		if(QueueEmpty(q1) && QueueEmpty(q2))
+			j = 11;
+	}
+}
+
+
+
+// 树：1.后序遍历二叉树的非递归算法
+
+void PostOrder(BiTree T)
+{
+	InitStack(S);
+	p = T;
+	r = NULL;
+	while(p || !IsEmpty(S))
+	{
+		if(p)
+		{
+			push(S, p);
+			p = p->lchild;
+		}
+		else
+		{
+			GetTop(S, p);
+			if(p->rchild && p->rchild != r)
+			{
+				p = p->rchild;
+			}
+			else
+			{
+				pop(S, p);
+				visit(p->data);
+				r = p;
+				p = NULL;
+			}
+		}
+	}
+}
+
+
+
+// 树：2.逆向层序遍历
+void InvertLevel(BiTree bt)
+{
+	Stack s, Queue q;
+	if(bt != NULL)
+	{
+		InitStack(s);
+		InitQueue(q);
+		EnQueue(q, bt);
+		while(IsEmpty(q) == false)
+		{
+			DeQueue(q, p);
+			Push(s, p);
+			if(p->lchild)
+				EnQueue(q, p->lchild);
+			if(p->rchild)
+				EnQueue(q, p->rchild);
+		}
+		while(IsEmpty(s) == false)
+		{
+			Pop(s, p);
+			visit(p->data);
+		}
+	}
+}
+
+
+
+// 树：3.求二叉树高度，非递归
+
+int Btdepth(BiTree T)
+{
+	if(!T)
+		return 0;
+	int front = -1, rear = -1;
+	int last = 0, level = 0;
+	BiTree Q[MaxSize];
+	Q[++rear] = T;
+	BiTree p;
+	while(front < rear)
+	{
+		p = Q[++front];
+		if(p->lchild)
+			Q[++rear] = p->lchild;
+		if(p->rchild)
+			Q[++rear] = p->rchild;
+		if(front == last)
+		{
+			level++;
+			last = rear;
+		}
+	}
+	return level;
+}
