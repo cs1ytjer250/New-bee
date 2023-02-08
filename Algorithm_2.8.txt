@@ -1,0 +1,537 @@
+// 树：3.求二叉树高度，非递归
+
+int Btdepth(BiTree T)
+{
+	if(!T)
+		return 0;
+	int front = -1, rear = -1;
+	int last = 0, level = 0;
+	BiTree Q[MaxSize];
+	Q[++rear] = T;
+	BiTree p;
+	while(front < rear)
+	{
+		p = Q[++front];
+		if(p->lchild)
+			Q[++rear] = p->lchild;
+		if(p->rchild)
+			Q[++rear] = p->rchild;
+		if(front == last)
+		{
+			level++;
+			last = rear;
+		}
+	}
+	return level;
+}
+
+// 解法2：递归
+
+int Btdepth2(BiTree T)
+{
+	if(T == NULL)
+		return 0;
+	ldep = BtDepth2(T->lchild);
+	rdep = BtDepth2(T->rchild);
+	if(ldep > rdep)
+		return ldep + 1;
+	else
+		return rdep + 1;
+}
+
+
+
+// 树：4.通过先序和后序，构建二叉树
+
+BiTree PreInCreat(char a[], char b[], int l1, int h1, int l2, int h2)
+{
+	root = (BiTNode *)malloc(sizeof(BiTNode));
+	root->data = a[l1];
+	for(i = l2; b[i] = ! root->data; i++);
+	llen = i - l2;
+	rlen = h2 - i;
+	if(llen)
+	{
+		root->lchild = PreInCreat(a, b, l1+1, l1 + llen, l2, l2+llen-1);
+	}
+	else
+	{
+		root->lchild = NULL;
+	}
+	
+	if(rlen)
+	{
+		root->rchild = PreInCreat(a, b, h1-rlen, h1, h2-rlen+1, h2);
+	}
+	else
+	{
+		root->rchild = NULL;
+	}
+	return root;
+}
+
+
+
+// 树：5.判断二叉链表是否是完全二叉树
+bool IsComplete(BiTree T)
+{
+	InitQueue(Q);
+	if(!T)
+		return 1;
+	EnQueue(Q, T);
+	while(!IsEmpty(Q))
+	{
+		DeQueue(Q, p);
+		if(p)
+		{
+			EnQueue(Q, p->lchild);
+			EnQueue(Q, p->rchild);
+		}
+		else
+		{
+			while(!IsEmpty(Q))
+			{
+				DeQueue(Q, p);
+				if(p)
+					return 0;
+			}
+		}
+	}
+}
+
+
+
+// 树:6.计算二叉链表所有双分支个数
+
+int DsonNodes(BiTree b)
+{
+	if(b == NULL)
+		return 0;
+	else if(b->lchild != NULL && b->rchild != NULL)
+		return DsonNodes(b->lchild) + DsonNodes(b->rchild) + 1;
+	else
+		return DsonNodes(b->lchild) + DsonNodes(b->rchild);
+}
+
+
+
+// 树：7.交换左右孩子
+void swap(BiTree p)
+{
+	if(b)
+	{
+		swap(b->lchild);
+		swap(b->rchild);
+		temp = b->lchild;
+		b->lchild = b->rchild;
+		b->rchild = temp;
+	}
+}
+
+
+
+// 树：8.先序遍历中第k个节点
+
+int i = 1;
+int PreNode(BiTree b, int k)
+{
+	if(b == NULL)
+		return '#';
+	if(i == k)
+		return b->data;
+	i++;
+	ch = PreNode(b->lchild, k);
+	if(ch != '#')
+		return ch;
+	ch = PreNode(b->rchild, k)
+		return ch;
+}
+
+
+
+// 树：9.删去以X为根的节点
+
+void DeleteXTree(BiTree &bt)
+{
+	if(bt)
+	{
+		DeleteXTree(bt->lchild);
+		DeleteXTree(bt->rchild);
+		free(bt);
+	}
+}
+
+void Search(BiTree bt, int x)
+{
+	BiTree Q[];
+	if(bt)
+	{
+		if(bt->data == x)
+		{
+			DeleteXTree(bt);
+			exit(0);
+		}
+		InitQueue(Q);
+		EnQueue(Q, bt);
+		while(!IsEmpty(Q))
+		{
+			DeQueue(Q, p);
+			if(p->lchild)
+			{
+				if(p->lchild->data == x)
+				{
+					DeleteXTree(p->lchild);
+					p->lchild = NULL
+				}
+				else
+				{
+					EnQueue(Q, p->lchild);
+				}
+			}
+			if(p->rchild)
+			{
+				if(p->rchild->data == x)
+				{
+					DeleteXTree(p->rchild);
+					p->rchild == NULL;
+				}
+				else
+				{
+					EnQueue(Q, p->rchild);
+				}
+			}
+		}
+	}
+}
+
+
+
+
+// 树：10.查找x，并输出它的祖先
+
+void Search(BiTree bt, int x)
+{
+	stack s[];
+	top = 0;
+	while(bt != NULL || top > 0)
+	{
+		while(bt != NULL && bt->data != x)
+		{
+			s[++top].t = bt;
+			s[top].tag = 0;
+			bt = bt->lchild;
+		}
+		if(bt != NULL && bt->data == x)
+		{
+			printf("所查节点的所有祖先节点的值为：\n");
+			for(i = 1; i <= top; i++)
+			{
+				printf("%d", s[i].t->data);
+				exit(1);
+			}
+		}
+		while(top != 0 && s[top].tag == 1)
+			top--;
+		if(top != 0)
+		{
+			s[top].tag = 1;
+			bt = s[top].t->rchild;
+		}
+	}
+}
+
+
+
+
+// 树：11.找到公共节点
+
+BiTree Ancestor(BiTree ROOT, BiTNode *p, BiTNode *q)
+{
+	top = 0; bt = ROOT;
+	while(bt != NULL || top > 0)
+	{
+		while(bt != NULL)
+		{
+			s[++top].t = bt;
+			s[top].tag = 0;
+			bt = bt->lchild;
+		}
+		while(top != 0 && s[top].tag == 1)
+		{
+			if(s[top].t == p)
+			{
+				for(i = 1; i <= top; i++)
+				{
+					s1[i] = s[i];
+					top1 = top;
+				}
+			}
+			if(s[top].t == q)
+			{
+				for(i = top; i > 0; i--)
+				{
+					for(j = top1; j > 0; j--)
+					{
+						if(s1[j].t == s[i].t)
+							return s[i].t
+					}
+				}
+			}
+			top--;
+		}
+		if(top != 0)
+		{
+			s[top].tag = 1;
+			bt = s[top].t->rchild;
+		}
+	}
+	return NULL;
+}
+
+
+
+// 树：12.求宽度
+
+int BTWidth(BiTree b)
+{
+	BiTree p;
+	int k, max, i, n;
+	Qu.front = Qu.rear = -1;
+	Qu.rear++;
+	Qu.data[Qu.rear] = b;
+	Qu.level[Qu.rear] = 1;
+	while(Qu.front < Qu.rear)
+	{
+		Qu.front++;
+		p = Qu.data[Qu.front];
+		k = Qu.level[Qu.front];
+		if(p->lchild != NULL)
+		{
+			Qu.rear++;
+			Qu.data[Qu.rear] = p->lchild;
+			Qu.level[Qu.rear] = k + 1;
+		}
+		if(p->rchild != NULL)
+		{
+			Qu.rear++;
+			Qu.data[Qu.rear] = p->rchild;
+			Qu.level[Qu.rear] = k + 1;
+		} 
+	}
+	max = 0; i = 0;
+	k = 1;
+	while(i <= Qu.rear)
+	{
+		n = 0;
+		while(i <= Qu.rear && Qu.level[i] == k)
+		{
+			n++;
+			i++;
+		}
+		k = Qu.level[i];
+		if(n > max) max = n;
+	}
+	return max;
+}
+
+
+
+// 树：13.通过满二叉树的前序，求其后序
+
+void PreToPost(char pre[], int l1, int h1, int post[], int l2, int h2)
+{
+	int half;
+	if(h1 >= l1)
+	{
+		post[h2] = pre[l1];
+		half = (h1 - l1) / 2;
+		PreToPost(pre, l1 + 1, l1 + half, post, l2, l2 + half - 1);
+		PreToPost(pre, l1 + half + 1, h1, post, l2 + half, h2 -1);
+	}
+}
+
+
+
+// 树：14.将二叉树叶节点连成单链表
+
+LinkList InOrder(BiTree bt)
+{
+	if(bt)
+	{
+		InOrder(bt->lchild);
+		if(bt->lchild == NULL && bt->rchild == NULL)
+		{
+			if(pre == NULL)
+			{
+				head = bt;
+				pre = bt;
+			}
+			else
+			{
+				pre->rchild = bt;
+				pre = bt;
+			}
+		}
+		InOrder(bt->rchild);
+		pre->rchild = NULL;
+	}
+	return head;
+}
+
+
+
+// 树：15.判断两颗二叉树是否相似
+
+int similar(BiTree T1, BiTree T2)
+{
+	int leftS, rightS;
+	if(T1 == NULL && T2 == NULL)
+		return 1;
+	else if(T1 == NULL || T2== NULL)
+		return 0;
+	else
+	{
+		leftS = similar(T1->lchild, T2->lrchild);
+		rightS = similar(T1->rchidl, T2->rchild);
+		return leftS && rightS;
+	}
+}
+
+
+
+// 树：16.查找线索二叉树的后序前驱
+BiThrTree InPostPre(BiThrTree t, BiThrTree p)
+{
+	BiThrTree q;
+	if(p->rtag == 0)
+		q = p->rchild;
+	else if(p->ltag == 0)
+		q = p->lchild;
+	else if(p->lchild == NULL)
+		q = NULL;
+	else
+	{
+		while(p->ltag == 1 && p->lchild != NULL)
+		{
+			p = p->lchidl;
+		}
+		if(p->ltag == 0)
+			q = p->lchild;
+		else
+			q = NULL;
+	}
+	return q;
+}
+
+
+
+// 树：17.求二叉链表的带权路径长度（wpl）
+int WPL(BiTree root)
+{
+	return wpl_PreOrder(root, 0)
+}
+int wpl_PreOrder(BiTree root, int deep)
+{
+	static int wpl = 0;
+	if(root->lchild == NULL && root->rchild == NULL)
+		wpl += deep * root->weight;
+	if(root->lchild != NULL)
+		wpl_PreOrder(root->lchild, deep + 1);
+	if(root->rchild != NULL)
+		wpl_PreOrder(root->rchild, deep + 1);
+	return wpl;
+}
+
+
+
+// 树：18.将表达式树，转换为对应的表达式
+
+void BtreeToE(BTree *root)
+{
+	BtreeToExp(root, 1);
+}
+
+void BtreeToExp(BTree *root, int deep)
+{
+	if(root == NULL) return;
+	else if(root->left == NULL && root->right == NULL)
+		printf("%s", root->data);
+	else
+	{
+		if(deep > 1) printf("(");
+		BtreeToExp(root->left, deep +1);
+		printf("%s", root->data);
+		BtreeToExp(root->right, deep + 1);
+		if(deep > 1) printf(")");
+	}
+}
+
+
+
+// 树：19.求孩子兄弟表示存储的叶子节点数
+
+typedef struct node
+{
+	int data;
+	struct node *fch, *nsib;
+}*Tree;
+
+int Leaves(Tree t)
+{
+	if(t == NULL)
+		return 0;
+	if(t->fch == NULL)
+		return 1 + Leaves(t->nsib);
+	else
+		return Leaves(t->fch) + Leaves(t->nsib);
+}
+
+
+
+// 树：20.求孩子兄弟表示法的树深度
+int Height(CSTree bt)
+{
+	int hc, hs;
+	if(bt == NULL)
+		return 0;
+	else
+	{
+		hc = Height(bt->firstchild);
+		hs = Height(bt->nextsibling);
+		if(hc + 1 > hs)
+			return hc + 1;
+		else
+			return hs;
+	}
+}
+
+
+
+// 树：21.根据层序和度，构建孩子兄弟链表
+
+void createCSTree_Degree(CSTree &T, char e[], int degree[], int n )
+{
+	CSNode *pointer = new CSNode[maxNodes];
+	int i, j, d, k = 0;
+	for(i = 0; i < n; i++)
+	{
+		pointer[i]->data = e[i];
+		pointer[i]->lchild = pointer[i]->rsibling = NULL;
+	}
+	for(i = 0; i < n; i ++)
+	{
+		d = degree[i];
+		if(d)
+		{
+			k++;
+			pointer[i]->lchild = pointer[k];
+			for(j = 2; j <= d; j++)
+			{
+				k++;
+				pointer[k-1]->rsibling = pointer[k];
+			}
+		}
+	}
+	T = pointer[0];
+	delete[] pointer;
+}
