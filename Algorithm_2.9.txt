@@ -1,0 +1,374 @@
+// 图：1.邻接表转邻接矩阵
+
+void Convert(ALGraph &G, int arcs[M][N])
+{
+	for(i = 0; i < n; i++)
+	{
+		p = (G->v[i]).firestarc;
+		while(p != NULL)
+		{
+			arcs[i][p->adjvex] = 1;
+			p = p->nextarc;
+		}
+	}
+}
+
+
+
+// 图：2.判断一个图是否是树
+
+bool isTree(Graph &G)
+{
+	for(i = 1; i <= G.vexnum; i++)
+	{
+		visited[i] = FALSE;
+	}
+	int Vnum = 0, Enum = 0;
+	DFS(G, 1, Vnum, Enum, visited);
+	if(Vnum == G.vexnum && Enum == 2*(G.vexnum - 1))
+		return true;
+	else
+		return false;
+}
+
+void DFS(Graph &G, int v, int &Vnum, int &Enum, char visited[])
+{
+	visited[v] = TRUE; Vnum++;
+	int w = FirstNeighbor(G, v);
+	while(w != -1)
+	{
+		Enum++;
+		if(!visited[w])
+			DFS(G, w, Vnum, Enum, visited);
+		w = NextNeighbor(G, v, w);
+	}
+}
+
+
+
+
+// 图：3.DFS非递归算法
+
+void DFS_Non_Rc(AGraph &G, int v)
+{
+	int w;
+	InitStack(S);
+	for(i = 0; i < G.vexnum; i++)
+	{
+		visited[i] = FALSE;
+	}
+	Push(S, v); visited[v] = TRUE;
+	while(!IsEmpty(S))
+	{
+		k = Pop(S);
+		visit(k);
+		for(w = FirstNeighbor(G, k); w >= 0; w = NextNeighbor(G, k, w))
+		{
+			if(!visited[w])
+			{
+				Push(S, w);
+				visited[w] = TRUE;
+			}
+		}
+	}
+}
+
+
+
+// 图：4.DFS和BFS找到i到j的路径
+// 队列遍历一般都是横向发展，栈和树因为都有递归属性，所以都是纵向发展
+int visited[MAXSIZE] = {0};
+void DFS(ALGraph G, int i, int j, bool &can_reach)
+{
+	if(i == j)
+	{
+		can_reach = true;
+		return;
+	}
+	visited[i] = 1;
+	for(int p = FirstNeighbor(G, i); p >= 0; p = NextNeighbor(G, i, p))
+	{
+		if(!visited[p] && !can_reach)
+			DFS(G, p, j, can_reach);
+	}
+}
+
+
+void BFS(ALGraph G, int i, int j)
+{
+	InitQueue(Q),; EnQueue(Q, i);
+	while(!IsEmpyt(Q))
+	{
+		DeQueue(Q, u);
+		visited[u] = 1;
+		if(u == j) return 1;
+		for(int p = FirstNeighbor(G, i); p >= 0; p = NextNeighbor(G, u, p))
+		{
+			if(p == j)
+				return 1;
+			if(!visited[p])
+			{
+				EnQueue(Q, p);
+				visited[p] = 1;
+			}
+		}
+	}
+	return 0;
+}
+
+
+
+// 图：5.找到i到j的简单路径
+
+void FindPath(AGraph *G, int u, int v, int path[], int d)
+{
+	int w, i;
+	ArcNode *p;
+	d++;
+	path[d] = u;
+	visited[u] = 1;
+	if(u == v)
+		print(path[]);
+	p = G->adjlist[u].firstarc;
+	while(p != NULL)
+	{
+		w = p->adjvex;
+		if(visited[w] == 0)
+			FindPath(G, w, V, path, d);
+		p = p->nextarc;
+	}
+	visited[u] = 0;
+}
+
+
+
+// 图：6.有向无环图的拓扑排序
+
+bool visited[MAX_VERTEX_NUM];
+
+void DFSTraverse(Graph G)
+{
+	for(v = 0; v < G.vexnum; v++)
+	{
+		visited[v] = FALSE;
+	}
+	time = 0;
+	for(v = 0; v < G.vexnum; v++)
+	{
+		if(!visited[v]) DFS(G, v);
+	}
+}
+
+
+void DFS(Graph G, int v)
+{
+	visited[v] = TRUE;
+	visit(v);
+	for(w = FirstNeighbor(G, v); w >= 0; w = NextNeighbor(G, v, w))
+	{
+		if(!visited[w])
+		{
+			DFS(G, W);
+		}
+	}
+	time = time +1; finishTime[v] = time;
+}
+
+
+
+// 查找：2.提高查找效率
+
+int SeqSrch(int r[], int k)
+{
+	int i = 0;
+	while(r[i].key != k && i < n)
+	{
+		i++;
+	}
+	if(i < n && i > 0)
+	{
+		temp = r[i]; r[i] = r[i - 1]; r[i - 1] = temp;
+		return --i;
+	}
+	else
+		 return -1;
+}
+
+
+
+// 查找：3.判断是否为二叉排序树
+int predt = -32767;
+
+int JudgeBST(BiTree bt)
+{
+	int b1, b2;
+	if(bt == NULL)
+		return 1;
+	else
+	{
+		b1 = JudgeBST(bt->lchidl);
+		if(b1 == 0 || predt >= bt->data)
+			return 0;
+		predt = bt->data;
+		b2 = JudgeBST(bt->rchild);
+		return b2;
+	}
+}
+
+
+// 查找：4.求给定节点的层次
+int level(BiTree bt, BSTNode *p)
+{
+	int n = 0;
+	BiTree t = bt;
+	if(bt != NULL)
+	{
+		n++;
+		while(t->data != p->data)
+		{
+			if(p->data < t->data)
+				t = t->lchild;
+			else
+				t = t->rchild;
+			n++;
+		}
+	}
+	return n;
+}
+
+
+
+
+// 查找：5.判断二叉树是否平衡
+
+void Judge_AVL(BiTree bt, int &balance, int &h)
+{
+	int bl = 0, br = 0, hl = 0, hr = 0;
+	if(bt == NULL)
+	{
+		h = 0;
+		balance = 1;
+	}
+	else if(bt->lchild == NULL && bt->rchild == NULL)
+	{
+		h = 1;
+		balance = 1;
+	}
+	else
+	{
+		Judge_AVL(bt->lchild, bl, hl);
+		Judge_AVL(bt->rchild, br, hr);
+		h = (hl > hr ? hl : hr) + 1;
+		if(abs(hl - hr) < 2)
+			balance = bl && br;
+		else
+			balance = 0;
+	}
+}
+
+
+
+// 查找：6.求最大和最小关键字
+
+int MinKey(BSTnode *bt)
+{
+	while(bt)
+		bt = bt->lchild;
+	return bt->data;
+}
+
+int MaxKey(BSTnode *bt)
+{
+	while(bt)
+		bt = bt->rchild;
+	return bt->data;
+}
+
+
+
+
+// 查找：7.从大到小输出大于k的节点
+
+void OutPut(BSTNode *bt, int k)
+{
+	if(bt == NULL)
+		return;
+	if(bt->rchild != NULL)
+		OutPut(bt->rchild, k);
+	if(bt->data >= k)
+		printf("%d", bt->data);
+	if(bt->lchild != NULL)
+		OutPut(bt->lchidl, k);
+}
+
+
+
+
+// 查找:8.查找第k小的元素
+
+BSTNode* Search_Small(BSTNode *t, int k)
+{
+	if(k < 1 || k > t->count) return NULL;
+	if(t->lchild == NULL)
+	{
+		if(k == 1) return t;
+		else return Search_Small(t->rchild, k - 1);
+	}
+	else
+	{
+		if(t->lchild->count == k - 1) return t;
+		if(t->lchild->count > k - 1)return Search_Small(t->lchild, k);
+		if(t->lchild->count < k- 1)return Search_Small(t->rchild, k - (t->lchild->count + 1));
+	}
+}
+
+
+
+// 排序：1.双向起泡
+
+void BubbleSort(int a[], int n)
+{
+	int low = 0; high = n - 1;
+	bool flag = true;
+	while(low < high && flag)
+	{
+		flag = false;
+		for(i = low; i < high; i++)
+		{
+			if(a[i] > a[i + 1])
+			{
+				swap(a[i], a[i+1]);
+				flag = true;
+			}
+		}
+		high--;
+		for(i = high; i > low; i--)
+		{
+			if(a[i] > a[i - 1])
+			{
+				swap(a[i], a[i - 1]);
+				flag = true;
+			}
+		}
+		low ++;
+	}
+}
+
+
+
+// 排序：2.奇偶排序
+
+void move(int a[], int len)
+{
+	int i = 0, j = len - 1;
+	while(i < j)
+	{
+		while(i < j && a[i] % 2 != 0)i++;
+		while(i < j && a[i] % 2 != 1)j--;
+		if(i < j)
+		{
+			swap(a[i], a[j]);
+			i++; j--;
+		}
+	}
+}
