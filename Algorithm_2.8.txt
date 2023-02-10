@@ -1,39 +1,39 @@
 // 树：3.求二叉树高度，非递归
 
-int Btdepth(BiTree T)
+int Btdepth(BiTree T)		// 形参：根节点
 {
-	if(!T)
+	if(!T)			// 判断是否为空树
 		return 0;
-	int front = -1, rear = -1;
-	int last = 0, level = 0;
+	int front = -1, rear = -1;	// 创建一个队列
+	int last = 0, level = 0;         // last：当前层所有孩子的数量，level：层级
 	BiTree Q[MaxSize];
-	Q[++rear] = T;
+	Q[++rear] = T;		// 根节点入队
 	BiTree p;
-	while(front < rear)
+	while(front < rear)		// 当front小于rear，进入循环
 	{
-		p = Q[++front];
-		if(p->lchild)
+		p = Q[++front];	// 出队队头节点
+		if(p->lchild)	// 如果队头节点有左右孩子，则将其入队
 			Q[++rear] = p->lchild;
 		if(p->rchild)
 			Q[++rear] = p->rchild;
-		if(front == last)
+		if(front == last)   // 如果front等于last，则level加1，更新last
 		{
 			level++;
 			last = rear;
 		}
 	}
-	return level;
+	return level;		// 返回层级
 }
 
 // 解法2：递归
 
-int Btdepth2(BiTree T)
+int Btdepth2(BiTree T)		// 形参：根节点
 {
-	if(T == NULL)
+	if(T == NULL)		// 根节点不为空，进入递归
 		return 0;
-	ldep = BtDepth2(T->lchild);
-	rdep = BtDepth2(T->rchild);
-	if(ldep > rdep)
+	ldep = BtDepth2(T->lchild);	// 左子树高度
+	rdep = BtDepth2(T->rchild);	// 右子树高度
+	if(ldep > rdep)		// 左右子树，更高的一方加1，并返回。
 		return ldep + 1;
 	else
 		return rdep + 1;
@@ -44,51 +44,67 @@ int Btdepth2(BiTree T)
 // 树：4.通过先序和后序，构建二叉树
 
 BiTree PreInCreat(char a[], char b[], int l1, int h1, int l2, int h2)
+// 形参：先序数组，中序数组，先序其实下标，先序结束下标，中序起始**，中序结束**
 {
-	root = (BiTNode *)malloc(sizeof(BiTNode));
-	root->data = a[l1];
-	for(i = l2; b[i] = ! root->data; i++);
-	llen = i - l2;
-	rlen = h2 - i;
+	root = (BiTNode *)malloc(sizeof(BiTNode));	// 声明根节点
+	root->data = a[l1];		// 根节点为先序序列的第一个节点
+	for(i = l2; b[i] = ! root->data; i++);	// 找到根节点所在中序的位置
+	llen = i - l2;			// 计算左子树数量
+	rlen = h2 - i;			// 右子树数量
+	
+	// 当左子树数量不为0，进入递归
 	if(llen)
 	{
+// 递归参数：（先序，中序，先序起始右移一位，先序起始加llen，中序起始，中序起始加llen-1）
+// 构建范围为先序数组起始下标右移一位（跳过根节点），到先序数组的l1加llen的位置
+// 中序数组：l2到l2加llen - 1（提过根节点）
+// 不停的递归调用这个范围构建左子树。
 		root->lchild = PreInCreat(a, b, l1+1, l1 + llen, l2, l2+llen-1);
 	}
+
+	// 构建完毕，将叶子节点的左孩子置空
 	else
 	{
 		root->lchild = NULL;
 	}
 	
+	// 当右子树数量不为0，进入递归
 	if(rlen)
 	{
+// 构建范围为：先序的h1-rlen（结束下标减右子树的数量），到结束下标
+// 中序：结束下标h2-rlen + 1（跳过根节点），到结束下标
+// 递归调用该范围，构建右子树。
 		root->rchild = PreInCreat(a, b, h1-rlen, h1, h2-rlen+1, h2);
 	}
+
+	// 构建完毕，将叶子节点的右孩子置空
 	else
 	{
 		root->rchild = NULL;
 	}
-	return root;
+	return root;	// 返回根节点
 }
 
 
 
 // 树：5.判断二叉链表是否是完全二叉树
-bool IsComplete(BiTree T)
+bool IsComplete(BiTree T)		// 形参：根节点
 {
-	InitQueue(Q);
-	if(!T)
+	InitQueue(Q);		// 初始化队列，并将根节点入队
+	if(!T)		// 判断树是否为空
 		return 1;
 	EnQueue(Q, T);
-	while(!IsEmpty(Q))
+	while(!IsEmpty(Q))	// 当队列不空时，进入循环
 	{
-		DeQueue(Q, p);
-		if(p)
+		DeQueue(Q, p);	// 出队队头节点
+		if(p)		// 如果队头节点不为空，则将左右孩子如果
 		{
 			EnQueue(Q, p->lchild);
 			EnQueue(Q, p->rchild);
 		}
-		else
+		else		// 如果为空，进入循环判断。
 		{
+			// 如果出队的元素，不为空则该数不是完全二叉树。
 			while(!IsEmpty(Q))
 			{
 				DeQueue(Q, p);
@@ -103,26 +119,29 @@ bool IsComplete(BiTree T)
 
 // 树:6.计算二叉链表所有双分支个数
 
-int DsonNodes(BiTree b)
+int DsonNodes(BiTree b)		// 形参：根节点
 {
-	if(b == NULL)
+	if(b == NULL)		// 根节点为空，返回0
 		return 0;
+	// 如果为叶子节点，返回左孩子和右孩子相加再加1
 	else if(b->lchild != NULL && b->rchild != NULL)
 		return DsonNodes(b->lchild) + DsonNodes(b->rchild) + 1;
-	else
+	else	// 不是叶节点，返回左孩子和右孩子相加
 		return DsonNodes(b->lchild) + DsonNodes(b->rchild);
 }
 
 
 
 // 树：7.交换左右孩子
-void swap(BiTree p)
+void swap(BiTree p)		// 形参：根节点
 {
-	if(b)
+	if(b)		// 如果根节点不为空，进入递归
 	{
-		swap(b->lchild);
-		swap(b->rchild);
-		temp = b->lchild;
+		swap(b->lchild);	// 交换左子树
+		swap(b->rchild);	// 交换右子树
+
+		// 交换逻辑
+		temp = b->lchild;	
 		b->lchild = b->rchild;
 		b->rchild = temp;
 	}
@@ -132,18 +151,18 @@ void swap(BiTree p)
 
 // 树：8.先序遍历中第k个节点
 
-int i = 1;
-int PreNode(BiTree b, int k)
+int i = 1;				// 全局变量i
+int PreNode(BiTree b, int k)		// 形参：根节点，k
 {
-	if(b == NULL)
+	if(b == NULL)		// 节点为空，返回特定字符
 		return '#';
-	if(i == k)
+	if(i == k)			// i值和k相等，返回该节点的data域
 		return b->data;
-	i++;
-	ch = PreNode(b->lchild, k);
-	if(ch != '#')
+	i++;			// 每调用过一个节点，i加1
+	ch = PreNode(b->lchild, k);	// 递归左子树
+	if(ch != '#')		// 如果返回的结果不是data域，则表明未找到
 		return ch;
-	ch = PreNode(b->rchild, k)
+	ch = PreNode(b->rchild, k)	// 开始递归右子树
 		return ch;
 }
 
@@ -151,9 +170,10 @@ int PreNode(BiTree b, int k)
 
 // 树：9.删去以X为根的节点
 
+// 删除函数
 void DeleteXTree(BiTree &bt)
 {
-	if(bt)
+	if(bt)	// 当节点不为空，先走到该节点的最下层，开始一层一层向上删除
 	{
 		DeleteXTree(bt->lchild);
 		DeleteXTree(bt->rchild);
@@ -161,33 +181,43 @@ void DeleteXTree(BiTree &bt)
 	}
 }
 
-void Search(BiTree bt, int x)
+void Search(BiTree bt, int x)	// 形参：根节点，X
 {
-	BiTree Q[];
-	if(bt)
+	BiTree Q[];	// 声明队列
+	if(bt)		// 当根节点不空，开始进入递归
 	{
+		// 如果根节点恰好是所求节点，直接调用删除
 		if(bt->data == x)
 		{
 			DeleteXTree(bt);
 			exit(0);
 		}
+
+		// 初始化队列，并将根节点入队
 		InitQueue(Q);
 		EnQueue(Q, bt);
+
+		// 当队列不空时，进入循环扫描
 		while(!IsEmpty(Q))
 		{
-			DeQueue(Q, p);
-			if(p->lchild)
+			DeQueue(Q, p);	// 队头元素出队
+			if(p->lchild)	// 队头元素有左孩子
 			{
+				// 先判断左孩子是否是所求节点
 				if(p->lchild->data == x)
 				{
 					DeleteXTree(p->lchild);
-					p->lchild = NULL
+					// 当删除完毕后，将左孩子置空
+					p->lchild = NULL；
 				}
+				// 不是所求节点继续往下。
 				else
 				{
 					EnQueue(Q, p->lchild);
 				}
 			}
+			
+			// 和左孩子相同。
 			if(p->rchild)
 			{
 				if(p->rchild->data == x)
@@ -209,29 +239,33 @@ void Search(BiTree bt, int x)
 
 // 树：10.查找x，并输出它的祖先
 
-void Search(BiTree bt, int x)
+void Search(BiTree bt, int x)		// 形参：根节点，x
 {
-	stack s[];
+	stack s[];			// 声明栈
 	top = 0;
-	while(bt != NULL || top > 0)
+	while(bt != NULL || top > 0)	// 根基节点不为空，或栈不为空
 	{
-		while(bt != NULL && bt->data != x)
+		while(bt != NULL && bt->data != x)	// 节点的data域不等于X，入栈，并向下走。
 		{
 			s[++top].t = bt;
 			s[top].tag = 0;
 			bt = bt->lchild;
 		}
+		// 找到了X节点，输出栈中所有元素。
 		if(bt != NULL && bt->data == x)
 		{
 			printf("所查节点的所有祖先节点的值为：\n");
+			// 这里输出栈中节点，是从栈底开始的，有点没想明白
 			for(i = 1; i <= top; i++)
 			{
 				printf("%d", s[i].t->data);
 				exit(1);
 			}
 		}
+		// 当左右子树都被访问过时，开始往回走
 		while(top != 0 && s[top].tag == 1)
 			top--;
+		// 访问右子树。
 		if(top != 0)
 		{
 			s[top].tag = 1;
