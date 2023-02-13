@@ -1,0 +1,391 @@
+// Vector: Data Access
+
+void printVector(vector<int> v1)
+{
+	for(vector<int>::iterator it = v1.begin(); it != v1.end(); it++)
+	{
+		cout << *it << ' ';
+	}
+	cout << endl;
+}
+
+void Push_Vector(vector<int> &v1)
+{
+	for(int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+	}
+}
+
+
+void Push_Vector2(vector<int> &v1)
+{
+	for(int i = 0; i < 5; i++)
+	{
+		v1.push_back(i+2);
+	}
+}
+
+void test01()
+{
+	vector<int> v1;
+	
+	Push_Vector(v1);
+	
+	for(int i = 0; i < v1.size(); i++)
+		cout << v1[i] << endl;
+	//printVector(v1);
+	
+	
+	cout << "First Element is :" << v1.front() << endl;
+	cout << "Last Elemnt is : " << v1.back() << endl;
+}
+
+
+// Vector: Exchange Capacity
+
+void test02()
+{
+	vector<int> v2;
+	vector<int> v1;
+	
+	
+	
+	Push_Vector(v1);
+	Push_Vector2(v2);
+	
+	printVector(v1);
+	printVector(v2);
+	
+	v1.swap(v2);
+	printVector(v1);
+	printVector(v2);
+	
+	
+}
+
+// Vector Exchange for Example
+void test03()
+{
+	vector<int> v;
+	for(int i = 0; i < 10000; i++)
+	{
+		v.push_back(i);
+	}
+	
+	cout << v.capacity() << endl;
+	cout << v.size() << endl;
+	
+	v.resize(3);
+	vector<int>(v).swap(v);
+	cout << v.capacity() << endl;
+	cout << v.size() << endl;
+}
+
+// Vector: Reseved Space
+
+void test04()
+{
+	vector<int>v;
+	v.reserve(10000);
+	int num = 0;
+	int *p = NULL;
+	for(int i = 0; i < 10000; i++)
+	{
+		v.push_back(i);
+		if(p != &v[0])
+		{
+			p = &v[0];
+			num++;
+		}
+	}
+	cout << num << endl;
+}
+
+
+
+
+
+
+#include <vector>
+#include <deque>
+#include <algorithm>
+
+// Deque Capacity: Double Ended Queue
+
+void printDeque(const deque<int>d)
+{
+	for(deque<int>::const_iterator cit = d.begin(); cit != d.end(); cit++)
+	{
+		cout << *cit << ' ';
+	}
+	cout << endl;
+}
+
+
+void Push_Deque(deque<int>&d)
+{
+	for(int i = 0; i < 10; i++)
+	{
+		d.push_back(i);
+	}
+}
+
+
+void test01()
+{
+	deque<int>d;
+	for(int i = 0; i < 10; i++)
+		d.push_back(i);
+	
+	printDeque(d);
+	
+	deque<int>d2(d.begin(), d.end());
+	printDeque(d2);
+	
+	deque<int>d3(d);
+	printDeque(d3);
+	
+	deque<int>d4(10,15);
+	printDeque(d4);
+}
+
+
+// Deque Capacity: Assignment Operation
+
+void test02()
+{
+	deque<int> d;
+	deque<int> d2;
+	Push_Deque(d2);
+	d = d2;
+	printDeque(d2);
+	printDeque(d);
+	
+	deque<int>d3;
+	d3.assign(d.begin(), d.end());
+	printDeque(d3);
+	
+	deque<int>d4;
+	d4.assign(10, 43);
+	printDeque(d4);
+}
+
+
+// Deque Capacity: Size Operation
+
+void test03()
+{
+	deque<int>d;
+	Push_Deque(d);
+	printDeque(d);
+	cout << d.size() << endl;
+	
+	d.resize(15, 21);
+	printDeque(d);
+	
+	d.resize(5);
+	printDeque(d);
+	
+	
+	d.erase(d.begin(), d.end());
+	if(d.empty())
+		cout << "Queue is Empty" << endl;
+	
+}
+
+
+//Deque Capacity: Insert and Delete
+
+void test04()
+{
+	/*
+	deque<int>d;
+	
+	d.push_front(20);
+	d.push_back(35);
+	printDeque(d);
+	
+	d.pop_back();
+	printDeque(d);
+	
+	d.pop_front();
+	printDeque(d);
+	
+	d.insert(d.end(), 2, 40);
+	printDeque(d);
+	
+	d.insert(d.begin(), 3, 54);
+	printDeque(d);
+	
+	d.clear();
+	printDeque(d);
+	
+	d.insert(d.begin(), 4, 30);
+	printDeque(d);
+
+	d.erase(d.begin(), d.end());
+	printDeque(d);
+	
+	d.push_back(23);
+	d.push_back(38);
+	d.push_front(65);
+	d.push_front(18);
+	printDeque(d);
+	
+	d.pop_back();
+	printDeque(d);
+	
+	d.pop_front();
+	printDeque(d);
+	
+	d.erase(d.begin(), d.end());
+	printDeque(d);
+	*/
+	
+	deque<int>d1;
+	deque<int>d2;
+	d1.push_back(23);
+	d1.push_back(33);
+	d1.push_back(53);
+	d1.push_back(63);
+	
+	d2.push_front(12);
+	d2.push_front(16);
+	
+	printDeque(d1);
+	printDeque(d2);
+	
+	d1.insert(d1.begin(), d2.begin(), d2.end());
+	printDeque(d1);
+	
+	deque<int>::iterator it = d1.begin();
+	it++;
+	d1.erase(it);
+	printDeque(d1);
+}
+
+
+//Deque Capacity: Data Access
+void test05()
+{
+	deque<int>d1;
+	Push_Deque(d1);
+	printDeque(d1);
+	
+	cout << d1[5] << endl;
+	d1[5] = 320;
+	printDeque(d1);
+}
+
+// Deque Capacity: Sort Operation
+
+void test06()
+{
+	deque<int>d1;
+	Push_Deque(d1);
+	printDeque(d1);
+	
+	sort(d1.begin(), d1.end()); // default ascending order
+	printDeque(d1);
+}
+
+
+
+
+
+
+// STL:Case
+
+#include <vector>
+#include <deque>
+#include <algorithm>
+#include <ctime>
+
+class Person
+{
+public:
+	
+	Person(string name, int score)
+	{
+		this->m_Name = name;
+		this->m_Score = score;
+	}
+	
+	string m_Name;
+	int m_Score;
+};
+
+
+void Create_Person(vector<Person>&v)
+{
+	string nameseed = "ABCDE";
+	for(int i = 0; i < 5; i++)
+	{
+		string name = "Player ";
+		name += nameseed[i];
+		
+		int score = 0;
+		Person p(name, score);
+		
+		v.push_back(p);
+	}
+}
+
+
+void setScore(vector<Person>&v)
+{
+	for(vector<Person>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		deque<int>d;
+		for(int i = 0; i < 10; i++)
+		{
+			int score = rand() % 41 + 60;
+			d.push_back(score);
+		}
+		/*
+		cout << it->m_Name << "的打分为：" << endl;
+		for(deque<int>::iterator dit = d.begin(); dit != d.end(); dit++)
+		{
+			cout << *dit << "  ";
+		}
+		cout << endl;
+		*/
+		
+		sort(d.begin(), d.end());
+		d.pop_back();
+		d.pop_front();
+		
+		int sum = 0;
+		for(deque<int>::iterator dit = d.begin(); dit != d.end(); dit++)
+		{
+			sum += *dit;
+		}
+		int val = sum / d.size();
+		it->m_Score = val;
+	}
+}
+
+void showScore(vector<Person>&v)
+{
+	for(vector<Person>::iterator it = v.begin(); it != v.end(); it++)
+		cout << "Player : " << it->m_Name << "  Score : " << it->m_Score << endl;
+}
+
+
+
+int main()
+{
+	srand((unsigned int)time(NULL));
+	vector<Person> v1;
+   	Create_Person(v1);
+	setScore(v1);
+	showScore(v1);
+	/*
+	for(vector<Person>::iterator it = v1.begin(); it != v1.end(); it++)
+	{
+		cout << it->m_Name << " " << it->m_Score << endl;
+	}
+	*/
+   return 0;
+}
