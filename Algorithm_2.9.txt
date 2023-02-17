@@ -1,13 +1,15 @@
 // 图：1.邻接表转邻接矩阵
 
-void Convert(ALGraph &G, int arcs[M][N])
+void Convert(ALGraph &G, int arcs[M][N])	// 形参：邻接表，链接矩阵
 {
-	for(i = 0; i < n; i++)
+	for(i = 0; i < n; i++)		// 从上往下扫描邻接表
 	{
-		p = (G->v[i]).firestarc;
-		while(p != NULL)
+		p = (G->v[i]).firestarc;    // 申明p：初始为邻接表第一个节点
+		while(p != NULL)	// 当p不为空时，进入循环
 		{
+			// 每扫描过一个节点，则对该节点标记为1
 			arcs[i][p->adjvex] = 1;
+			// p移向该节点的下一个相邻节点。	
 			p = p->nextarc;
 		}
 	}
@@ -17,29 +19,41 @@ void Convert(ALGraph &G, int arcs[M][N])
 
 // 图：2.判断一个图是否是树
 
-bool isTree(Graph &G)
+bool isTree(Graph &G)		// 形参：无向图
 {
-	for(i = 1; i <= G.vexnum; i++)
+	for(i = 1; i <= G.vexnum; i++)		// 初始化所有顶点，置为false
 	{
 		visited[i] = FALSE;
 	}
+	// 声明Vnum：顶点数，Enum：边数
 	int Vnum = 0, Enum = 0;
-	DFS(G, 1, Vnum, Enum, visited);
+	DFS(G, 1, Vnum, Enum, visited);	// 调用DFS（深度优先遍历）
+	// 若返回的边数为2倍的顶点数-1，则该图是树
 	if(Vnum == G.vexnum && Enum == 2*(G.vexnum - 1))
 		return true;
 	else
 		return false;
 }
 
+// 深度优先遍历
+// 形参：图，顶点，顶点计数器，边奇数器，访问数组
 void DFS(Graph &G, int v, int &Vnum, int &Enum, char visited[])
 {
+	// 每一次调用，将该节点置为已访问，同时Vnum加1
 	visited[v] = TRUE; Vnum++;
+
+	// w，移到该节点的下一个相邻节点。
 	int w = FirstNeighbor(G, v);
+
+	// 当w不为-1，图中有节点W，没有则是-1
 	while(w != -1)
 	{
+		// 边数加1
 		Enum++;
+	// 递归调用，参数为：图，顶点，顶点计数器，边奇数器，访问数组
 		if(!visited[w])
 			DFS(G, w, Vnum, Enum, visited);
+		// 每一次w都移到下一个相邻顶点。
 		w = NextNeighbor(G, v, w);
 	}
 }
@@ -49,24 +63,30 @@ void DFS(Graph &G, int v, int &Vnum, int &Enum, char visited[])
 
 // 图：3.DFS非递归算法
 
-void DFS_Non_Rc(AGraph &G, int v)
+void DFS_Non_Rc(AGraph &G, int v)		// 形参：图，第一个顶点
 {
 	int w;
-	InitStack(S);
-	for(i = 0; i < G.vexnum; i++)
+	InitStack(S);	// 初始化栈
+	for(i = 0; i < G.vexnum; i++)	// 数组初始化
 	{
 		visited[i] = FALSE;
 	}
+	// 将第一个顶点入栈，且将该顶点所在数组中的位置置为true（已访问）
 	Push(S, v); visited[v] = TRUE;
-	while(!IsEmpty(S))
+	while(!IsEmpty(S))	// 当栈不为空时，进入循环
 	{
-		k = Pop(S);
-		visit(k);
+		k = Pop(S);	// k为栈顶元素
+		visit(k);		// 输出k
+
+// 二层循环，w为k的第一个相邻顶点，每一次w移到相邻顶点的下一个顶点。
 		for(w = FirstNeighbor(G, k); w >= 0; w = NextNeighbor(G, k, w))
 		{
 			if(!visited[w])
 			{
+				// 入栈当前顶点
 				Push(S, w);
+
+			// 将当前顶点的访问数组改为true（已访问）
 				visited[w] = TRUE;
 			}
 		}
@@ -78,34 +98,42 @@ void DFS_Non_Rc(AGraph &G, int v)
 // 图：4.DFS和BFS找到i到j的路径
 // 队列遍历一般都是横向发展，栈和树因为都有递归属性，所以都是纵向发展
 int visited[MAXSIZE] = {0};
-void DFS(ALGraph G, int i, int j, bool &can_reach)
+void DFS(ALGraph G, int i, int j, bool &can_reach)	// 形参：图，i，j，找到标志
 {
-	if(i == j)
+	if(i == j)	// 如果i==j则将标志can_reach置为1，并返回
 	{
 		can_reach = true;
 		return;
 	}
-	visited[i] = 1;
+	visited[i] = 1;	// 将i所在访问数组中的位置置为1,（已访问）
+	// p等于i的相邻顶点，p每次移到i的相邻顶点的下一个顶点。
 	for(int p = FirstNeighbor(G, i); p >= 0; p = NextNeighbor(G, i, p))
 	{
+		// 如果p没有访问过，且can_reach为false，则进入递归
 		if(!visited[p] && !can_reach)
 			DFS(G, p, j, can_reach);
 	}
 }
 
 
-void BFS(ALGraph G, int i, int j)
+void BFS(ALGraph G, int i, int j)	// 形参：图，i，j
 {
-	InitQueue(Q),; EnQueue(Q, i);
+	// 初始化队列，并将i入队
+	InitQueue(Q), EnQueue(Q, i);
+
+	// 当队列不空时，进入循环
 	while(!IsEmpyt(Q))
 	{
-		DeQueue(Q, u);
-		visited[u] = 1;
-		if(u == j) return 1;
-		for(int p = FirstNeighbor(G, i); p >= 0; p = NextNeighbor(G, u, p))
+		DeQueue(Q, u);	// 出队队头元素
+		visited[u] = 1;	// 队头元素所在访问数组中的位置置为1
+		if(u == j) return 1; // 如果队头元素等于j，则返回1（已找到）
+// 二层循环，p为i的相邻顶点，每次p移到队头元素的相邻顶点的下一个顶点
+		for(int p = FirstNeighbor(G, u); p >= 0; p = NextNeighbor(G, u, p))
 		{
-			if(p == j)
+			if(p == j)	// 如果p等于j，则找到路径，返回1
 				return 1;
+			
+			// 不相等，若p未被访问过，则继续入队，并修改访问数组
 			if(!visited[p])
 			{
 				EnQueue(Q, p);
@@ -113,7 +141,7 @@ void BFS(ALGraph G, int i, int j)
 			}
 		}
 	}
-	return 0;
+	return 0;		// 循环结束，没有找到
 }
 
 
@@ -121,22 +149,30 @@ void BFS(ALGraph G, int i, int j)
 // 图：5.找到i到j的简单路径
 
 void FindPath(AGraph *G, int u, int v, int path[], int d)
+// 形参：图，i，j，数组（保存路径中的顶点），路径长度
 {
-	int w, i;
+	int w;	// w保存p的相邻顶点，和相邻顶点的下一个顶点。
 	ArcNode *p;
-	d++;
-	path[d] = u;
-	visited[u] = 1;
-	if(u == v)
+	d++;	// 长度加1
+	path[d] = u;	// 将i存入数组
+	visited[u] = 1;	// 修改i所在访问数组中位置置为1（已访问）
+	if(u == v)		// 如果找到路径，输出数组
 		print(path[]);
+
+	// p接收i的第一个相邻顶点
 	p = G->adjlist[u].firstarc;
+
+	// 当p不为空，进入循环
 	while(p != NULL)
 	{
-		w = p->adjvex;
-		if(visited[w] == 0)
-			FindPath(G, w, V, path, d);
+		w = p->adjvex;	// w接收p的第一个顶点
+		if(visited[w] == 0)	// 如果w未被访问，进入递归
+			// 递归参数：图，w， j，数组，路径长度
+			FindPath(G, w, v, path, d);
+		// p移到相邻顶点的下一个顶点。
 		p = p->nextarc;
 	}
+	// 恢复环境，方便其他路径使用
 	visited[u] = 0;
 }
 
@@ -146,13 +182,13 @@ void FindPath(AGraph *G, int u, int v, int path[], int d)
 
 bool visited[MAX_VERTEX_NUM];
 
-void DFSTraverse(Graph G)
+void DFSTraverse(Graph G)		// 形参：图
 {
 	for(v = 0; v < G.vexnum; v++)
 	{
 		visited[v] = FALSE;
 	}
-	time = 0;
+	time = 0;			// 记录扫描顺序
 	for(v = 0; v < G.vexnum; v++)
 	{
 		if(!visited[v]) DFS(G, v);
@@ -160,7 +196,7 @@ void DFSTraverse(Graph G)
 }
 
 
-void DFS(Graph G, int v)
+void DFS(Graph G, int v)	// 形参：图，顶点
 {
 	visited[v] = TRUE;
 	visit(v);
@@ -171,6 +207,8 @@ void DFS(Graph G, int v)
 			DFS(G, W);
 		}
 	}
+	// time加1，同时将其存入顶点v所在数组的位置中。
+	// 最后的拓扑序列，由高到低输出数组即可获得
 	time = time +1; finishTime[v] = time;
 }
 
@@ -178,15 +216,16 @@ void DFS(Graph G, int v)
 
 // 查找：2.提高查找效率
 
-int SeqSrch(int r[], int k)
+int SeqSrch(int r[], int k)		// 形参：数组，所求k
 {
-	int i = 0;
-	while(r[i].key != k && i < n)
+	int i = 0;			// i：记录下标
+	while(r[i].key != k && i < n)	// 扫描数组，循环结束，i即为k所在下标
 	{
 		i++;
 	}
-	if(i < n && i > 0)
+	if(i < n && i > 0)		// 当i小于数组长度，且大于0
 	{
+		// 将i和i-1交换，并返回i-1.
 		temp = r[i]; r[i] = r[i - 1]; r[i - 1] = temp;
 		return --i;
 	}
@@ -197,19 +236,25 @@ int SeqSrch(int r[], int k)
 
 
 // 查找：3.判断是否为二叉排序树
-int predt = -32767;
+int predt = -32767;		// 声明一个变量，保存当前节点的值，初始为无穷小
 
-int JudgeBST(BiTree bt)
+int JudgeBST(BiTree bt)	// 形参：根节点
 {
-	int b1, b2;
-	if(bt == NULL)
+	int b1, b2;	// 声明变量b1：左子树值，b2：右子树值
+	if(bt == NULL)	// 节点为空，返回1.
 		return 1;
-	else
+	else		
 	{
+		// 递归左子树，并用b1保存左子树的值
 		b1 = JudgeBST(bt->lchidl);
+		
+		// b1为0，或predt大于当前节点值，则返回false
 		if(b1 == 0 || predt >= bt->data)
 			return 0;
+		
+		// predt保存当前节点的值
 		predt = bt->data;
+		// 递归右子树。
 		b2 = JudgeBST(bt->rchild);
 		return b2;
 	}
@@ -217,22 +262,30 @@ int JudgeBST(BiTree bt)
 
 
 // 查找：4.求给定节点的层次
-int level(BiTree bt, BSTNode *p)
+int level(BiTree bt, BSTNode *p)	// 形参：根节点，所求节点p
 {
-	int n = 0;
-	BiTree t = bt;
-	if(bt != NULL)
+	int n = 0;			// n：层次
+	BiTree t = bt;		
+	if(t != NULL)		// 当t不为空，进入判断
 	{
-		n++;
+		n++;		// n加1
+
+		// 当t的data域不等于p的data域，进入循环
 		while(t->data != p->data)
 		{
+
+		// 如果p的data域小于t的data域，则p在t的左子树中
 			if(p->data < t->data)
 				t = t->lchild;
+
+			// 否则在右子树
 			else
 				t = t->rchild;
+			// 只要有左或右子树，n都加1
 			n++;
 		}
 	}
+	// 循环结束，n即为p所在层次。
 	return n;
 }
 
@@ -242,23 +295,34 @@ int level(BiTree bt, BSTNode *p)
 // 查找：5.判断二叉树是否平衡
 
 void Judge_AVL(BiTree bt, int &balance, int &h)
+// 形参：根节点，平衡标志，树高
 {
-	int bl = 0, br = 0, hl = 0, hr = 0;
-	if(bt == NULL)
+	int bl = 0, br = 0, hl = 0, hr = 0;	// 左右平衡标志，和左右高度
+	if(bt == NULL)		// 根节点为空，则高度为0，且平衡
 	{
 		h = 0;
 		balance = 1;
 	}
+	// 如果节点为叶节点，则高度为1，且平衡
 	else if(bt->lchild == NULL && bt->rchild == NULL)
 	{
 		h = 1;
 		balance = 1;
 	}
+
+	// 如果不是叶节点，也不为空，递归进入左右子树。
 	else
 	{
-		Judge_AVL(bt->lchild, bl, hl);
+		// 该递归会返回左子树的平衡标志和高度
+		Judge_AVL(bt->lchild, bl, hl);	
+
+		// 该递归会返回右子树的平衡标志和高度
 		Judge_AVL(bt->rchild, br, hr);
+
+		// 判断左右子树的高度，较大一方加1.
 		h = (hl > hr ? hl : hr) + 1;
+		
+		// 左右高差如果小于2，则返回左右平衡标志相与。
 		if(abs(hl - hr) < 2)
 			balance = bl && br;
 		else
@@ -289,15 +353,15 @@ int MaxKey(BSTnode *bt)
 
 // 查找：7.从大到小输出大于k的节点
 
-void OutPut(BSTNode *bt, int k)
+void OutPut(BSTNode *bt, int k)	// 形参：根节点，k
 {
-	if(bt == NULL)
+	if(bt == NULL)		// 空节点，返回
 		return;
-	if(bt->rchild != NULL)
+	if(bt->rchild != NULL)	// 有右子树，递归进入
 		OutPut(bt->rchild, k);
-	if(bt->data >= k)
+	if(bt->data >= k)	// 返回时，如果节点的data域大于k，则输出该节点
 		printf("%d", bt->data);
-	if(bt->lchild != NULL)
+	if(bt->lchild != NULL)	// 递归进入左子树
 		OutPut(bt->lchidl, k);
 }
 
@@ -306,18 +370,24 @@ void OutPut(BSTNode *bt, int k)
 
 // 查找:8.查找第k小的元素
 
-BSTNode* Search_Small(BSTNode *t, int k)
+BSTNode* Search_Small(BSTNode *t, int k)	// 形参：根节点，k
 {
-	if(k < 1 || k > t->count) return NULL;
-	if(t->lchild == NULL)
+	if(k < 1 || k > t->count) return NULL;	// 判断k是否合法
+	if(t->lchild == NULL)		// 左孩子为空
 	{
+		// 如果k为1，则根节点就是所求节点
 		if(k == 1) return t;
+		// 否则递归进入右子树，k-1（减去根节点）
 		else return Search_Small(t->rchild, k - 1);
 	}
+	// 如果左孩子不为空
 	else
 	{
+		// 如果左孩子的count==k-1，则返回t
 		if(t->lchild->count == k - 1) return t;
+		// 如果大于k-1，则递归进入左子树
 		if(t->lchild->count > k - 1)return Search_Small(t->lchild, k);
+// 小于k-1，则递归进入右子树，传入的k为，k减去根节点的左子树数量加1
 		if(t->lchild->count < k- 1)return Search_Small(t->rchild, k - (t->lchild->count + 1));
 	}
 }
@@ -364,7 +434,7 @@ void move(int a[], int len)
 	while(i < j)
 	{
 		while(i < j && a[i] % 2 != 0)i++;
-		while(i < j && a[i] % 2 != 1)j--;
+		while(i < j && a[j] % 2 != 1)j--;
 		if(i < j)
 		{
 			swap(a[i], a[j]);
