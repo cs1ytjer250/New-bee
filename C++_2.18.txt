@@ -1,0 +1,234 @@
+// Function object (Functor)
+
+class MyAdd
+{
+public:
+	int operator()(int v1, int v2)
+	{
+		return v1 + v2;
+	}
+};
+
+
+class MyPrint
+{
+public:
+	void operator()(string str)
+	{
+		cout << str << endl;
+		this->count ++;
+	}
+	
+	int count;
+};
+
+
+void doPrint(MyPrint &mp, string text)
+{
+	mp(text);
+}
+
+
+void test01()
+{
+	MyAdd add;
+	int ret = add(10, 19);
+	cout << ret << endl;
+	
+	MyPrint print;
+	print("Siga Let's go!");
+	print("I bloom in the killing, like a flower in the dawn");
+	cout << print.count << endl;
+	
+	
+	doPrint(print, "Ionia wile never die");
+}
+
+
+
+// One-element predicate
+
+#include <vector>
+#include <algorithm>
+
+class GreaterFive
+{
+public:
+	bool operator()(int v1)
+	{
+		return v1 > 5;
+	}
+};
+
+void InsertEl(vector<int> &v)
+{
+	for(int i = 0; i < 10; i++)
+		v.push_back(i);
+}
+
+
+
+void test01()
+{
+	vector<int> v;
+	InsertEl(v);
+	
+	vector<int>::iterator it = find_if(v.begin(), v.end(), GreaterFive());
+	cout << *it << endl;
+}
+
+
+
+
+// two¡ªplace predicate
+#include <vector>
+#include <algorithm>
+
+
+class MyCompare
+{
+public:
+	bool operator()(int v1, int v2)
+	{
+		return v1 > v2;
+	}
+};
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(50);
+	v.push_back(10);
+	v.push_back(30);
+	v.push_back(20);
+	v.push_back(40);
+	
+	sort(v.begin(), v.end());
+	for(vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		cout << *it << "  ";
+	}
+	cout << endl; 
+	
+	sort(v.begin(), v.end(), MyCompare());
+	for(vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		cout << *it << "  ";
+	}
+	cout << endl; 
+}
+
+
+
+
+
+
+// Built-in function object: Arithmetic func object
+
+void test01()
+{
+	negate<int> n;
+	cout << n(450) << endl;
+	
+	plus<int>p;
+	cout << p(10, 32) << endl;
+}
+
+
+
+
+// Built-in function object: Relationship func object
+
+class MyCompare
+{
+public:
+	bool operator()(int v1, int v2)
+	{
+		return v1 > v2;
+	}
+};
+
+
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(20);
+	v.push_back(40);
+	v.push_back(10);
+	v.push_back(15);
+	v.push_back(34);
+	
+	sort(v.begin(), v.end());
+	for(vector<int>::iterator it = v.begin(); it != v.end(); it++)
+		cout << *it << "  ";
+	cout << endl;
+	
+	sort(v.begin(), v.end(), greater<int>());
+	for(vector<int>::iterator it = v.begin(); it != v.end(); it++)
+		cout << *it << "  ";
+	
+	sort(v.begin(), v.end(), less<int>());
+	for(vector<int>::iterator it = v.begin(); it != v.end(); it++)
+		cout << *it << "  ";
+	
+}
+
+
+
+
+// Built-in function object: Logic functor
+
+
+void test01()
+{
+	vector<bool> v;
+	v.push_back(true);
+	v.push_back(false);
+	v.push_back(false);
+	v.push_back(true);
+	
+	for(vector<bool>::iterator it = v.begin(); it != v.end(); it++)
+		cout << *it << "  ";
+	cout << endl;
+	
+	vector<bool> v2;
+	v2.resize(v.size());
+	transform(v.begin(), v.end(), v2.begin(), logical_not<bool>());
+	for(vector<bool>::iterator it = v2.begin(); it != v2.end(); it++)
+		cout << *it << "  ";
+	cout << endl;
+	
+}
+
+
+
+
+// STL-Algorithm: for_each
+
+void print(int v1)
+{
+	cout << v1 << "  ";
+}
+
+class print1
+{
+public:
+	void operator()(int v1)
+	{
+		cout << v1 << "  " ;
+	}
+};
+
+void test01()
+{
+	vector<int> v;
+	for(int i = 0; i < 10 ; i++)
+	{
+		v.push_back(i);
+	}
+	
+	for_each(v.begin(), v.end(), print);
+	cout << endl;
+	for_each(v.begin(), v.end(), print1());
+}
