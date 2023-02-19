@@ -1,0 +1,712 @@
+// Common algorithm : Transform
+
+class Transform
+{
+public:
+	int operator()(int val)
+	{
+		return val + 10;
+	}
+};
+
+
+class MyCompare
+{
+public:
+	void operator()(int v1)
+	{
+		cout << v1 << "  ";;
+	}
+};
+
+
+void test01()
+{
+	vector<int> v;
+	for(int i = 0; i < 10; i++)
+	{
+		v.push_back(i);
+	}
+	
+	vector<int> v2;
+	v2.resize(v.size());
+	
+	
+	transform(v.begin(), v.end(), v2.begin(), Transform());
+	
+	for_each(v2.begin(), v2.end(), MyCompare());
+	cout << endl;
+}
+
+
+
+
+
+
+// Common algorithm : Find
+
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_name = name;
+		this->m_age = age;
+	}
+	
+	
+	// #### Reload ####
+	bool operator==(const Person &p)
+	{
+		if(this->m_name == p.m_name && this->m_age == p.m_age)
+			return true;
+		else
+			 return false;
+	}
+	
+	
+	string m_name;
+	int m_age;
+};
+
+
+void test01()
+{
+	vector<int> v;
+	for(int i = 0; i < 10; i++)
+		v.push_back(i);
+	
+	vector<int>::iterator it = find(v.begin(), v.end(), 5);
+	if(it == v.end())
+	{
+		return ;
+	}
+	else 
+		cout << &it << endl;
+	
+	
+}
+
+
+void test02()
+{
+	vector<Person>v;
+	Person p1("aa", 10);
+	Person p2("bb", 20);
+	Person p3("cc", 30);
+	Person p4("dd", 40);
+	
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+	
+	vector<Person>::iterator it = find(v.begin(), v.end(), p2);
+	if(it == v.end())
+		return;
+	else
+		cout << " Name: " << it->m_name << " Age : " << it->m_age << endl;
+}
+
+
+
+
+
+
+// Common algorithm : Find_if
+
+class GreaterFive
+{
+public:
+	bool operator()(int val)
+	{
+		return val < 15;
+	}
+};
+
+
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_name = name;
+		this->m_age = age;
+	}
+	
+	string m_name;
+	int m_age;
+};
+
+class MyCompare
+{
+public:
+	bool operator()(const Person &val)
+	{
+		return val.m_age < 15;
+	}
+};
+
+void test01()
+{
+	vector<int>v;
+	for(int i = 0; i < 10; i++)
+	{
+		v.push_back(i);
+	}
+	
+	vector<int>::iterator it = find_if(v.begin(), v.end(), GreaterFive());
+	if(it == v.end())
+		return;
+	else
+		cout << *it << endl;
+}
+
+void test02()
+{
+	vector<Person>v;
+	Person p1("zhangsan", 23);
+	Person p2("lisi", 33);
+	Person p3("wangwu", 13);
+	Person p4("zhaoliu", 25);
+	
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+	
+	vector<Person>::iterator it = find_if(v.begin(), v.end(), MyCompare());
+	if(it == v.end())
+		return;
+	else
+		cout << " Name£º " << it->m_name << " Age:" << it->m_age << endl;
+}
+
+
+
+
+
+// Common algorithm : Abjacent_find
+
+void test01()
+{
+	vector<int>v;
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(1);
+	v.push_back(4);
+	v.push_back(2);
+
+	
+	vector<int>:: iterator it = adjacent_find(v.begin(), v.end());
+	if(it == v.end())
+		return ;
+	else
+		cout << *it << endl;
+	
+}
+
+
+
+
+// Common algorithm : Binary_search
+
+void test01()
+{
+	vector<int>v;
+	for(int i = 0; i < 10; i++)
+	{
+		v.push_back(i);
+	}
+	
+	bool ret = binary_search(v.begin(), v.end(), 11);
+	cout << ret << endl;
+}
+
+
+
+
+// Common algorithm : Count
+
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_name = name;
+		this->m_age = age;
+	}
+	
+	bool operator==(const Person &p)
+	{
+		if(this->m_age == p.m_age)
+			return true;
+		else
+			return false;
+	}
+
+	
+	string m_name;
+	int m_age;
+};
+
+void test01()
+{
+	vector<int>v;
+	v.push_back(2);
+	v.push_back(2);
+	v.push_back(2);
+	v.push_back(2);
+	
+	int ret = count(v.begin(), v.end(), 2);
+	cout << ret << endl;
+	
+}
+
+class MyCompare
+{
+public:
+	bool operator()(const Person &p)
+	{
+		return p.m_age == 15;
+	}
+};
+
+void test02()
+{
+	vector<Person>v;
+	Person p1("zhangsan", 15);
+	Person p2("zhangsan", 15);
+	Person p3("zhangsan", 15);
+	Person p4("lisi", 15);
+	
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+	
+	int ret = count(v.begin(), v.end(), p1);
+	cout << ret << endl;
+}
+
+
+
+
+
+
+// Common algorithm : Count_if
+
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_name = name;
+		this->m_age = age;
+	}
+	
+	
+	string m_name;
+	int m_age;
+};
+
+
+class Greater
+{
+public:
+	bool operator()(int val)
+	{
+		return val > 20;
+	}
+};
+
+
+class Count
+{
+public:
+	
+	bool operator()(const Person &p)
+	{
+		return p.m_age > 25;
+	}
+};
+
+void test02()
+{
+	vector<int> v;
+	v.push_back(10);
+	v.push_back(20);
+	v.push_back(30);
+	v.push_back(40);
+	v.push_back(20);
+	v.push_back(10);
+	
+	
+	int ret = count_if(v.begin(), v.end(), Greater());
+	cout << ret << endl;
+}
+
+
+void test01()
+{
+	vector<Person> v;
+	Person p1("zhangsan", 42);
+	Person p2("lisi", 22);
+	Person p3("wangwu", 23);
+	Person p4("zhaoliu", 42);
+	
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+	
+	int ret = count_if(v.begin(), v.end(), Count());
+	cout << ret << endl;
+}
+
+
+
+#include <vector>
+#include <algorithm>
+#include <functional>
+// Common algorithm : Sort
+
+class MyCompare
+{
+public:
+	bool operator()(int va1, int va2)
+	{
+		return va1 > va2;
+	}
+};
+
+void myPrint(int val)
+{
+	cout << val << "  ";
+}
+
+
+void test01()
+{
+	vector<int> v;
+	for(int i = 0; i < 5; i++)
+		v.push_back(i);
+	
+	for_each(v.begin(), v.end(), myPrint);
+	cout << endl;
+	sort(v.begin(), v.end(), less<int>());
+	
+	for_each(v.begin(), v.end(), myPrint);
+}
+
+
+
+// Common algorithm : Random_shuffle
+
+
+class myPrint
+{
+public:
+	void operator()(int val)
+	{
+		cout << val << " ";
+	}
+};
+
+void test01()
+{
+	vector<int> v;
+	for(int i = 0; i < 5; i++)
+	{
+		v.push_back(i);
+	}
+	
+	random_shuffle(v.begin(), v.end());
+	
+	for_each(v.begin(), v.end(), myPrint());
+}
+
+
+
+
+
+// Common algorithm : Merge
+
+void myPrint(int val)
+{
+	cout << val << "  ";
+}
+
+
+void test01()
+{
+	vector<int>v1;
+	vector<int>v2;
+	vector<int>v3;
+	
+	for(int i = 0; i < 5; i++)
+	{
+		v1.push_back(i);
+		v2.push_back(i + 5);
+	}
+	
+	v3.resize(v1.size() + v2.size());
+	
+	for_each(v1.begin(), v1.end(), myPrint);
+	cout << endl;
+	for_each(v2.begin(), v2.end(), myPrint);
+	cout << endl;
+	
+	vector<int>::iterator it = v3.begin();
+	merge(v1.begin(), v1.end(), v2.begin(), v2.end(), it);
+	for_each(v3.begin(), v3.end(), myPrint);
+}
+
+
+// Common algorithm : Reverse
+
+void myPrint(int val)
+{
+	cout << val << "  ";
+}
+
+
+void test01()
+{
+	vector<int>v1;
+	for(int i = 0; i < 10; i++)
+		v1.push_back(i);
+	
+	reverse(v1.begin(), v1.end());
+	for_each(v1.begin(), v1.end(), myPrint);
+	
+
+}
+
+
+
+// Common algorithm : Copy
+
+void myPrint(int val)
+{
+	cout << val << "  ";
+}
+
+void test01()
+{
+	vector<int> v;
+	for(int i = 0; i < 10; i++)
+	{
+		v.push_back(i);
+	}
+	
+	vector<int> v2;
+	v2.resize(v.size());
+	copy(v.begin(), v.end(), v2.begin());
+	
+	for_each(v2.begin(), v2.end(), myPrint);
+}
+
+
+
+
+// Common algorithm : Replace
+
+void myPrint(int val)
+{
+	cout << val << "  ";
+}
+
+class myPrint2
+{
+public:
+	void operator()(int val)
+	{
+		cout << val << "  ";
+	}
+};
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(20);
+	v.push_back(10);
+	v.push_back(40);
+	v.push_back(50);
+	v.push_back(20);
+	v.push_back(18);
+	
+	for_each(v.begin(), v.end(), myPrint2());
+	cout << endl;
+
+	replace(v.begin(), v.end(), 20, 40);
+	for_each(v.begin(), v.end(), myPrint2());
+	cout << endl;
+}
+
+
+
+
+// Common algorithm : Replace_if
+
+void myPrint(int val)
+{
+	cout << val << "  ";
+}
+
+class myPrint2
+{
+public:
+	void operator()(int val)
+	{
+		cout << val << "  ";
+	}
+};
+
+class Greater30
+{
+public:
+	bool operator()(int val)
+	{
+		return val > 20;
+	}
+};
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(20);
+	v.push_back(10);
+	v.push_back(40);
+	v.push_back(50);
+	v.push_back(20);
+	v.push_back(18);
+	
+	replace_if(v.begin(), v.end(), Greater30(), 3000);
+	for_each(v.begin(), v.end(), myPrint2());
+}
+
+
+
+// Common algorithm : Swap
+void test01()
+{
+	vector<int> v;
+	vector<int> v2;
+	Init_v(v, 5);
+	Init_v(v2, 100);
+
+	
+	for_each(v.begin(), v.end(), myPrint2());
+	cout << endl;
+	for_each(v2.begin(), v2.end(), myPrint2());
+	cout << endl;
+	
+	swap(v, v2);
+	for_each(v.begin(), v.end(), myPrint2());
+	cout << endl;
+	for_each(v2.begin(), v2.end(), myPrint2());
+	cout << endl;
+}
+
+
+
+
+// Common algorithm : Accumulate
+
+void test01()
+{
+	vector<int> v;
+	Init_v(v, 1);
+	
+	int total = accumulate(v.begin(), v.end(), 0);
+	cout << total << endl;
+}
+
+
+
+
+// Common algorithm : Fill
+
+void test01()
+{
+	vector<int> v;
+	Init_v(v, 1);
+	
+	vector<int>::iterator it = v.begin();
+	it += 3;
+	fill(it, v.end(), 10);
+	for_each(v.begin(), v.end(), myPrint);
+}
+
+
+
+
+// Common algorithm : Set-intersection / Set-union / Set-difference\
+
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <ctime>
+#include <numeric>
+
+void myPrint(int val)
+{
+	cout << val << "  ";
+}
+
+class myPrint2
+{
+public:
+	void operator()(int val)
+	{
+		cout << val << "  ";
+	}
+};
+
+class Greater30
+{
+public:
+	bool operator()(int val)
+	{
+		return val > 20;
+	}
+};
+
+
+void Init_v(vector<int> &v, int n)
+{
+	for(int i = n; i < n + 10; i++)
+	{
+		v.push_back(i);
+	}
+}
+
+void test01()
+{
+	vector<int> v1;
+	vector<int> v2;
+	vector<int> v3;
+	Init_v(v1, 1);
+	Init_v(v2, 5);
+	
+	v3.resize(v1.size() + v2.size());
+	
+	// Intersection
+	vector<int>::iterator itEnd = set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+	//for_each(v3.begin(), itEnd, myPrint);
+	
+	
+	// Union
+	itEnd = set_union(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+	//for_each(v3.begin(), itEnd, myPrint);
+	
+	
+	// Difference
+	itEnd = set_difference(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+	for_each(v3.begin(), itEnd, myPrint);
+	cout << endl;
+	itEnd = set_difference(v2.begin(), v2.end(), v1.begin(), v1.end(), v3.begin());
+	for_each(v3.begin(), itEnd, myPrint);
+}
+
